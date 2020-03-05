@@ -21,10 +21,11 @@ router.post("/bundles/:bundleId/bookmarks", async (req, res) => {
             },
             { new: true }
         );
-        //res.status(201).send(updatedBundle);
         res.status(201).send(bookmark);
     } catch (e) {
-        res.status(404).send({ error: e.message });
+        res.status(404).send({
+            error: `Error creating bookmark - ${e.message}`
+        });
     }
 });
 
@@ -33,21 +34,25 @@ router.patch("/bundles/:bundleId/bookmarks/:bookmarkId", async (req, res) => {
     // TODO: check user auth on bundle
 
     try {
-        const newBookmark = await Bookmark.findByIdAndUpdate(
-            req.params.bookmarkId,
+        await Bundle.updateOne(
             {
-                name: req.body.name,
-                url: req.body.url,
-                note: req.body.note
+                _id: req.params.bundleId,
+                "bookmarks._id": req.params.bookmarkId
             },
             {
-                new: true,
-                runValidators: true
+                $set: {
+                    "bookmarks.$.name": req.body.name,
+                    "bookmarks.$.url": req.body.url,
+                    "bookmarks.$.note": req.body.note
+                }
             }
         );
-        res.status(200).send(newBookmark);
+        const bundle = await Bundle.findById(req.params.bundleId); // TODO: is returning bundle needed?
+        res.status(200).send(bundle);
     } catch (e) {
-        res.status(404).send({ error: e.message });
+        res.status(404).send({
+            error: `Error modifying bookmark - ${e.message}`
+        });
     }
 });
 
@@ -58,21 +63,49 @@ router.patch(
         // TODO: check user auth on both bundles
 
         try {
-            const newBookmark = await Bookmark.findByIdAndUpdate(
-                req.params.bookmarkId,
-                {
-                    name: req.body.name,
-                    url: req.body.url,
-                    note: req.body.note
-                },
-                {
-                    new: true,
-                    runValidators: true
+            // get the bookmark
+            const bookmarkBeforeDelete = await Bundle.findOne({
+                _id: req.params.bundleId
+            }).select({
+                bookmarks: {
+                    $elemMatch: {
+                        _id: req.params.bookmarkId
+                    }
                 }
+            });
+            const bookmark = new Bookmark({
+                name: bookmarkBeforeDelete.bookmarks[0].name,
+                url: bookmarkBeforeDelete.bookmarks[0].url,
+                note: bookmarkBeforeDelete.bookmarks[0].note
+            });
+
+            // add bookmark to newBundleId
+            const addedToBundle = await Bundle.findByIdAndUpdate(
+                req.params.newBundleId,
+                {
+                    $push: {
+                        bookmarks: bookmark
+                    }
+                },
+                { new: true }
             );
-            res.status(200).send(newBookmark);
+
+            // delete bookmark from bundleId
+            const removedFromBundle = await Bundle.findByIdAndUpdate(
+                req.params.bundleId,
+                {
+                    $pull: {
+                        bookmarks: { _id: req.params.bookmarkId }
+                    }
+                },
+                { new: true }
+            );
+
+            res.status(200).send([removedFromBundle, addedToBundle]);
         } catch (e) {
-            res.status(404).send({ error: e.message });
+            res.status(404).send({
+                error: `Error moving bookmark - ${e.message}`
+            });
         }
     }
 );
@@ -92,9 +125,11 @@ router.delete("/bundles/:bundleId/bookmarks/:bookmarkId", async (req, res) => {
             },
             { new: true }
         );
-        res.status(204).send();
+        res.status(204).send(updatedBundle);
     } catch (e) {
-        res.status(404).send({ error: e.message });
+        res.status(404).send({
+            error: `Error deleting bookmark - ${e.message}`
+        });
     }
 });
 
