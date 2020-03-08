@@ -11,7 +11,11 @@ const Bookmark = mongoose.model("Bookmark", bookmarkSchema);
 router.post("/bundles/:bundleId/bookmarks", async (req, res) => {
     // TODO: check user auth for bundle
 
-    const bookmark = new Bookmark(req.body);
+    const bookmark = new Bookmark({
+        name: req.body.name,
+        url: req.body.url,
+        note: req.body.note
+    });
 
     try {
         const updatedBundle = await Bundle.findByIdAndUpdate(
