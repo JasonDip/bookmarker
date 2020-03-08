@@ -30,6 +30,4 @@ const bundleSchema = new mongoose.Schema(
     }
 );
 
-const Bundle = mongoose.model("Bundle", bundleSchema);
-
-module.exports = Bundle;
+module.exports = bundleSchema;
