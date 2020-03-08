@@ -1,11 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Bundle = require("../bundle/bundleModel");
+const bundleSchema = require("../bundle/bundleSchema");
 const bookmarkSchema = require("../bookmark/bookmarkSchema");
 
-const router = new express.Router();
-
+const Bundle = mongoose.model("Bundle", bundleSchema);
 const Bookmark = mongoose.model("Bookmark", bookmarkSchema);
+
+const router = new express.Router();
 
 // create a bookmark for a bundle
 router.post("/bundles/:bundleId/bookmarks", async (req, res) => {
