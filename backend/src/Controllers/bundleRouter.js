@@ -31,12 +31,7 @@ router.get("/bundles/:bundleId", async (req, res) => {
 router.post("/bundles", async (req, res) => {
     // TODO: make sure user is logged in
 
-    const result = await bundle.createRootBundle({
-        name: req.body.name,
-        note: req.body.note,
-        //ownerId: // TODO: add this in when userid+auth is ready
-        bookmarks: req.body.bookmarks
-    });
+    const result = await bundle.createRootBundle(req.body);
 
     // TODO: should the User have a list of owned bundles?
 

@@ -7,11 +7,7 @@ const bundleSchema = require("../bundle/bundleSchema");
 const Bundle = mongoose.model("Bundle", bundleSchema);
 
 module.exports.createBookmark = async (BundleId, bookmarkObj) => {
-    const bookmark = new Bookmark({
-        name: bookmarkObj.name,
-        url: bookmarkObj.url,
-        note: bookmarkObj.note
-    });
+    const bookmark = new Bookmark(bookmarkObj);
 
     try {
         const updatedBundle = await Bundle.findByIdAndUpdate(
@@ -73,11 +69,7 @@ module.exports.moveBookmark = async (bundleId, bookmarkId, newBundleId) => {
                 }
             }
         });
-        const bookmark = new Bookmark({
-            name: bookmarkBeforeDelete.bookmarks[0].name,
-            url: bookmarkBeforeDelete.bookmarks[0].url,
-            note: bookmarkBeforeDelete.bookmarks[0].note
-        });
+        const bookmark = new Bookmark({ ...bookmarkBeforeDelete.bookmarks[0] });
 
         // add bookmark to newBundleId
         const addedToBundle = await Bundle.findByIdAndUpdate(

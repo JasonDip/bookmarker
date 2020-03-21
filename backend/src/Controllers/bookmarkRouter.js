@@ -7,11 +7,7 @@ const router = new express.Router();
 router.post("/bundles/:bundleId/bookmarks", async (req, res) => {
     // TODO: check user auth for bundle
 
-    const result = await bookmark.createBookmark(req.params.bundleId, {
-        name: req.body.name,
-        url: req.body.url,
-        note: req.body.note
-    });
+    const result = await bookmark.createBookmark(req.params.bundleId, req.body);
 
     if (result.success) {
         res.status(201).send(result.message);
@@ -29,11 +25,7 @@ router.patch("/bundles/:bundleId/bookmarks/:bookmarkId", async (req, res) => {
     const result = await bookmark.modifyBookmark(
         req.params.bundleId,
         req.params.bookmarkId,
-        {
-            name: req.body.name,
-            url: req.body.url,
-            note: req.body.note
-        }
+        req.body
     );
 
     if (result.success) {
