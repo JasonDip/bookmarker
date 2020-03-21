@@ -7,9 +7,8 @@ const bundleSchema = require("../bundle/bundleSchema");
 const Bundle = mongoose.model("Bundle", bundleSchema);
 
 module.exports.createBookmark = async (BundleId, bookmarkObj) => {
-    const bookmark = new Bookmark(bookmarkObj);
-
     try {
+        const bookmark = new Bookmark(bookmarkObj);
         const updatedBundle = await Bundle.findByIdAndUpdate(
             BundleId,
             {
@@ -105,8 +104,8 @@ module.exports.moveBookmark = async (bundleId, bookmarkId, newBundleId) => {
 };
 
 module.exports.deleteBookmark = async (bundleId, bookmarkId) => {
-    const bookmarkIdObj = mongoose.Types.ObjectId(bookmarkId);
     try {
+        const bookmarkIdObj = mongoose.Types.ObjectId(bookmarkId);
         const updatedBundle = await Bundle.findByIdAndUpdate(
             bundleId,
             {

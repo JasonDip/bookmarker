@@ -22,9 +22,8 @@ module.exports.getBundle = async bundleId => {
 };
 
 module.exports.createRootBundle = async bundleObj => {
-    const bundle = new Bundle(bundleObj);
-
     try {
+        const bundle = new Bundle(bundleObj);
         await bundle.save();
         return {
             success: true,
@@ -101,12 +100,12 @@ module.exports.createNestedBundle = async (parentBundleId, newBundleObj) => {
         };
     }
 
-    const bundle = new Bundle({
-        ...newBundleObj,
-        parentBundleId: mongoose.Types.ObjectId(parentBundleId)
-    });
-
     try {
+        const bundle = new Bundle({
+            ...newBundleObj,
+            parentBundleId: mongoose.Types.ObjectId(parentBundleId)
+        });
+
         await bundle.save();
         // update the parent bundle's childBundleIds array to reflect new relationship
         await Bundle.updateOne(
