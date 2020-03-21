@@ -3,7 +3,7 @@ const bookmark = require("../Models/bookmark/bookmark");
 
 const router = new express.Router();
 
-// create a bookmark for a bundle
+/*  create a bookmark for a bundle  */
 router.post("/bundles/:bundleId/bookmarks", async (req, res) => {
     // TODO: check user auth for bundle
 
@@ -22,7 +22,7 @@ router.post("/bundles/:bundleId/bookmarks", async (req, res) => {
     }
 });
 
-// modify an existing bookmark
+/*  modify an existing bookmark  */
 router.patch("/bundles/:bundleId/bookmarks/:bookmarkId", async (req, res) => {
     // TODO: check user auth on bundle
 
@@ -45,7 +45,7 @@ router.patch("/bundles/:bundleId/bookmarks/:bookmarkId", async (req, res) => {
     }
 });
 
-// move a bookmark between bundles
+/*  move a bookmark between bundles  */
 router.patch(
     "/bundles/:bundleId/bookmarks/:bookmarkId/move/:newBundleId",
     async (req, res) => {
@@ -67,7 +67,7 @@ router.patch(
     }
 );
 
-// delete a bookmark from a bundle
+/*  delete a bookmark from a bundle  */
 router.delete("/bundles/:bundleId/bookmarks/:bookmarkId", async (req, res) => {
     // TODO: check user auth for bundle
 
