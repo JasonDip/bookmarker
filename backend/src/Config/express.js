@@ -1,7 +1,6 @@
-require("../db/mongoose");
 const express = require("express");
-const bundleRouter = require("../api/bundle/bundleRouter");
-const bookmarkRouter = require("../api/bookmark/bookmarkRouter");
+const bundleRouter = require("../Controllers/bundleRouter");
+const bookmarkRouter = require("../Controllers/bookmarkRouter");
 
 const server = express();
 

@@ -1,9 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bundleSchema = require("./bundleSchema");
 
 const router = new express.Router();
 
+const bundleSchema = require("../Models/bundle/bundleSchema");
 const Bundle = mongoose.model("Bundle", bundleSchema);
 
 // TODO: get all bundles for current user
