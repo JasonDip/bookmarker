@@ -18,7 +18,7 @@ router.get("/bundles", async (req, res) => {
 
 /*  get a bundle  */
 /*  note: no auth is needed to get bundle because it depends on the bundle's privacy setting  */
-router.get("/bundles/:bundleId", bundle.getBundle);
+router.get("/bundles/:bundleId", bundle.getCollection);
 
 /*  create a new root bundle  */
 router.post("/bundles", isLoggedIn, bundle.createRootBundle);

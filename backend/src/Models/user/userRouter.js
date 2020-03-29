@@ -26,7 +26,7 @@ router.post("/users", async (req, res) => {
 /*  delete current logged in user  */
 router.delete("/users", isLoggedIn, async (req, res) => {
     if (req.session.user.email !== req.body.email) {
-        res.status(401).send({ error: "Cannot delete another user." });
+        return res.status(401).send({ error: "Cannot delete another user." });
     }
 
     const result = await user.deleteUser(req.body);
@@ -34,9 +34,9 @@ router.delete("/users", isLoggedIn, async (req, res) => {
     // TODO: email confirmation
 
     if (result.success) {
-        res.status(204).send();
+        return res.status(204).send();
     } else {
-        res.status(400).send({ error: "Invalid email or password." });
+        return res.status(400).send({ error: "Invalid email or password." });
     }
 });
 

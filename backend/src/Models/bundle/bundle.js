@@ -6,24 +6,42 @@ const Bundle = mongoose.model("Bundle", bundleSchema);
 const userSchema = require("../user/userSchema");
 const User = mongoose.model("User", userSchema);
 
-module.exports.getBundle = async (req, res) => {
-    try {
-        let bundleId = req.params.bundleId;
-        const bundle = await Bundle.findById(bundleId);
-        if (!bundle) {
-            throw new Error("Unable to find bundle.");
+module.exports.getCollection = async (req, res) => {
+    // utility function for recursively populating all bundles in collection
+    let populateUtil = async (fullCollection, childBundleIds) => {
+        for (let childId of childBundleIds) {
+            const childBundle = await Bundle.findById(childId);
+            fullCollection.push(childBundle);
+            if (childBundle.childBundleIds.length > 0) {
+                await populateUtil(
+                    fullCollection,
+                    new Array(childBundle.childBundleIds)
+                );
+            }
         }
+    };
+
+    try {
+        const root = await Bundle.findById(req.params.bundleId);
+        // only root-bundles/collections are allowed to be fully populated
+        // by design only collections' privacy setting can be toggled.
+        if (!root.isRoot) {
+            throw new Error("Only collections allowed to be populated.");
+        }
+        // private collections need authentication
         if (
-            bundle.isPrivate &&
+            root.isPrivate &&
             (!req.session.isLoggedIn ||
-                req.session.user._id.toString() !== bundle.ownerId.toString())
+                req.session.user._id.toString() !== root.ownerId.toString())
         ) {
-            // private bundles require authentication
             return res.status(401).send({
-                error: "You do not have permission to access this bundle."
+                error: "You do not have permission to access this collection."
             });
         }
-        res.status(200).send(bundle);
+        let fullCollection = [];
+        fullCollection.push(root);
+        await populateUtil(fullCollection, new Array(root.childBundleIds));
+        res.status(200).send(fullCollection);
     } catch (e) {
         res.status(404).send({ error: e.message });
     }
@@ -64,6 +82,7 @@ module.exports.modifyBundle = async (req, res) => {
 
         // if attempting to change this bundle's parent bundle, first make sure new parent is valid
         let newParent;
+        let newRoot;
         if (req.body.parentBundleId) {
             // do not allow root bundles (collections) to be nested
             if (req.session.specifiedBundle.isRoot) {
@@ -73,6 +92,7 @@ module.exports.modifyBundle = async (req, res) => {
             }
 
             newParent = await Bundle.findById(req.body.parentBundleId);
+            newRoot = newParent.rootBundleId;
 
             if (!newParent) {
                 throw new Error("Specified parent was not found.");
@@ -89,7 +109,7 @@ module.exports.modifyBundle = async (req, res) => {
         // find bundle and update
         const bundle = await Bundle.findByIdAndUpdate(
             req.params.bundleId,
-            { ...req.body },
+            { ...req.body, rootBundleId: newRoot },
             {
                 new: true,
                 runValidators: true
@@ -138,11 +158,20 @@ module.exports.createNestedBundle = async (req, res) => {
                 .send({ error: "You do not own this bundle." });
         }
 
+        // get the root bundle
+        let root;
+        if (parentBundle.isRoot) {
+            root = parentBundle._id;
+        } else {
+            root = parentBundle.rootBundleId;
+        }
+
         // create the new bundle
         const newBundle = new Bundle({
             ...req.body,
             parentBundleId: mongoose.Types.ObjectId(req.params.bundleId),
-            ownerId: mongoose.Types.ObjectId(req.session.user._id)
+            ownerId: mongoose.Types.ObjectId(req.session.user._id),
+            rootBundleId: root
         });
         await newBundle.save();
 
