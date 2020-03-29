@@ -19,11 +19,22 @@ const userSchema = new mongoose.Schema(
                     throw new Error("Email is invalid.");
                 }
             }
-        }
+        },
+        hashedPassword: {
+            type: String,
+            required: true
+        },
+        ownedBundles: [
+            // note: root bundles only
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Bundle"
+            }
+        ]
     },
     {
         timestamps: true
     }
 );
 
-mondule.exports = userSchema;
+module.exports = userSchema;
