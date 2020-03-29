@@ -7,6 +7,8 @@ module.exports = async (req, res, next) => {
     try {
         const bundle = await Bundle.findById(req.params.bundleId);
         if (bundle.ownerId.toString() === req.session.user._id.toString()) {
+            req.session.specifiedBundle = bundle;
+            req.session.save();
             return next();
         } else {
             throw new Error("You do not own this bundle.");

@@ -13,8 +13,15 @@ module.exports.getBundle = async (req, res) => {
         if (!bundle) {
             throw new Error("Unable to find bundle.");
         }
-        if (bundle._id.toString() !== bundleId) {
-            throw new Error("Invalid bundle Id.");
+        if (
+            bundle.isPrivate &&
+            (!req.session.isLoggedIn ||
+                req.session.user._id.toString() !== bundle.ownerId.toString())
+        ) {
+            // private bundles require authentication
+            return res.status(401).send({
+                error: "You do not have permission to access this bundle."
+            });
         }
         res.status(200).send(bundle);
     } catch (e) {
@@ -52,13 +59,23 @@ module.exports.createRootBundle = async (req, res) => {
 
 module.exports.modifyBundle = async (req, res) => {
     try {
+        // saving old parent
+        let oldParent = req.session.specifiedBundle;
+
         // if attempting to change this bundle's parent bundle, first make sure new parent is valid
         let newParent;
         if (req.body.parentBundleId) {
+            // do not allow root bundles (collections) to be nested
+            if (req.session.specifiedBundle.isRoot) {
+                return res
+                    .status(401)
+                    .send({ error: "Cannot nest root bundles." });
+            }
+
             newParent = await Bundle.findById(req.body.parentBundleId);
 
-            if (newParent._id.toString() !== req.body.parentBundleId) {
-                throw new Error("Invalid parent.");
+            if (!newParent) {
+                throw new Error("Specified parent was not found.");
             }
 
             // make sure current user is owner of the new parent bundle
@@ -69,24 +86,30 @@ module.exports.modifyBundle = async (req, res) => {
             }
         }
 
-        // create new bundle
+        // find bundle and update
         const bundle = await Bundle.findByIdAndUpdate(
             req.params.bundleId,
-            {
-                name: req.body.name,
-                note: req.body.note,
-                parentBundleId: req.body.parentBundleId
-            },
+            { ...req.body },
             {
                 new: true,
                 runValidators: true
             }
         );
 
-        // update the parent's childBundleIds array to reflect new relationship
         if (req.body.parentBundleId) {
+            // update the old parent's childBundleIds array to remove old child
             await Bundle.updateOne(
-                { _id: newParent.parentBundleId },
+                { _id: oldParent.parentBundleId },
+                {
+                    $pull: {
+                        childBundleIds: mongoose.Types.ObjectId(bundle._id)
+                    }
+                }
+            );
+
+            // update the new parent's childBundleIds array to add new child
+            await Bundle.updateOne(
+                { _id: newParent._id },
                 {
                     $push: {
                         childBundleIds: mongoose.Types.ObjectId(bundle._id)
