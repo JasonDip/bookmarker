@@ -10,9 +10,9 @@ const bundleSchema = new mongoose.Schema(
         note: {
             type: String
         },
-        // ownerId: { // TODO: add this back once userid+auth is ready
+        // ownerId: {
         //     type: mongoose.Schema.Types.ObjectId,
-        //      ref
+        //     ref: "User",
         //     required: true
         // },
         parentBundleId: {
