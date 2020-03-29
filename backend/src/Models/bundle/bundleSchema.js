@@ -15,6 +15,9 @@ const bundleSchema = new mongoose.Schema(
             ref: "User",
             required: true
         },
+        rootBundleId: {
+            type: mongoose.Schema.Types.ObjectId
+        },
         parentBundleId: {
             type: mongoose.Schema.Types.ObjectId
         },
