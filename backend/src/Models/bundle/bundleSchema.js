@@ -23,6 +23,14 @@ const bundleSchema = new mongoose.Schema(
         },
         bookmarks: {
             type: [bookmarkSchema]
+        },
+        isRoot: {
+            type: Boolean,
+            default: false
+        },
+        isPrivate: {
+            type: Boolean,
+            default: true
         }
     },
     {

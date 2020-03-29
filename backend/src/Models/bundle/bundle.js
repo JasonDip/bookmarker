@@ -27,6 +27,7 @@ module.exports.createRootBundle = async (req, res) => {
         // create new root bundle
         const bundle = new Bundle({
             ...req.body,
+            isRoot: true,
             ownerId: req.session.user._id
         });
         await bundle.save();
@@ -51,20 +52,6 @@ module.exports.createRootBundle = async (req, res) => {
 
 module.exports.modifyBundle = async (req, res) => {
     try {
-        // check if current user is owner of the bundle being modified
-        let doesOwn = false;
-        for (let bundle of req.session.user.ownedCollections) {
-            if (bundle.toString() === req.params.bundleId) {
-                doesOwn = true;
-                break;
-            }
-        }
-        if (!doesOwn) {
-            return res
-                .status(401)
-                .send({ error: "You do not own this bundle." });
-        }
-
         // if attempting to change this bundle's parent bundle, first make sure new parent is valid
         let newParent;
         if (req.body.parentBundleId) {
@@ -152,22 +139,47 @@ module.exports.createNestedBundle = async (req, res) => {
 };
 
 module.exports.deleteBundle = async (req, res) => {
-    try {
-        // check if user owns the bundle
-        let doesOwn = false;
-        for (let bundle of req.session.user.ownedCollections) {
-            if (bundle.toString() === req.params.bundleId) {
-                doesOwn = true;
-                break;
+    // utility function for recursively deleting children bundles
+    let deleteUtil = async childBundleIds => {
+        try {
+            for (let childId of childBundleIds) {
+                const bundle = await Bundle.findByIdAndDelete(childId);
+                deleteUtil(bundle.childBundleIds);
             }
+        } catch {
+            throw new Error("Error deleting a child bundle.");
         }
-        if (!doesOwn) {
-            return res
-                .status(401)
-                .send({ error: "You do not own this bundle." });
+    };
+
+    try {
+        // delete the current bundle
+        const bundle = await Bundle.findByIdAndDelete(req.params.bundleId);
+        if (!bundle) throw new Error("Bundle is null.");
+
+        if (bundle.isRoot) {
+            // delete entry from user's ownedCollections if it is a root bundle
+            const updatedUser = await User.findByIdAndUpdate(
+                bundle.ownerId,
+                {
+                    $pull: {
+                        ownedCollections: bundle._id
+                    }
+                },
+                { new: true }
+            );
+            // refresh session data
+            req.session.user = updatedUser;
+            req.session.save();
+        } else {
+            // delete entry from parent bundle if it is a nested bundle
+            await Bundle.findByIdAndUpdate(bundle.parentBundleId, {
+                $pull: { childBundleIds: bundle._id }
+            });
         }
 
-        await Bundle.findByIdAndDelete(req.params.bundleId);
+        // recursively delete all children bundles
+        deleteUtil(bundle.childBundleIds);
+
         res.status(204).send();
     } catch (e) {
         res.status(404).send({ error: e.message });
