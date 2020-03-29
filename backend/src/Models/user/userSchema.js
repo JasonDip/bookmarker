@@ -24,8 +24,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        ownedBundles: [
-            // note: root bundles only
+        ownedCollections: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Bundle"
