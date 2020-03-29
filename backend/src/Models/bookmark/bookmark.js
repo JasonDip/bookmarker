@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const bookmarkSchema = require("../bookmark/bookmarkSchema");
+const bookmarkSchema = require("./bookmarkSchema");
 const Bookmark = mongoose.model("Bookmark", bookmarkSchema);
 
 const bundleSchema = require("../bundle/bundleSchema");
@@ -18,7 +18,7 @@ module.exports.createBookmark = async (BundleId, bookmarkObj) => {
         );
         return {
             success: true,
-            message: bookmark // maybe return the updated bundle instead?
+            message: bookmark // TODO: maybe return the updated bundle instead?
         };
     } catch (e) {
         return {
@@ -43,7 +43,7 @@ module.exports.modifyBookmark = async (bundleId, bookmarkId, bookmarkObj) => {
                 }
             }
         );
-        const bundle = await Bundle.findById(bundleId); // TODO: is returning bundle needed?
+        const bundle = await Bundle.findById(bundleId); // TODO: is returning bundle needed? also check if this extra findById is needed
         return {
             success: true,
             message: bundle

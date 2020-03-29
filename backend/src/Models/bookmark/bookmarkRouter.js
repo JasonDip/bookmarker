@@ -1,5 +1,5 @@
 const express = require("express");
-const bookmark = require("../Models/bookmark/bookmark");
+const bookmark = require("./bookmark");
 
 const router = new express.Router();
 

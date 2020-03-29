@@ -10,11 +10,11 @@ const bundleSchema = new mongoose.Schema(
         note: {
             type: String
         },
-        // ownerId: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "User",
-        //     required: true
-        // },
+        ownerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+        },
         parentBundleId: {
             type: mongoose.Schema.Types.ObjectId
         },
