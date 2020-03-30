@@ -5,17 +5,6 @@ const ownsBundle = require("../../middlewares/ownsBundle");
 
 const router = new express.Router();
 
-// TODO: get all bundles for current user
-router.get("/bundles", async (req, res) => {
-    // TODO: check user auth
-
-    try {
-        res.status(200).send();
-    } catch (e) {
-        res.status(404).send({ error: e.message });
-    }
-});
-
 /*  get a bundle  */
 /*  note: no auth is needed to get bundle because it depends on the bundle's privacy setting  */
 router.get("/bundles/:bundleId", bundle.getCollection);

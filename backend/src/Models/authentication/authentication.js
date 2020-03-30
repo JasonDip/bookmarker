@@ -49,4 +49,4 @@ module.exports.login = async (req, res) => {
     }
 };
 
-module.exports.logout = async () => {};
+module.exports.logout = async (req, res) => {};

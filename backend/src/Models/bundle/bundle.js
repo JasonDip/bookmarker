@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bundleUtil = require("../util/bundleUtil");
 
 const bundleSchema = require("./bundleSchema");
 const Bundle = mongoose.model("Bundle", bundleSchema);
@@ -7,20 +8,6 @@ const userSchema = require("../user/userSchema");
 const User = mongoose.model("User", userSchema);
 
 module.exports.getCollection = async (req, res) => {
-    // utility function for recursively populating all bundles in collection
-    let populateUtil = async (fullCollection, childBundleIds) => {
-        for (let childId of childBundleIds) {
-            const childBundle = await Bundle.findById(childId);
-            fullCollection.push(childBundle);
-            if (childBundle.childBundleIds.length > 0) {
-                await populateUtil(
-                    fullCollection,
-                    new Array(childBundle.childBundleIds)
-                );
-            }
-        }
-    };
-
     try {
         const root = await Bundle.findById(req.params.bundleId);
         if (!root) {
@@ -43,7 +30,10 @@ module.exports.getCollection = async (req, res) => {
         }
         let fullCollection = [];
         fullCollection.push(root);
-        await populateUtil(fullCollection, new Array(root.childBundleIds));
+        await bundleUtil.populateUtil(
+            fullCollection,
+            new Array(root.childBundleIds)
+        );
         res.status(200).send(fullCollection);
     } catch (e) {
         res.status(404).send({ error: e.message });
@@ -194,18 +184,6 @@ module.exports.createNestedBundle = async (req, res) => {
 };
 
 module.exports.deleteBundle = async (req, res) => {
-    // utility function for recursively deleting children bundles
-    let deleteUtil = async childBundleIds => {
-        try {
-            for (let childId of childBundleIds) {
-                const bundle = await Bundle.findByIdAndDelete(childId);
-                deleteUtil(bundle.childBundleIds);
-            }
-        } catch {
-            throw new Error("Error deleting a child bundle.");
-        }
-    };
-
     try {
         // delete the current bundle
         const bundle = await Bundle.findByIdAndDelete(req.params.bundleId);
@@ -233,7 +211,7 @@ module.exports.deleteBundle = async (req, res) => {
         }
 
         // recursively delete all children bundles
-        deleteUtil(bundle.childBundleIds);
+        bundleUtil.deleteUtil(bundle.childBundleIds);
 
         res.status(204).send();
     } catch (e) {
