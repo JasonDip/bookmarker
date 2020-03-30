@@ -23,6 +23,9 @@ module.exports.getCollection = async (req, res) => {
 
     try {
         const root = await Bundle.findById(req.params.bundleId);
+        if (!root) {
+            throw new Error("Bundle does not exist.");
+        }
         // only root-bundles/collections are allowed to be fully populated
         // by design only collections' privacy setting can be toggled.
         if (!root.isRoot) {
