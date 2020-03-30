@@ -49,4 +49,7 @@ module.exports.login = async (req, res) => {
     }
 };
 
-module.exports.logout = async (req, res) => {};
+module.exports.logout = async (req, res) => {
+    req.session.destroy();
+    return res.status(204).send();
+};

@@ -6,7 +6,7 @@ const router = new express.Router();
 /*  log in  */
 router.post("/login", authentication.login);
 
-// TODO: logout
+/*  log out  */
 router.post("/logout", authentication.logout);
 
 module.exports = router;
