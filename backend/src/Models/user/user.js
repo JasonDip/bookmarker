@@ -65,7 +65,8 @@ module.exports.deleteUser = async (req, res) => {
 
         // TODO: email confirmation
 
-        // TODO: delete session
+        // delete session (similar to logging out)
+        req.session.destroy();
 
         // delete collections owned by user
         bundleUtil.deleteUtil(existingUser.ownedCollections);
@@ -74,5 +75,69 @@ module.exports.deleteUser = async (req, res) => {
         return res.status(204).send();
     } catch (e) {
         return res.status(400).send({ error: "Invalid email or password." });
+    }
+};
+
+module.exports.getUserInfo = async (req, res) => {
+    try {
+        const user = await User.findById(req.session.user._id);
+
+        // refresh the session with newest info
+        req.session.user = user;
+        req.session.save();
+
+        // populate user's ownedCollections with additional information
+        await user
+            .populate("ownedCollections", {
+                _id: 1,
+                name: 1,
+                note: 1
+            })
+            .execPopulate();
+
+        return res.status(200).send({
+            name: user.name,
+            email: user.email,
+            ownedCollections: user.ownedCollections
+        });
+    } catch (e) {
+        return res.status(404).send({ error: e.message });
+    }
+};
+
+module.exports.changePassword = async (req, res) => {
+    try {
+        // check current logged in user
+        if (req.session.user.email !== req.body.email) {
+            return res
+                .status(401)
+                .send({ error: "Cannot delete another user." });
+        }
+
+        // check password vs hashed password
+        let user = await User.findById(req.session.user._id);
+        if (!user) {
+            throw new Error("Could not find user.");
+        }
+        const isMatch = await bcrypt.compare(
+            req.body.password,
+            user.hashedPassword
+        );
+        if (!isMatch) {
+            throw new Error("Incorrect password.");
+        }
+
+        // store new hashed password
+        let newPass = await bcrypt.hash(req.body.newPassword, 12);
+        await User.findByIdAndUpdate(req.session.user._id, {
+            hashedPassword: newPass
+        });
+
+        // destroy session
+        req.session.destroy();
+
+        return res.status(204).send();
+    } catch (e) {
+        return res.status(404).send({ error: "Error changing password." });
     }
 };
