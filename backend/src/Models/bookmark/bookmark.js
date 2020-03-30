@@ -6,65 +6,68 @@ const Bookmark = mongoose.model("Bookmark", bookmarkSchema);
 const bundleSchema = require("../bundle/bundleSchema");
 const Bundle = mongoose.model("Bundle", bundleSchema);
 
-module.exports.createBookmark = async (BundleId, bookmarkObj) => {
+module.exports.createBookmark = async (req, res) => {
     try {
-        const bookmark = new Bookmark(bookmarkObj);
+        const bookmark = new Bookmark(req.body);
         const updatedBundle = await Bundle.findByIdAndUpdate(
-            BundleId,
+            req.params.bundleId,
             {
                 $push: { bookmarks: bookmark }
             },
             { new: true }
         );
-        return {
-            success: true,
-            message: bookmark // TODO: maybe return the updated bundle instead?
-        };
+        return res.status(201).send(bookmark);
     } catch (e) {
-        return {
-            success: false,
-            error: e
-        };
+        return res.status(404).send({
+            error: `Error creating bookmark - ${e.message}`
+        });
     }
 };
 
-module.exports.modifyBookmark = async (bundleId, bookmarkId, bookmarkObj) => {
+module.exports.modifyBookmark = async (req, res) => {
     try {
         await Bundle.updateOne(
             {
-                _id: bundleId,
-                "bookmarks._id": bookmarkId
+                _id: req.params.bundleId,
+                "bookmarks._id": req.params.bookmarkId
             },
             {
                 $set: {
-                    "bookmarks.$.name": bookmarkObj.name,
-                    "bookmarks.$.url": bookmarkObj.url,
-                    "bookmarks.$.note": bookmarkObj.note
+                    "bookmarks.$.name": req.body.name,
+                    "bookmarks.$.url": req.body.url,
+                    "bookmarks.$.note": req.body.note
                 }
             }
         );
-        const bundle = await Bundle.findById(bundleId); // TODO: is returning bundle needed? also check if this extra findById is needed
-        return {
-            success: true,
-            message: bundle
-        };
+        const bundle = await Bundle.findById(req.params.bundleId); // TODO: is returning bundle needed?
+        return res.status(200).send(bundle);
     } catch (e) {
-        return {
-            success: false,
-            error: e
-        };
+        return res.status(404).send({
+            error: `Error modifying bookmark - ${e.message}`
+        });
     }
 };
 
-module.exports.moveBookmark = async (bundleId, bookmarkId, newBundleId) => {
+module.exports.moveBookmark = async (req, res) => {
     try {
+        // check if the new bookmark location is owned by current user
+        const newBundle = await Bundle.findById(req.params.newBundleId);
+        if (!newBundle) {
+            throw new Error("Destination bundle not found.");
+        }
+        if (newBundle.ownerId !== req.session.user._id) {
+            return res
+                .status(401)
+                .send("You do not have access to this bundle.");
+        }
+
         // get the bookmark
         const bookmarkBeforeDelete = await Bundle.findOne({
-            _id: bundleId
+            _id: req.params.bundleId
         }).select({
             bookmarks: {
                 $elemMatch: {
-                    _id: bookmarkId
+                    _id: req.params.bookmarkId
                 }
             }
         });
@@ -72,7 +75,7 @@ module.exports.moveBookmark = async (bundleId, bookmarkId, newBundleId) => {
 
         // add bookmark to newBundleId
         const addedToBundle = await Bundle.findByIdAndUpdate(
-            newBundleId,
+            req.params.newBundleId,
             {
                 $push: {
                     bookmarks: bookmark
@@ -83,31 +86,27 @@ module.exports.moveBookmark = async (bundleId, bookmarkId, newBundleId) => {
 
         // delete bookmark from bundleId
         const removedFromBundle = await Bundle.findByIdAndUpdate(
-            bundleId,
+            req.params.bundleId,
             {
                 $pull: {
-                    bookmarks: { _id: bookmarkId }
+                    bookmarks: { _id: req.params.bookmarkId }
                 }
             },
             { new: true }
         );
-        return {
-            success: true,
-            message: [removedFromBundle, addedToBundle]
-        };
+        return res.status(200).send([removedFromBundle, addedToBundle]);
     } catch (e) {
-        return {
-            success: false,
-            error: e
-        };
+        return res.status(404).send({
+            error: `Error moving bookmark - ${e.message}`
+        });
     }
 };
 
-module.exports.deleteBookmark = async (bundleId, bookmarkId) => {
+module.exports.deleteBookmark = async (req, res) => {
     try {
-        const bookmarkIdObj = mongoose.Types.ObjectId(bookmarkId);
+        const bookmarkIdObj = mongoose.Types.ObjectId(req.params.bookmarkId);
         const updatedBundle = await Bundle.findByIdAndUpdate(
-            bundleId,
+            req.params.bundleId,
             {
                 $pull: {
                     bookmarks: { _id: bookmarkIdObj }
@@ -115,14 +114,10 @@ module.exports.deleteBookmark = async (bundleId, bookmarkId) => {
             },
             { new: true }
         );
-        return {
-            success: true,
-            message: updatedBundle
-        };
+        return res.status(204).send(updatedBundle);
     } catch (e) {
-        return {
-            success: false,
-            error: e
-        };
+        return res.status(404).send({
+            error: `Error deleting bookmark - ${e.message}`
+        });
     }
 };

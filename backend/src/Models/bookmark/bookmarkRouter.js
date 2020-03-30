@@ -1,80 +1,40 @@
 const express = require("express");
 const bookmark = require("./bookmark");
+const isLoggedIn = require("../../middlewares/isLoggedIn");
+const ownsBundle = require("../../middlewares/ownsBundle");
 
 const router = new express.Router();
 
 /*  create a bookmark for a bundle  */
-router.post("/bundles/:bundleId/bookmarks", async (req, res) => {
-    // TODO: check user auth for bundle
-
-    const result = await bookmark.createBookmark(req.params.bundleId, req.body);
-
-    if (result.success) {
-        return res.status(201).send(result.message);
-    } else {
-        return res.status(404).send({
-            error: `Error creating bookmark - ${result.error.message}`
-        });
-    }
-});
+router.post(
+    "/bundles/:bundleId/bookmarks",
+    isLoggedIn,
+    ownsBundle,
+    bookmark.createBookmark
+);
 
 /*  modify an existing bookmark  */
-router.patch("/bundles/:bundleId/bookmarks/:bookmarkId", async (req, res) => {
-    // TODO: check user auth on bundle
-
-    const result = await bookmark.modifyBookmark(
-        req.params.bundleId,
-        req.params.bookmarkId,
-        req.body
-    );
-
-    if (result.success) {
-        return res.status(200).send(result.message);
-    } else {
-        return res.status(404).send({
-            error: `Error modifying bookmark - ${result.error.message}`
-        });
-    }
-});
+router.patch(
+    "/bundles/:bundleId/bookmarks/:bookmarkId",
+    isLoggedIn,
+    ownsBundle,
+    bookmark.modifyBookmark
+);
 
 /*  move a bookmark between bundles  */
 router.patch(
     "/bundles/:bundleId/bookmarks/:bookmarkId/move/:newBundleId",
-    async (req, res) => {
-        // TODO: check user auth on both bundles
-
-        let result = await bookmark.moveBookmark(
-            req.params.bundleId,
-            req.params.bookmarkId,
-            req.params.newBundleId
-        );
-
-        if (result.success) {
-            return res.status(200).send(result.message);
-        } else {
-            return res.status(404).send({
-                error: `Error moving bookmark - ${result.error.message}`
-            });
-        }
-    }
+    isLoggedIn,
+    ownsBundle,
+    bookmark.moveBookmark
 );
 
 /*  delete a bookmark from a bundle  */
-router.delete("/bundles/:bundleId/bookmarks/:bookmarkId", async (req, res) => {
-    // TODO: check user auth for bundle
-
-    let result = await bookmark.deleteBookmark(
-        req.params.bundleId,
-        req.params.bookmarkId
-    );
-
-    if (result.success) {
-        return res.status(204).send(result.message);
-    } else {
-        return res.status(404).send({
-            error: `Error deleting bookmark - ${result.error.message}`
-        });
-    }
-});
+router.delete(
+    "/bundles/:bundleId/bookmarks/:bookmarkId",
+    isLoggedIn,
+    ownsBundle,
+    bookmark.deleteBookmark
+);
 
 module.exports = router;
