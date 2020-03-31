@@ -1,9 +1,6 @@
-const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const bundleUtil = require("../util/bundleUtil");
-
-const userSchema = require("./userSchema");
-const User = mongoose.model("User", userSchema);
+const { User } = require("./model");
 
 module.exports.createNewUser = async (req, res) => {
     try {

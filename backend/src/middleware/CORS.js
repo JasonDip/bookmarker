@@ -1,4 +1,4 @@
-/*  headers to allow CORS  */
+/*  adds headers to allow CORS  */
 module.exports = (req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(

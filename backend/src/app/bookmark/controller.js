@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
-
-const bookmarkSchema = require("./bookmarkSchema");
-const Bookmark = mongoose.model("Bookmark", bookmarkSchema);
-
-const bundleSchema = require("../bundle/bundleSchema");
-const Bundle = mongoose.model("Bundle", bundleSchema);
+const { Bookmark } = require("./model");
+const { Bundle } = require("../bundle/model");
 
 module.exports.createBookmark = async (req, res) => {
     try {

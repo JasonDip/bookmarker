@@ -1,9 +1,8 @@
-const mongoose = require("mongoose");
-const bundleSchema = require("../models/bundle/bundleSchema");
-const Bundle = mongoose.model("Bundle", bundleSchema);
+const { Bundle } = require("../app/bundle/model");
 
+/*  check if the user owns the bundle specified by req.params.bundleId  */
+/*  must be logged in  */
 module.exports = async (req, res, next) => {
-    // check if user owns the bundle
     try {
         const bundle = await Bundle.findById(req.params.bundleId);
         if (bundle.ownerId.toString() === req.session.user._id.toString()) {

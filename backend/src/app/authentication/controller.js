@@ -1,8 +1,5 @@
-const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-
-const userSchema = require("../user/userSchema");
-const User = mongoose.model("User", userSchema);
+const { User } = require("../user/model");
 
 module.exports.login = async (req, res) => {
     try {

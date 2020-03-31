@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
 const bundleUtil = require("../util/bundleUtil");
-
-const bundleSchema = require("./bundleSchema");
-const Bundle = mongoose.model("Bundle", bundleSchema);
-
-const userSchema = require("../user/userSchema");
-const User = mongoose.model("User", userSchema);
+const { Bundle } = require("./model");
+const { User } = require("../user/model");
 
 module.exports.getCollection = async (req, res) => {
     try {

@@ -1,14 +1,14 @@
 const express = require("express");
 
 /*  routers  */
-const authenticationRouter = require("../models/authentication/authenticationRouter");
-const userRouter = require("../models/user/userRouter");
-const bundleRouter = require("../models/bundle/bundleRouter");
-const bookmarkRouter = require("../models/bookmark/bookmarkRouter");
+const authenticationRouter = require("../app/authentication/router");
+const userRouter = require("../app/user/router");
+const bundleRouter = require("../app/bundle/router");
+const bookmarkRouter = require("../app/bookmark/router");
 
 /*  middlewares  */
-const session = require("../middlewares/session");
-const CORS = require("../middlewares/CORS");
+const session = require("../middleware/session");
+const CORS = require("../middleware/CORS");
 
 /*  server configuration  */
 const server = express();

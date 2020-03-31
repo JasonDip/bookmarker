@@ -1,6 +1,4 @@
-const mongoose = require("mongoose");
-const bundleSchema = require("../bundle/bundleSchema");
-const Bundle = mongoose.model("Bundle", bundleSchema);
+const { Bundle } = require("../bundle/model");
 
 /**
  * utility function for recursively populating all bundles in collection

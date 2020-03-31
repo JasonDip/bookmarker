@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const bookmarkSchema = require("../bookmark/bookmarkSchema");
+const { bookmarkSchema } = require("../bookmark/model");
 
-const bundleSchema = new mongoose.Schema(
+module.exports.bundleSchema = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -41,4 +41,4 @@ const bundleSchema = new mongoose.Schema(
     }
 );
 
-module.exports = bundleSchema;
+module.exports.Bundle = mongoose.model("Bundle", this.bundleSchema);

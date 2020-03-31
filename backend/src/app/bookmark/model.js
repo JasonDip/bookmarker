@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const bookmarkSchema = new mongoose.Schema(
+module.exports.bookmarkSchema = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -19,4 +19,4 @@ const bookmarkSchema = new mongoose.Schema(
     }
 );
 
-module.exports = bookmarkSchema;
+module.exports.Bookmark = mongoose.model("Bookmark", this.bookmarkSchema);
