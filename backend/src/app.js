@@ -1,23 +1,23 @@
 /* Load environment variables */
-require("./Config/env");
+require("./config/env");
 
 /*  Configure Express server  */
-const server = require("./Config/express");
+const server = require("./server/express");
 
-/*  Connect to database  */
-require("./Config/mongoose")
-    .then(() => {
+(async () => {
+    /*  Connect to database  */
+    try {
+        await require("./db/mongoose");
         console.log("Connected to MongoDB database.");
-    })
-    .catch(e => {
+    } catch (e) {
         console.log(
             "[ERROR] Unable to connect to the MongoDB database: " + e.message
         );
-    })
-    .then(() => {
-        /*  begin listening on server  */
-        const port = process.env.PORT || 3000;
-        server.listen(port, () => {
-            console.log(`Server is listening on port ${port}.`);
-        });
+    }
+
+    /*  begin listening on server  */
+    const port = process.env.PORT || 3000;
+    server.listen(port, () => {
+        console.log(`Server is listening on port ${port}.`);
     });
+})();

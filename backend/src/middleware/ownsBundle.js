@@ -1,4 +1,4 @@
-const { Bundle } = require("../app/bundle/model");
+const { Bundle } = require("../api/bundle/model");
 
 /*  check if the user owns the bundle specified by req.params.bundleId  */
 /*  must be logged in  */

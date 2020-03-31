@@ -1,10 +1,10 @@
 const express = require("express");
 
 /*  routers  */
-const authenticationRouter = require("../app/authentication/router");
-const userRouter = require("../app/user/router");
-const bundleRouter = require("../app/bundle/router");
-const bookmarkRouter = require("../app/bookmark/router");
+const authenticationRouter = require("../api/authentication/router");
+const userRouter = require("../api/user/router");
+const bundleRouter = require("../api/bundle/router");
+const bookmarkRouter = require("../api/bookmark/router");
 
 /*  middlewares  */
 const session = require("../middleware/session");

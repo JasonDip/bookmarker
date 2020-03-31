@@ -1,7 +1,7 @@
 const { Bundle } = require("../bundle/model");
 
 /**
- * utility function for recursively populating all bundles in collection
+ * utility function for recursively getting all bundles in a collection
  * @param {Bundle[]} fullCollection
  * @param {ObjectId[]} childBundleIds
  */
