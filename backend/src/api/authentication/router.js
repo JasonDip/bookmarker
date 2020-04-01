@@ -1,5 +1,6 @@
 const express = require("express");
 const controller = require("./controller");
+const isAuth = require("../../middleware/isAuth");
 
 const router = new express.Router();
 
@@ -7,6 +8,6 @@ const router = new express.Router();
 router.post("/login", controller.login);
 
 /*  log out  */
-router.post("/logout", controller.logout);
+router.post("/logout", isAuth, controller.logout);
 
 module.exports = router;

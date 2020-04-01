@@ -5,14 +5,19 @@ const { Bundle } = require("../api/bundle/model");
 module.exports = async (req, res, next) => {
     try {
         const bundle = await Bundle.findById(req.params.bundleId);
-        if (bundle.ownerId.toString() === req.session.user._id.toString()) {
-            req.session.specifiedBundle = bundle;
-            req.session.save();
-            return next();
-        } else {
-            throw new Error("You do not own this bundle.");
+        if (!bundle) {
+            const error = new Error("Bundle does not exist.");
+            throw error;
         }
+        if (bundle.ownerId.toString() !== req.user._id) {
+            const error = new Error("You do not own this bundle.");
+            throw error;
+        }
+        req.specifiedBundle = bundle;
+        return next();
     } catch (e) {
-        res.status(401).send({ error: e.message });
+        e.statusCode = e.statusCode || 401;
+        e.name = "Owns Bundle Error";
+        return next(e);
     }
 };

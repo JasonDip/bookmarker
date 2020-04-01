@@ -1,6 +1,6 @@
 const express = require("express");
 const controller = require("./controller");
-const isLoggedIn = require("../../middleware/isLoggedIn");
+const isAuth = require("../../middleware/isAuth");
 
 const router = new express.Router();
 
@@ -8,12 +8,12 @@ const router = new express.Router();
 router.post("/user", controller.createNewUser);
 
 /*  delete current logged in user  */
-router.delete("/user", isLoggedIn, controller.deleteUser);
+router.delete("/user", isAuth, controller.deleteUser);
 
 /*  get current user information  */
-router.get("/user", isLoggedIn, controller.getUserInfo);
+router.get("/user", isAuth, controller.getUserInfo);
 
 /*  change password  */
-router.patch("/user/password", isLoggedIn, controller.changePassword);
+router.patch("/user/password", isAuth, controller.changePassword);
 
 module.exports = router;

@@ -1,53 +1,90 @@
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 const bundleUtil = require("../util/bundleUtil");
 const { Bundle } = require("./model");
 const { User } = require("../user/model");
 
-module.exports.getCollection = async (req, res) => {
+module.exports.getCollection = async (req, res, next) => {
     try {
-        const root = await Bundle.findById(req.params.bundleId);
-        if (!root) {
-            throw new Error("Bundle does not exist.");
+        const collection = await Bundle.findById(req.params.bundleId);
+        if (!collection) {
+            const error = new Error("Bundle does not exist.");
+            error.statusCode = 404;
+            throw error;
         }
         // only root-bundles/collections are allowed to be fully populated
-        // by design only collections' privacy setting can be toggled.
-        if (!root.isRoot) {
-            throw new Error("Only collections allowed to be populated.");
+        // by design only collections' privacy setting matters.
+        if (!collection.isRoot) {
+            const error = new Error("Only collections can be populated.");
+            error.statusCode = 404;
+            throw error;
         }
+
         // private collections need authentication
-        if (
-            root.isPrivate &&
-            (!req.session.isLoggedIn ||
-                req.session.user._id.toString() !== root.ownerId.toString())
-        ) {
-            return res.status(401).send({
-                error: "You do not have permission to access this collection."
-            });
+        if (collection.isPrivate) {
+            // check for auth token
+            req.user = {}; // always have a user obj
+            const authHeader = req.get("Authorization");
+            if (!authHeader) {
+                const error = new Error("Not authenticated.");
+                error.name = "Authentication Error";
+                error.statusCode = 401;
+                throw error;
+            }
+            const token = authHeader.split(" ")[1];
+            let decodedToken;
+            try {
+                decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+            } catch (e) {
+                e.statusCode = 500;
+                e.name = "Authentication Error";
+                throw e;
+            }
+            if (!decodedToken) {
+                const error = new Error("Not authenticated.");
+                error.statusCode = 401;
+                error.name = "Authentication Error";
+                throw error;
+            }
+            req.user._id = decodedToken._id;
+
+            // if authenticated, check if user owns this collection
+            if (req.user._id !== collection.ownerId.toString()) {
+                const error = new Error(
+                    "You do not have permission to access this collection."
+                );
+                error.statusCode = 401;
+                throw error;
+            }
         }
+
+        // populate the collection and its children
         let fullCollection = [];
-        fullCollection.push(root);
+        fullCollection.push(collection);
         await bundleUtil.populateUtil(
             fullCollection,
-            new Array(root.childBundleIds)
+            collection.childBundleIds
         );
-        res.status(200).send(fullCollection);
+        return res.status(200).send(fullCollection);
     } catch (e) {
-        res.status(404).send({ error: e.message });
+        e.name = "Get Collection Error";
+        e.statusCode = e.statusCode || 500;
+        return next(e);
     }
 };
 
-module.exports.createRootBundle = async (req, res) => {
+module.exports.createRootBundle = async (req, res, next) => {
     try {
         // create new root bundle
         const bundle = new Bundle({
             ...req.body,
             isRoot: true,
-            ownerId: req.session.user._id
+            ownerId: req.user._id
         });
         await bundle.save();
         // add this new root bundle to the user's ownedCollections list
         const modifiedUser = await User.findByIdAndUpdate(
-            req.session.user._id,
+            req.user._id,
             {
                 $push: {
                     ownedCollections: bundle._id
@@ -55,43 +92,46 @@ module.exports.createRootBundle = async (req, res) => {
             },
             { new: true }
         );
-        // refresh the session's user object to update with the newly added bundle
-        req.session.user = modifiedUser;
-        req.session.save();
-        res.status(201).send(bundle);
+        return res.status(201).send(bundle);
     } catch (e) {
-        res.status(404).send({ error: e.message });
+        e.name = "Create Root Bundle Error";
+        e.statusCode = 500;
+        return next(e);
     }
 };
 
-module.exports.modifyBundle = async (req, res) => {
+module.exports.modifyBundle = async (req, res, next) => {
     try {
-        // saving old parent
-        let oldParent = req.session.specifiedBundle;
+        // cache old parent temporarily
+        let oldParent = req.specifiedBundle;
 
         // if attempting to change this bundle's parent bundle, first make sure new parent is valid
         let newParent;
         let newRoot;
         if (req.body.parentBundleId) {
             // do not allow root bundles (collections) to be nested
-            if (req.session.specifiedBundle.isRoot) {
-                return res
-                    .status(401)
-                    .send({ error: "Cannot nest root bundles." });
+            if (req.specifiedBundle.isRoot) {
+                const error = new Error("Cannot nest root bundles.");
+                error.statusCode = 401;
+                throw error;
             }
 
             newParent = await Bundle.findById(req.body.parentBundleId);
             newRoot = newParent.rootBundleId;
 
             if (!newParent) {
-                throw new Error("Specified parent was not found.");
+                const error = new Error("Specified parent was not found.");
+                error.statusCode = 404;
+                throw error;
             }
 
             // make sure current user is owner of the new parent bundle
-            if (!req.session.user._id === newParent._id.toString()) {
-                return res
-                    .status(401)
-                    .send({ error: "You are not owner of the parent bundle." });
+            if (!req.user._id === newParent._id.toString()) {
+                const error = new Error(
+                    "You are not owner of the parent bundle."
+                );
+                error.statusCode = 401;
+                throw error;
             }
         }
 
@@ -126,25 +166,27 @@ module.exports.modifyBundle = async (req, res) => {
                 }
             );
         }
-        res.status(200).send(bundle);
+        return res.status(200).send(bundle);
     } catch (e) {
-        res.status(404).send({ error: e.message });
+        e.statusCode = e.statusCode || 500;
+        e.name = "Modify Bundle Error";
+        return next(e);
     }
 };
 
-module.exports.createNestedBundle = async (req, res) => {
+module.exports.createNestedBundle = async (req, res, next) => {
     try {
         // check if the entered parent bundle is valid
         let parentBundle = await Bundle.findById(req.params.bundleId);
         if (!parentBundle) {
-            throw new Error("Bundle not found.");
+            const error = new Error("Bundle not found.");
+            error.statusCode = 404;
+            throw error;
         }
-        if (
-            parentBundle.ownerId.toString() !== req.session.user._id.toString()
-        ) {
-            return res
-                .status(401)
-                .send({ error: "You do not own this bundle." });
+        if (parentBundle.ownerId.toString() !== req.user._id) {
+            const error = new Error("You do not own this bundle.");
+            error.statusCode = 401;
+            throw error;
         }
 
         // get the root bundle
@@ -159,7 +201,7 @@ module.exports.createNestedBundle = async (req, res) => {
         const newBundle = new Bundle({
             ...req.body,
             parentBundleId: mongoose.Types.ObjectId(req.params.bundleId),
-            ownerId: mongoose.Types.ObjectId(req.session.user._id),
+            ownerId: mongoose.Types.ObjectId(req.user._id),
             rootBundleId: root
         });
         await newBundle.save();
@@ -173,17 +215,23 @@ module.exports.createNestedBundle = async (req, res) => {
                 }
             }
         );
-        res.status(201).send(newBundle);
+        return res.status(201).send(newBundle);
     } catch (e) {
-        res.status(404).send({ error: e.message });
+        e.statusCode = e.statusCode || 500;
+        e.name = "Create Nested Bundle Error";
+        return next(e);
     }
 };
 
-module.exports.deleteBundle = async (req, res) => {
+module.exports.deleteBundle = async (req, res, next) => {
     try {
         // delete the current bundle
         const bundle = await Bundle.findByIdAndDelete(req.params.bundleId);
-        if (!bundle) throw new Error("Bundle is null.");
+        if (!bundle) {
+            const error = new Error("Bundle is null.");
+            error.statusCode = 404;
+            throw error;
+        }
 
         if (bundle.isRoot) {
             // delete entry from user's ownedCollections if it is a root bundle
@@ -196,9 +244,6 @@ module.exports.deleteBundle = async (req, res) => {
                 },
                 { new: true }
             );
-            // refresh session data
-            req.session.user = updatedUser;
-            req.session.save();
         } else {
             // delete entry from parent bundle if it is a nested bundle
             await Bundle.findByIdAndUpdate(bundle.parentBundleId, {
@@ -209,8 +254,10 @@ module.exports.deleteBundle = async (req, res) => {
         // recursively delete all children bundles
         bundleUtil.deleteUtil(bundle.childBundleIds);
 
-        res.status(204).send();
+        return res.status(204).send();
     } catch (e) {
-        res.status(404).send({ error: e.message });
+        e.statusCode = e.statusCode || 500;
+        e.name = "Delete Bundle Error";
+        return next(e);
     }
 };

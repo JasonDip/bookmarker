@@ -1,14 +1,9 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { User } = require("../user/model");
 
-module.exports.login = async (req, res) => {
+module.exports.login = async (req, res, next) => {
     try {
-        if (req.session.isLoggedIn) {
-            return res
-                .status(401)
-                .send({ error: "You are already logged in an account." });
-        }
-
         // find the user and match input password to hashed password
         const findUser = await User.findOne({ email: req.body.email });
         if (!findUser) {
@@ -22,31 +17,37 @@ module.exports.login = async (req, res) => {
             throw new Error("Incorrect password.");
         }
 
-        // TODO: CSRF Token?
+        // create jwt
+        const token = jwt.sign(
+            {
+                _id: findUser._id.toString()
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
 
-        // save session info
-        // note: data is saved in db, client cookie only has session id
-        req.session.isLoggedIn = true;
-        req.session.user = findUser;
-        req.session.save();
+        // TODO: save jwt?
 
         await findUser
             .populate("ownedCollections", { _id: 1, name: 1, note: 1 })
             .execPopulate();
 
         return res.status(200).send({
+            _id: findUser._id.toString(),
             name: findUser.name,
             email: findUser.email,
-            ownedCollections: findUser.ownedCollections
+            ownedCollections: findUser.ownedCollections,
+            token: token
         });
     } catch (e) {
-        return res.status(401).send({
-            error: "Invalid email or password."
-        });
+        const error = new Error("Invalid email or password.");
+        error.statusCode = 401;
+        error.name = "Login Error";
+        return next(error);
     }
 };
 
-module.exports.logout = async (req, res) => {
-    req.session.destroy();
+module.exports.logout = async (req, res, next) => {
+    // TODO: delete jwt?
     return res.status(204).send();
 };

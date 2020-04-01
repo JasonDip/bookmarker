@@ -6,15 +6,19 @@ const { Bundle } = require("../bundle/model");
  * @param {ObjectId[]} childBundleIds
  */
 module.exports.populateUtil = async (fullCollection, childBundleIds) => {
-    for (let childId of childBundleIds) {
-        const childBundle = await Bundle.findById(childId);
-        fullCollection.push(childBundle);
-        if (childBundle.childBundleIds.length > 0) {
-            await populateUtil(
-                fullCollection,
-                new Array(childBundle.childBundleIds)
-            );
+    try {
+        if (childBundleIds.length === 0) return;
+        for (let childId of childBundleIds) {
+            const childBundle = await Bundle.findById(childId);
+            fullCollection.push(childBundle);
+            if (childBundle.childBundleIds.length > 0) {
+                await populateUtil(fullCollection, childBundle.childBundleIds);
+            }
         }
+    } catch (e) {
+        e.name = "Error PopulateUtil";
+        e.statusCode = 500;
+        throw e;
     }
 };
 
@@ -24,12 +28,15 @@ module.exports.populateUtil = async (fullCollection, childBundleIds) => {
  */
 module.exports.deleteUtil = async childBundleIds => {
     try {
+        if (childBundleIds.length === 0) return;
         for (let childId of childBundleIds) {
             const bundle = await Bundle.findByIdAndDelete(childId);
             if (bundle.childBundleIds.length === 0) continue;
             deleteUtil(bundle.childBundleIds);
         }
-    } catch {
-        throw new Error("Error deleting a child bundle.");
+    } catch (e) {
+        e.name = "Error DeleteUtil";
+        e.statusCode = 500;
+        throw e;
     }
 };

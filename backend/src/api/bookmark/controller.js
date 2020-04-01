@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Bookmark } = require("./model");
 const { Bundle } = require("../bundle/model");
 
-module.exports.createBookmark = async (req, res) => {
+module.exports.createBookmark = async (req, res, next) => {
     try {
         const bookmark = new Bookmark(req.body);
         const updatedBundle = await Bundle.findByIdAndUpdate(
@@ -14,13 +14,13 @@ module.exports.createBookmark = async (req, res) => {
         );
         return res.status(201).send(bookmark);
     } catch (e) {
-        return res.status(404).send({
-            error: `Error creating bookmark - ${e.message}`
-        });
+        e.statusCode = e.statusCode || 500;
+        e.name = "Create Bookmark Error";
+        return next(e);
     }
 };
 
-module.exports.modifyBookmark = async (req, res) => {
+module.exports.modifyBookmark = async (req, res, next) => {
     try {
         await Bundle.updateOne(
             {
@@ -38,23 +38,25 @@ module.exports.modifyBookmark = async (req, res) => {
         const bundle = await Bundle.findById(req.params.bundleId); // TODO: is returning bundle needed?
         return res.status(200).send(bundle);
     } catch (e) {
-        return res.status(404).send({
-            error: `Error modifying bookmark - ${e.message}`
-        });
+        e.statusCode = e.statusCode || 500;
+        e.name = "Modify Bookmark Error";
+        return next(e);
     }
 };
 
-module.exports.moveBookmark = async (req, res) => {
+module.exports.moveBookmark = async (req, res, next) => {
     try {
         // check if the new bookmark location is owned by current user
         const newBundle = await Bundle.findById(req.params.newBundleId);
         if (!newBundle) {
-            throw new Error("Destination bundle not found.");
+            const error = new Error("Destination bundle not found.");
+            error.statusCode = 404;
+            throw error;
         }
-        if (newBundle.ownerId !== req.session.user._id) {
-            return res
-                .status(401)
-                .send("You do not have access to this bundle.");
+        if (newBundle.ownerId !== req.user._id) {
+            const error = new Error("You do not have access to this bundle.");
+            error.statusCode = 401;
+            throw error;
         }
 
         // get the bookmark
@@ -92,13 +94,13 @@ module.exports.moveBookmark = async (req, res) => {
         );
         return res.status(200).send([removedFromBundle, addedToBundle]);
     } catch (e) {
-        return res.status(404).send({
-            error: `Error moving bookmark - ${e.message}`
-        });
+        e.statusCode = e.statusCode || 500;
+        e.name = "Move Bookmark Error";
+        return next(e);
     }
 };
 
-module.exports.deleteBookmark = async (req, res) => {
+module.exports.deleteBookmark = async (req, res, next) => {
     try {
         const bookmarkIdObj = mongoose.Types.ObjectId(req.params.bookmarkId);
         const updatedBundle = await Bundle.findByIdAndUpdate(
@@ -112,8 +114,8 @@ module.exports.deleteBookmark = async (req, res) => {
         );
         return res.status(204).send(updatedBundle);
     } catch (e) {
-        return res.status(404).send({
-            error: `Error deleting bookmark - ${e.message}`
-        });
+        e.statusCode = e.statusCode || 500;
+        e.name = "Delete Bookmark Error";
+        return next(e);
     }
 };

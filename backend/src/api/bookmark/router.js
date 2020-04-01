@@ -1,6 +1,6 @@
 const express = require("express");
 const controller = require("./controller");
-const isLoggedIn = require("../../middleware/isLoggedIn");
+const isAuth = require("../../middleware/isAuth");
 const ownsBundle = require("../../middleware/ownsBundle");
 
 const router = new express.Router();
@@ -8,7 +8,7 @@ const router = new express.Router();
 /*  create a bookmark for a bundle  */
 router.post(
     "/bundles/:bundleId/bookmarks",
-    isLoggedIn,
+    isAuth,
     ownsBundle,
     controller.createBookmark
 );
@@ -16,7 +16,7 @@ router.post(
 /*  modify an existing bookmark  */
 router.patch(
     "/bundles/:bundleId/bookmarks/:bookmarkId",
-    isLoggedIn,
+    isAuth,
     ownsBundle,
     controller.modifyBookmark
 );
@@ -24,7 +24,7 @@ router.patch(
 /*  move a bookmark between bundles  */
 router.patch(
     "/bundles/:bundleId/bookmarks/:bookmarkId/move/:newBundleId",
-    isLoggedIn,
+    isAuth,
     ownsBundle,
     controller.moveBookmark
 );
@@ -32,7 +32,7 @@ router.patch(
 /*  delete a bookmark from a bundle  */
 router.delete(
     "/bundles/:bundleId/bookmarks/:bookmarkId",
-    isLoggedIn,
+    isAuth,
     ownsBundle,
     controller.deleteBookmark
 );
