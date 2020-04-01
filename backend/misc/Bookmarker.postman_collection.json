@@ -1,0 +1,687 @@
+{
+	"info": {
+		"_postman_id": "148c0666-abc0-426e-ae1c-d2bd97ded133",
+		"name": "Bookmarker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "create new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Jason\",\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\",\n\t\"newPassword\": \"newpass\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"password"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8f58fd24-3636-483d-93af-f52a494fccb3",
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let savedData = response.token;\r",
+									"\r",
+									"pm.environment.set(\"token\", savedData);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Bundles",
+			"item": [
+				{
+					"name": "Create collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4b885f5a-1e04-4f9b-a06e-80b70bf5dd86",
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let savedData = response._id;\r",
+									"\r",
+									"pm.environment.set(\"bundleId\", savedData);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Example collection 1\",\n\t\"note\": \"my note\",\n\t\"bookmarks\": {\n\t\t\"name\": \"hi\",\n\t\t\"url\": \"google.com\",\n\t\t\"note\": \"bm note\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/bundles",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create nested bundle",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d7b7c5ee-3511-46d1-964d-9cc9a18f7012",
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let savedData = response._id;\r",
+									"\r",
+									"pm.environment.set(\"nestedBundleId\", savedData);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Example nested bundle 1\",\n\t\"note\": \"my note\",\n\t\"bookmarks\": {\n\t\t\"name\": \"hi\",\n\t\t\"url\": \"yahoo.com\",\n\t\t\"note\": \"bm note\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/bundles/{{bundleId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles",
+								"{{bundleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create collection 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4b885f5a-1e04-4f9b-a06e-80b70bf5dd86",
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let savedData = response._id;\r",
+									"\r",
+									"pm.environment.set(\"bundleId2\", savedData);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Example collection 2\",\n\t\"note\": \"my note\",\n\t\"bookmarks\": {\n\t\t\"name\": \"hi\",\n\t\t\"url\": \"google.com\",\n\t\t\"note\": \"bm note\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/bundles",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create nested bundle 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d7b7c5ee-3511-46d1-964d-9cc9a18f7012",
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let savedData = response._id;\r",
+									"\r",
+									"pm.environment.set(\"nestedBundleId2\", savedData);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Example nested bundle 2\",\n\t\"note\": \"my note\",\n\t\"bookmarks\": {\n\t\t\"name\": \"hi\",\n\t\t\"url\": \"yahoo.com\",\n\t\t\"note\": \"bm note\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/bundles/{{bundleId2}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles",
+								"{{bundleId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a collection",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/bundles/{{bundleId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles",
+								"{{bundleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify a bundle",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"my new bundle name 2\",\n\t\"note\": \"my new notes\",\n\t\"parentBundleId\": \"{{nestedBundleId2}}\",\n\t\"isPrivate\": \"false\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/bundles/{{nestedBundleId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles",
+								"{{nestedBundleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a bundle",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/bundles/{{bundleId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles",
+								"{{bundleId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Bookmarks",
+			"item": [
+				{
+					"name": "Create a bookmark",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "418eff0d-4c13-4d8a-8b22-9531456122b4",
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let savedData = response._id;\r",
+									"\r",
+									"pm.environment.set(\"bookmarkId\", savedData);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"my bookmark name 3\",\n\t\"url\": \"my url\",\n\t\"note\": \"my note\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/bundles/{{bundleId}}/bookmarks",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles",
+								"{{bundleId}}",
+								"bookmarks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify a bookmark",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"my changed name\",\n\t\"url\": \"youtube.com\",\n\t\"note\": \"my changed note\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/bundles/{{bundleId}}/bookmarks/{{bookmarkId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles",
+								"{{bundleId}}",
+								"bookmarks",
+								"{{bookmarkId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Move a bookmark",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/bundles/{{bundleId}}/bookmarks/{{bookmarkId}}/move/{{bundleId2}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles",
+								"{{bundleId}}",
+								"bookmarks",
+								"{{bookmarkId}}",
+								"move",
+								"{{bundleId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a bookmark",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/bundles/{{bundleId}}/bookmarks/{{bookmarkId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"bundles",
+								"{{bundleId}}",
+								"bookmarks",
+								"{{bookmarkId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
