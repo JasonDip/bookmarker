@@ -24,6 +24,10 @@ module.exports.userSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        role: {
+            type: Number,
+            default: 1
+        },
         ownedCollections: [
             {
                 type: mongoose.Schema.Types.ObjectId,
