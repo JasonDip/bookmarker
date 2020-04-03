@@ -25,8 +25,8 @@ module.exports.userSchema = new mongoose.Schema(
             required: true
         },
         role: {
-            type: Number,
-            default: 1
+            type: String,
+            default: "active"
         },
         ownedCollections: [
             {
