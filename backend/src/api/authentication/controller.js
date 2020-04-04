@@ -4,6 +4,12 @@ const { User } = require("../user/model");
 
 module.exports.login = async (req, res, next) => {
     try {
+        if (req.session.isLoggedIn) {
+            return res
+                .status(401)
+                .send({ error: "You are already logged in an account." });
+        }
+
         // find the user and match input password to hashed password
         const findUser = await User.findOne({ email: req.body.email });
         if (!findUser) {
@@ -17,17 +23,22 @@ module.exports.login = async (req, res, next) => {
             throw new Error("Incorrect password.");
         }
 
-        // create jwt
+        // save session info
+        // note: data is saved in db, client cookie only has session id
+        req.session.isLoggedIn = true;
+        req.session.user = findUser;
+        req.session.save();
+
+        // create access jwt
         const token = jwt.sign(
             {
                 _id: findUser._id.toString()
             },
             process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            { expiresIn: "30 days" }
         );
 
-        // TODO: save jwt?
-
+        // populate ownedCollections information useful for showing upon login
         await findUser
             .populate("ownedCollections", { _id: 1, name: 1, note: 1 })
             .execPopulate();
@@ -48,6 +59,6 @@ module.exports.login = async (req, res, next) => {
 };
 
 module.exports.logout = async (req, res, next) => {
-    // TODO: delete jwt?
+    req.session.destroy();
     return res.status(204).send();
 };

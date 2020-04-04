@@ -53,7 +53,7 @@ module.exports.moveBookmark = async (req, res, next) => {
             error.statusCode = 404;
             throw error;
         }
-        if (newBundle.ownerId !== req.user._id) {
+        if (newBundle.ownerId.toString() !== req.session.user._id.toString()) {
             const error = new Error("You do not have access to this bundle.");
             error.statusCode = 401;
             throw error;
@@ -64,12 +64,12 @@ module.exports.moveBookmark = async (req, res, next) => {
             _id: req.params.bundleId
         }).select({
             bookmarks: {
-                $elemMatch: {
+                $pull: {
                     _id: req.params.bookmarkId
                 }
             }
         });
-        const bookmark = new Bookmark({ ...bookmarkBeforeDelete.bookmarks[0] });
+        const bookmark = new Bookmark({ ...bookmarkBeforeDelete[0] });
 
         // add bookmark to newBundleId
         const addedToBundle = await Bundle.findByIdAndUpdate(

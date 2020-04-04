@@ -32,7 +32,7 @@ module.exports.deleteUtil = async childBundleIds => {
         for (let childId of childBundleIds) {
             const bundle = await Bundle.findByIdAndDelete(childId);
             if (bundle.childBundleIds.length === 0) continue;
-            deleteUtil(bundle.childBundleIds);
+            this.deleteUtil(bundle.childBundleIds);
         }
     } catch (e) {
         e.name = "Error DeleteUtil";

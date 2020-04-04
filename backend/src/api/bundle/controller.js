@@ -6,6 +6,7 @@ const { User } = require("../user/model");
 
 module.exports.getCollection = async (req, res, next) => {
     try {
+        // need to search bundle here since we are not using middleware
         const collection = await Bundle.findById(req.params.bundleId);
         if (!collection) {
             const error = new Error("Bundle does not exist.");
@@ -13,7 +14,8 @@ module.exports.getCollection = async (req, res, next) => {
             throw error;
         }
         // only root-bundles/collections are allowed to be fully populated
-        // by design only collections' privacy setting matters.
+        // this is by design. only collections' privacy setting matters.
+        // TODO: maybe just search for root bundle and use that privacy setting?
         if (!collection.isRoot) {
             const error = new Error("Only collections can be populated.");
             error.statusCode = 404;
@@ -22,34 +24,63 @@ module.exports.getCollection = async (req, res, next) => {
 
         // private collections need authentication
         if (collection.isPrivate) {
-            // check for auth token
-            req.user = {}; // always have a user obj
+            // check the session if user is logged in
+            if (!req.session.isLoggedIn) {
+                let error = new Error("Not logged in.");
+                error.name = "Authentication Error";
+                error.statusCode = 401;
+                return next(error);
+            }
+            if (!req.session.user) {
+                let error = new Error("Session has no user logged.");
+                error.name = "Authentication Error";
+                error.statusCode = 401;
+                return next(error);
+            }
+            if (!req.session.user._id) {
+                let error = new Error("Session has no user id logged.");
+                error.name = "Authentication Error";
+                error.statusCode = 401;
+                return next(error);
+            }
+
+            // get the access token from header
             const authHeader = req.get("Authorization");
             if (!authHeader) {
                 const error = new Error("Not authenticated.");
                 error.name = "Authentication Error";
                 error.statusCode = 401;
-                throw error;
+                return next(error);
             }
             const token = authHeader.split(" ")[1];
+
+            // check the access token
             let decodedToken;
             try {
                 decodedToken = jwt.verify(token, process.env.JWT_SECRET);
             } catch (e) {
-                e.statusCode = 500;
+                e.statusCode = 401;
                 e.name = "Authentication Error";
-                throw e;
+                return next(e);
             }
             if (!decodedToken) {
                 const error = new Error("Not authenticated.");
                 error.statusCode = 401;
                 error.name = "Authentication Error";
-                throw error;
+                return next(error);
             }
-            req.user._id = decodedToken._id;
+            if (decodedToken._id !== req.session.user._id.toString()) {
+                const error = new Error("Id mismatch.");
+                error.statusCode = 401;
+                error.name = "Authentication Error";
+                return next(error);
+            }
 
             // if authenticated, check if user owns this collection
-            if (req.user._id !== collection.ownerId.toString()) {
+            if (
+                req.session.user._id.toString() !==
+                collection.ownerId.toString()
+            ) {
                 const error = new Error(
                     "You do not have permission to access this collection."
                 );
@@ -79,12 +110,12 @@ module.exports.createRootBundle = async (req, res, next) => {
         const bundle = new Bundle({
             ...req.body,
             isRoot: true,
-            ownerId: req.user._id
+            ownerId: req.session.user._id.toString()
         });
         await bundle.save();
         // add this new root bundle to the user's ownedCollections list
         const modifiedUser = await User.findByIdAndUpdate(
-            req.user._id,
+            req.session.user._id.toString(),
             {
                 $push: {
                     ownedCollections: bundle._id
@@ -126,7 +157,7 @@ module.exports.modifyBundle = async (req, res, next) => {
             }
 
             // make sure current user is owner of the new parent bundle
-            if (!req.user._id === newParent._id.toString()) {
+            if (!req.session.user._id.toString() === newParent._id.toString()) {
                 const error = new Error(
                     "You are not owner of the parent bundle."
                 );
@@ -183,7 +214,9 @@ module.exports.createNestedBundle = async (req, res, next) => {
             error.statusCode = 404;
             throw error;
         }
-        if (parentBundle.ownerId.toString() !== req.user._id) {
+        if (
+            parentBundle.ownerId.toString() !== req.session.user._id.toString()
+        ) {
             const error = new Error("You do not own this bundle.");
             error.statusCode = 401;
             throw error;
@@ -201,7 +234,7 @@ module.exports.createNestedBundle = async (req, res, next) => {
         const newBundle = new Bundle({
             ...req.body,
             parentBundleId: mongoose.Types.ObjectId(req.params.bundleId),
-            ownerId: mongoose.Types.ObjectId(req.user._id),
+            ownerId: req.session.user._id,
             rootBundleId: root
         });
         await newBundle.save();

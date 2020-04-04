@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
             const error = new Error("Bundle does not exist.");
             throw error;
         }
-        if (bundle.ownerId.toString() !== req.user._id) {
+        if (bundle.ownerId.toString() !== req.session.user._id.toString()) {
             const error = new Error("You do not own this bundle.");
             throw error;
         }

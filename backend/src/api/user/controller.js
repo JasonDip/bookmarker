@@ -4,6 +4,15 @@ const { User } = require("./model");
 
 module.exports.createNewUser = async (req, res, next) => {
     try {
+        // cannot create a new user while logged in
+        if (req.session) {
+            if (req.session.isLoggedIn) {
+                const error = new Error("Currently logged in to a user.");
+                error.statusCode = 401;
+                throw error;
+            }
+        }
+
         const existingUser = await User.findOne({ email: req.body.email });
         if (existingUser) {
             const error = new Error("User with this email already exists.");
@@ -34,7 +43,7 @@ module.exports.createNewUser = async (req, res, next) => {
 
 module.exports.deleteUser = async (req, res, next) => {
     try {
-        const existingUser = await User.findById(req.user._id);
+        const existingUser = await User.findById(req.session.user._id);
         if (!existingUser) {
             let error = new Error("Could not find user.");
             error.statusCode = 404;
@@ -56,7 +65,8 @@ module.exports.deleteUser = async (req, res, next) => {
         // delete collections owned by user
         bundleUtil.deleteUtil(existingUser.ownedCollections);
 
-        // TODO: delete jwt?
+        // delete session
+        req.session.destroy();
 
         // complete deleting user
         await User.findByIdAndDelete(existingUser._id);
@@ -72,7 +82,11 @@ module.exports.deleteUser = async (req, res, next) => {
 
 module.exports.getUserInfo = async (req, res, next) => {
     try {
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req.session.user._id);
+
+        // refresh the session with newest info
+        req.session.user = user;
+        req.session.save();
 
         // populate user's ownedCollections with additional information
         await user
@@ -84,6 +98,7 @@ module.exports.getUserInfo = async (req, res, next) => {
             .execPopulate();
 
         return res.status(200).send({
+            _id: user._id,
             name: user.name,
             email: user.email,
             ownedCollections: user.ownedCollections
@@ -96,7 +111,7 @@ module.exports.getUserInfo = async (req, res, next) => {
 
 module.exports.changePassword = async (req, res, next) => {
     try {
-        let user = await User.findById(req.user._id);
+        let user = await User.findById(req.session.user._id);
         if (!user) {
             const error = new Error("Could not find user.");
             error.statusCode = 404;
@@ -114,11 +129,12 @@ module.exports.changePassword = async (req, res, next) => {
 
         // store new hashed password
         let newPass = await bcrypt.hash(req.body.newPassword, 12);
-        await User.findByIdAndUpdate(req.user._id, {
+        await User.findByIdAndUpdate(req.session.user._id, {
             hashedPassword: newPass
         });
 
-        // TODO: destroy all jwt?
+        // destroy session (log out)
+        req.session.destroy();
 
         return res.status(204).send();
     } catch (e) {
