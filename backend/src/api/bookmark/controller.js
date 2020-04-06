@@ -64,12 +64,19 @@ module.exports.moveBookmark = async (req, res, next) => {
             _id: req.params.bundleId
         }).select({
             bookmarks: {
-                $pull: {
+                $elemMatch: {
                     _id: req.params.bookmarkId
                 }
             }
         });
-        const bookmark = new Bookmark({ ...bookmarkBeforeDelete[0] });
+        if (bookmarkBeforeDelete.bookmarks.length === 0) {
+            const error = new Error("Could not find bookmark.");
+            error.statusCode = 404;
+            throw error;
+        }
+        const bookmark = new Bookmark({
+            ...bookmarkBeforeDelete.bookmarks[0]._doc
+        });
 
         // add bookmark to newBundleId
         const addedToBundle = await Bundle.findByIdAndUpdate(
