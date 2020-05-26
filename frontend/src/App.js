@@ -14,6 +14,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 
 import CollectionList from "./components/CollectionList";
+import SelectedCollection from "./components/SelectedCollection";
 
 const drawerWidth = "30%";
 
@@ -62,6 +63,9 @@ function App() {
                 }}
             >
                 <Toolbar />
+                <div className={classes.drawerContainer}>
+                    <CollectionList />
+                </div>
                 {/* <div className={classes.drawerContainer}>
                     <List>
                         {["Inbox", "Starred", "Send email", "Drafts"].map(
@@ -233,7 +237,7 @@ function App() {
             </Drawer>
             <main className={classes.content}>
                 <Toolbar />
-                <CollectionList />
+                <SelectedCollection />
             </main>
         </div>
     );
