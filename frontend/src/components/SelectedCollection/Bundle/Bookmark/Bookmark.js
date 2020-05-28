@@ -5,6 +5,7 @@ import Link from "@material-ui/core/Link";
 const Bookmark = (props) => {
     const { bookmark } = props;
 
+    // add https if no prefix is present
     let link = bookmark["url"];
     let reg = new RegExp("^(http|https)://");
     if (link.search(reg) < 0) {
@@ -12,7 +13,7 @@ const Bookmark = (props) => {
     }
 
     return (
-        <Typography style={{ paddingTop: "10px" }}>
+        <Typography>
             <Link href={link} target="_blank" rel="noopener">
                 {bookmark["name"]} {bookmark["_id"]}
             </Link>
