@@ -1,7 +1,7 @@
 import React from "react";
-
 import { connect } from "react-redux";
-import { getCollections } from "../redux/reducers/actions";
+
+import { getCollections } from "../../redux/reducers/actions";
 
 const CollectionList = (props) => {
     return (

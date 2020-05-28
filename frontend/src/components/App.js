@@ -13,8 +13,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 
-import CollectionList from "./components/CollectionList";
-import SelectedCollection from "./components/SelectedCollection";
+import CollectionList from "./CollectionList/CollectionList";
+import SelectedCollection from "./SelectedCollection/SelectedCollection";
 
 const drawerWidth = "30%";
 
