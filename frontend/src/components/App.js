@@ -50,7 +50,7 @@ function App() {
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6" noWrap>
-                        Clipped drawer
+                        Bookmarker
                     </Typography>
                 </Toolbar>
             </AppBar>

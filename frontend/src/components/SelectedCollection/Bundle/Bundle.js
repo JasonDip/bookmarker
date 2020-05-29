@@ -1,9 +1,17 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
+
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import AddIcon from "@material-ui/icons/Add";
+import CommentIcon from "@material-ui/icons/Comment";
+import CreateIcon from "@material-ui/icons/Create";
+import IconButton from "@material-ui/core/IconButton";
+import Popover from "@material-ui/core/Popover";
 
 import Bookmark from "./Bookmark/Bookmark";
 
@@ -45,6 +53,13 @@ const ExpansionPanelDetails = withStyles((theme) => ({
     },
 }))(MuiExpansionPanelDetails);
 
+// FOR POPOVER
+const useStyles = makeStyles((theme) => ({
+    typography: {
+        padding: theme.spacing(2),
+    },
+}));
+
 const Bundle = (props) => {
     const { collection, id } = props;
 
@@ -56,6 +71,49 @@ const Bundle = (props) => {
         setExpanded((state) => !state);
     };
 
+    const addButtonHandler = (e) => {
+        alert("add");
+        e.stopPropagation();
+        e.preventDefault();
+    };
+
+    const deleteButtonHandler = (e) => {
+        alert("delete");
+        e.stopPropagation();
+        e.preventDefault();
+    };
+
+    const modifyButtonHandler = (e) => {
+        alert("modify");
+        e.stopPropagation();
+        e.preventDefault();
+    };
+
+    // FOR POPOVER
+    const classes = useStyles();
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (e) => {
+        setAnchorEl(e.currentTarget);
+        e.stopPropagation();
+        e.preventDefault();
+    };
+
+    const handleClose = (e) => {
+        setAnchorEl(null);
+        e.stopPropagation();
+        e.preventDefault();
+    };
+
+    const doNothingHandler = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+    };
+
+    const open = Boolean(anchorEl);
+    const popid = open ? "simple-popover" : undefined;
+
     return (
         <ExpansionPanel
             square
@@ -63,10 +121,65 @@ const Bundle = (props) => {
             onChange={panelClickHandler}
             style={{ width: "100%" }}
         >
-            <ExpansionPanelSummary aria-controls="panel1d-content" id={id}>
-                <Typography>
+            <ExpansionPanelSummary
+                aria-controls="panel-content"
+                id={id}
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                }}
+            >
+                <Typography style={{ margin: "auto 0" }}>
                     {collection.get(id)["name"]} {id}
                 </Typography>
+
+                {/* notes for bundle */}
+                <IconButton aria-label="delete" onClick={handleClick}>
+                    <CommentIcon />
+                </IconButton>
+                <Popover
+                    id={popid}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                    }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                    }}
+                >
+                    <Typography
+                        className={classes.typography}
+                        onClick={doNothingHandler}
+                    >
+                        The content of the Popover. The content of the Popover.
+                        The content of the Popover. The content of the Popover.
+                        The content of the Popover. The content of the Popover.
+                        The content of the Popover.
+                        <button>hey</button>
+                    </Typography>
+                </Popover>
+
+                {/* add to bundle */}
+                <IconButton
+                    aria-label="add"
+                    style={{ marginLeft: "auto" }}
+                    onClick={addButtonHandler}
+                >
+                    <AddIcon />
+                </IconButton>
+                {/* modify bundle */}
+                <IconButton aria-label="modify" onClick={modifyButtonHandler}>
+                    <CreateIcon />
+                </IconButton>
+                {/* delete bundle */}
+                <IconButton aria-label="delete" onClick={deleteButtonHandler}>
+                    <DeleteOutlineIcon />
+                </IconButton>
             </ExpansionPanelSummary>
 
             <ExpansionPanelDetails
@@ -78,7 +191,11 @@ const Bundle = (props) => {
                 {/* child bundles */}
                 {collection.get(id)["childBundleIds"].map((childBundleId) => {
                     return (
-                        <Bundle collection={collection} id={childBundleId} />
+                        <Bundle
+                            key={childBundleId}
+                            collection={collection}
+                            id={childBundleId}
+                        />
                     );
                 })}
 
@@ -89,7 +206,12 @@ const Bundle = (props) => {
 
                 {/* bookmarks */}
                 {collection.get(id)["bookmarks"].map((bookmark) => {
-                    return <Bookmark bookmark={{ ...bookmark }} />;
+                    return (
+                        <Bookmark
+                            key={bookmark["_id"]}
+                            bookmark={{ ...bookmark }}
+                        />
+                    );
                 })}
             </ExpansionPanelDetails>
         </ExpansionPanel>
