@@ -1,19 +1,16 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { makeStyles } from "@material-ui/core/styles";
-
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import AddIcon from "@material-ui/icons/Add";
-import CommentIcon from "@material-ui/icons/Comment";
-import CreateIcon from "@material-ui/icons/Create";
-import IconButton from "@material-ui/core/IconButton";
-import Popover from "@material-ui/core/Popover";
 
+import PopOver from "../../PopOver/PopOver";
 import Bookmark from "./Bookmark/Bookmark";
+import NoteButton from "./Buttons/NoteButton/NoteButton";
+import AddButton from "./Buttons/AddButton/AddButton";
+import ModifyButton from "./Buttons/ModifyButton/ModifyButton";
+import DeleteButton from "./Buttons/DeleteButton/DeleteButton";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -53,13 +50,6 @@ const ExpansionPanelDetails = withStyles((theme) => ({
     },
 }))(MuiExpansionPanelDetails);
 
-// FOR POPOVER
-const useStyles = makeStyles((theme) => ({
-    typography: {
-        padding: theme.spacing(2),
-    },
-}));
-
 const Bundle = (props) => {
     const { collection, id } = props;
 
@@ -72,47 +62,30 @@ const Bundle = (props) => {
     };
 
     const addButtonHandler = (e) => {
-        alert("add");
+        alert("add " + id);
         e.stopPropagation();
         e.preventDefault();
     };
 
     const deleteButtonHandler = (e) => {
-        alert("delete");
+        alert("delete " + id);
         e.stopPropagation();
         e.preventDefault();
     };
 
     const modifyButtonHandler = (e) => {
-        alert("modify");
+        alert("modify " + id);
         e.stopPropagation();
         e.preventDefault();
     };
 
-    // FOR POPOVER
-    const classes = useStyles();
-
+    // for notes popover
     const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (e) => {
+    const popoverClickHandler = (e) => {
         setAnchorEl(e.currentTarget);
         e.stopPropagation();
         e.preventDefault();
     };
-
-    const handleClose = (e) => {
-        setAnchorEl(null);
-        e.stopPropagation();
-        e.preventDefault();
-    };
-
-    const doNothingHandler = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-    };
-
-    const open = Boolean(anchorEl);
-    const popid = open ? "simple-popover" : undefined;
 
     return (
         <ExpansionPanel
@@ -130,56 +103,30 @@ const Bundle = (props) => {
                     alignItems: "center",
                 }}
             >
+                {/* title */}
                 <Typography style={{ margin: "auto 0" }}>
                     {collection.get(id)["name"]} {id}
                 </Typography>
 
                 {/* notes for bundle */}
-                <IconButton aria-label="delete" onClick={handleClick}>
-                    <CommentIcon />
-                </IconButton>
-                <Popover
-                    id={popid}
-                    open={open}
-                    anchorEl={anchorEl}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "center",
-                    }}
-                    transformOrigin={{
-                        vertical: "top",
-                        horizontal: "center",
-                    }}
-                >
-                    <Typography
-                        className={classes.typography}
-                        onClick={doNothingHandler}
-                    >
-                        The content of the Popover. The content of the Popover.
-                        The content of the Popover. The content of the Popover.
-                        The content of the Popover. The content of the Popover.
-                        The content of the Popover.
-                        <button>hey</button>
-                    </Typography>
-                </Popover>
+                <NoteButton clickHandler={popoverClickHandler} />
+                <PopOver anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
+                    The content of the Popover. The content of the Popover. The
+                    content of the Popover. The content of the Popover. The
+                    content of the Popover. The content of the Popover. The
+                    content of the Popover.
+                    <button>hey</button>
+                </PopOver>
 
                 {/* add to bundle */}
-                <IconButton
-                    aria-label="add"
+                <AddButton
                     style={{ marginLeft: "auto" }}
-                    onClick={addButtonHandler}
-                >
-                    <AddIcon />
-                </IconButton>
+                    clickHandler={addButtonHandler}
+                />
                 {/* modify bundle */}
-                <IconButton aria-label="modify" onClick={modifyButtonHandler}>
-                    <CreateIcon />
-                </IconButton>
+                <ModifyButton clickHandler={modifyButtonHandler} />
                 {/* delete bundle */}
-                <IconButton aria-label="delete" onClick={deleteButtonHandler}>
-                    <DeleteOutlineIcon />
-                </IconButton>
+                <DeleteButton clickHandler={deleteButtonHandler} />
             </ExpansionPanelSummary>
 
             <ExpansionPanelDetails
@@ -199,7 +146,7 @@ const Bundle = (props) => {
                     );
                 })}
 
-                {/* optional padding if child bundles are rendered above */}
+                {/* optional padding added if child bundles are rendered above */}
                 {collection.get(id)["childBundleIds"].length > 0 && (
                     <div style={{ paddingTop: "16px" }} />
                 )}
