@@ -1,15 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
+import Button from "@material-ui/core/Button";
+import CreateIcon from "@material-ui/icons/Create";
 
-import { getCollections } from "../../redux/reducers/actions";
+import * as optionsActions from "../../redux/reducers/options/actions";
 import Bundle from "./Bundle/Bundle";
 
 const SelectedCollection = (props) => {
+    const {
+        selectedCollection,
+        editMode,
+        setEditModeOn,
+        setEditModeOff,
+    } = props;
+
     // map the selected collection into a map for O(1) lookup
     let rootBundleId;
     let collection = new Map();
-    let collectionDisplay;
-    const { selectedCollection } = props;
+    let collectionDisplay = null;
     selectedCollection.forEach((bundle) => {
         collection.set(bundle["_id"], { ...bundle });
         if (bundle["isRoot"] === true) {
@@ -23,18 +31,46 @@ const SelectedCollection = (props) => {
         );
     }
 
-    return <div>{collectionDisplay}</div>;
+    const editModeClickHandler = () => {
+        if (editMode) {
+            setEditModeOff();
+        } else {
+            setEditModeOn();
+        }
+    };
+
+    const editButtonColor = editMode ? "secondary" : "default";
+
+    return (
+        <div>
+            {collectionDisplay !== null && (
+                <Button
+                    color={editButtonColor}
+                    variant="contained"
+                    onClick={editModeClickHandler}
+                    style={{ marginBottom: "10px" }}
+                    startIcon={<CreateIcon />}
+                >
+                    Edit Mode
+                </Button>
+            )}
+
+            {collectionDisplay}
+        </div>
+    );
 };
 
 const mapStateToProps = (state) => {
     return {
         selectedCollection: state.bookmarker.selectedCollection,
+        editMode: state.options.editMode,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getCollections: () => dispatch(getCollections()),
+        setEditModeOn: () => dispatch(optionsActions.setEditModeOn()),
+        setEditModeOff: () => dispatch(optionsActions.setEditModeOff()),
     };
 };
 

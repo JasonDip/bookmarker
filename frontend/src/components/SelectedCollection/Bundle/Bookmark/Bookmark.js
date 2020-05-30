@@ -8,7 +8,7 @@ import NoteButton from "../Buttons/NoteButton/NoteButton";
 import PopOver from "../../../PopOver/PopOver";
 
 const Bookmark = (props) => {
-    const { bookmark } = props;
+    const { bookmark, editMode } = props;
 
     // add https if no prefix is present
     let link = bookmark["url"];
@@ -56,13 +56,17 @@ const Bookmark = (props) => {
                 </>
             )}
 
-            {/* modify bookmark */}
-            <ModifyButton
-                style={{ marginLeft: "auto" }}
-                clickHandler={modifyBookmarkHandler}
-            />
-            {/* delete bookmark */}
-            <DeleteButton clickHandler={deleteBookmarkHandler} />
+            {editMode && (
+                <>
+                    {/* modify bookmark */}
+                    <ModifyButton
+                        style={{ marginLeft: "auto" }}
+                        clickHandler={modifyBookmarkHandler}
+                    />
+                    {/* delete bookmark */}
+                    <DeleteButton clickHandler={deleteBookmarkHandler} />
+                </>
+            )}
         </Typography>
     );
 };

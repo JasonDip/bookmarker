@@ -4,6 +4,7 @@ import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
+import { connect } from "react-redux";
 
 import PopOver from "../../PopOver/PopOver";
 import Bookmark from "./Bookmark/Bookmark";
@@ -51,7 +52,10 @@ const ExpansionPanelDetails = withStyles((theme) => ({
 }))(MuiExpansionPanelDetails);
 
 const Bundle = (props) => {
+    // passed in
     const { collection, id } = props;
+    // from redux
+    const { editMode } = props;
     const thisBundle = collection.get(id);
 
     const [expanded, setExpanded] = React.useState(thisBundle["isRoot"]);
@@ -117,15 +121,19 @@ const Bundle = (props) => {
                     </>
                 )}
 
-                {/* add to bundle */}
-                <AddButton
-                    style={{ marginLeft: "auto" }}
-                    clickHandler={addButtonHandler}
-                />
-                {/* modify bundle */}
-                <ModifyButton clickHandler={modifyButtonHandler} />
-                {/* delete bundle */}
-                <DeleteButton clickHandler={deleteButtonHandler} />
+                {editMode && (
+                    <>
+                        {/* add to bundle */}
+                        <AddButton
+                            style={{ marginLeft: "auto" }}
+                            clickHandler={addButtonHandler}
+                        />
+                        {/* modify bundle */}
+                        <ModifyButton clickHandler={modifyButtonHandler} />
+                        {/* delete bundle */}
+                        <DeleteButton clickHandler={deleteButtonHandler} />
+                    </>
+                )}
             </ExpansionPanelSummary>
 
             <ExpansionPanelDetails
@@ -141,6 +149,7 @@ const Bundle = (props) => {
                             key={childBundleId}
                             collection={collection}
                             id={childBundleId}
+                            editMode={editMode}
                         />
                     );
                 })}
@@ -156,6 +165,7 @@ const Bundle = (props) => {
                         <Bookmark
                             key={bookmark["_id"]}
                             bookmark={{ ...bookmark }}
+                            editMode={editMode}
                         />
                     );
                 })}
@@ -164,4 +174,10 @@ const Bundle = (props) => {
     );
 };
 
-export default Bundle;
+const mapStateToProps = (state) => {
+    return {
+        editMode: state.options.editMode,
+    };
+};
+
+export default connect(mapStateToProps, null)(Bundle);

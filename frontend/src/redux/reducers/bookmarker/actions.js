@@ -1,6 +1,4 @@
-import axios from "axios";
-
-import * as bundleApi from "../api/bundle";
+import * as bundleApi from "../../api/bundle";
 
 export const GET_COLLECTIONS_PENDING = "GET_COLLECTIONS_PENDING";
 export const GET_COLLECTIONS_SUCCESS = "GET_COLLECTIONS_SUCCESS";

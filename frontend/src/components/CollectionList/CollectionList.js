@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { getCollections } from "../../redux/reducers/actions";
+import * as bookmarkerActions from "../../redux/reducers/bookmarker/actions";
 
 const CollectionList = (props) => {
     return (
@@ -19,7 +19,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    getCollections: () => dispatch(getCollections()),
+    getCollections: () => dispatch(bookmarkerActions.getCollections()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CollectionList);
