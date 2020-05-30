@@ -52,10 +52,9 @@ const ExpansionPanelDetails = withStyles((theme) => ({
 
 const Bundle = (props) => {
     const { collection, id } = props;
+    const thisBundle = collection.get(id);
 
-    const [expanded, setExpanded] = React.useState(
-        collection.get(id)["isRoot"]
-    );
+    const [expanded, setExpanded] = React.useState(thisBundle["isRoot"]);
 
     const panelClickHandler = () => {
         setExpanded((state) => !state);
@@ -105,18 +104,18 @@ const Bundle = (props) => {
             >
                 {/* title */}
                 <Typography style={{ margin: "auto 0" }}>
-                    {collection.get(id)["name"]} {id}
+                    {thisBundle["name"]} {id}
                 </Typography>
 
                 {/* notes for bundle */}
-                <NoteButton clickHandler={popoverClickHandler} />
-                <PopOver anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
-                    The content of the Popover. The content of the Popover. The
-                    content of the Popover. The content of the Popover. The
-                    content of the Popover. The content of the Popover. The
-                    content of the Popover.
-                    <button>hey</button>
-                </PopOver>
+                {thisBundle["note"].length > 0 && (
+                    <>
+                        <NoteButton clickHandler={popoverClickHandler} />
+                        <PopOver anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
+                            {thisBundle["note"]}
+                        </PopOver>
+                    </>
+                )}
 
                 {/* add to bundle */}
                 <AddButton
@@ -136,7 +135,7 @@ const Bundle = (props) => {
                 }}
             >
                 {/* child bundles */}
-                {collection.get(id)["childBundleIds"].map((childBundleId) => {
+                {thisBundle["childBundleIds"].map((childBundleId) => {
                     return (
                         <Bundle
                             key={childBundleId}
@@ -147,12 +146,12 @@ const Bundle = (props) => {
                 })}
 
                 {/* optional padding added if child bundles are rendered above */}
-                {collection.get(id)["childBundleIds"].length > 0 && (
+                {thisBundle["childBundleIds"].length > 0 && (
                     <div style={{ paddingTop: "16px" }} />
                 )}
 
                 {/* bookmarks */}
-                {collection.get(id)["bookmarks"].map((bookmark) => {
+                {thisBundle["bookmarks"].map((bookmark) => {
                     return (
                         <Bookmark
                             key={bookmark["_id"]}

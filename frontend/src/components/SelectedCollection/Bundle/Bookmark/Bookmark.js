@@ -1,9 +1,11 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import CreateIcon from "@material-ui/icons/Create";
-import IconButton from "@material-ui/core/IconButton";
+
+import ModifyButton from "../Buttons/ModifyButton/ModifyButton";
+import DeleteButton from "../Buttons/DeleteButton/DeleteButton";
+import NoteButton from "../Buttons/NoteButton/NoteButton";
+import PopOver from "../../../PopOver/PopOver";
 
 const Bookmark = (props) => {
     const { bookmark } = props;
@@ -15,6 +17,22 @@ const Bookmark = (props) => {
         link = "https://" + link;
     }
 
+    const deleteBookmarkHandler = () => {
+        alert("delete " + bookmark["_id"]);
+    };
+
+    const modifyBookmarkHandler = () => {
+        alert("modify  " + bookmark["_id"]);
+    };
+
+    // for notes popover
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const popoverClickHandler = (e) => {
+        setAnchorEl(e.currentTarget);
+        e.stopPropagation();
+        e.preventDefault();
+    };
+
     return (
         <Typography
             style={{
@@ -23,15 +41,28 @@ const Bookmark = (props) => {
                 alignItems: "center",
             }}
         >
+            {/* title */}
             <Link href={link} target="_blank" rel="noopener">
                 {bookmark["name"]} {bookmark["_id"]}
             </Link>
-            <IconButton aria-label="modify" style={{ marginLeft: "auto" }}>
-                <CreateIcon />
-            </IconButton>
-            <IconButton aria-label="delete">
-                <DeleteOutlineIcon />
-            </IconButton>
+            {/* notes */}
+
+            {bookmark["note"].length > 0 && (
+                <>
+                    <NoteButton clickHandler={popoverClickHandler} />
+                    <PopOver anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
+                        {bookmark["note"]}
+                    </PopOver>
+                </>
+            )}
+
+            {/* modify bookmark */}
+            <ModifyButton
+                style={{ marginLeft: "auto" }}
+                clickHandler={modifyBookmarkHandler}
+            />
+            {/* delete bookmark */}
+            <DeleteButton clickHandler={deleteBookmarkHandler} />
         </Typography>
     );
 };
