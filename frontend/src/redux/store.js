@@ -1,8 +1,8 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 
-import bookmarkerReducer from "./reducers/bookmarker/reducer";
-import optionsReducer from "./reducers/options/reducer";
+import bookmarkerReducer from "./ducks/bookmarker";
+import optionsReducer from "./ducks/options";
 
 const reducer = combineReducers({
     bookmarker: bookmarkerReducer,

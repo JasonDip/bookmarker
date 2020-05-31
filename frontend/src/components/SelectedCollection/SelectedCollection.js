@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import CreateIcon from "@material-ui/icons/Create";
 
-import * as optionsActions from "../../redux/reducers/options/actions";
+import * as optionsActions from "../../redux/ducks/options";
 import Bundle from "./Bundle/Bundle";
 
 const SelectedCollection = (props) => {

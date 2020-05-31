@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import * as bookmarkerActions from "../../redux/reducers/bookmarker/actions";
+import * as bookmarkerActions from "../../redux/ducks/bookmarker";
 
 const CollectionList = (props) => {
     return (
