@@ -7,6 +7,7 @@ import * as optionsActions from "../../redux/ducks/options";
 import Bundle from "./Bundle/Bundle";
 
 const SelectedCollection = (props) => {
+    // props from redux store
     const {
         selectedCollection,
         editMode,
@@ -31,6 +32,7 @@ const SelectedCollection = (props) => {
         );
     }
 
+    // edit button util
     const editModeClickHandler = () => {
         if (editMode) {
             setEditModeOff();
@@ -38,11 +40,11 @@ const SelectedCollection = (props) => {
             setEditModeOn();
         }
     };
-
     const editButtonColor = editMode ? "secondary" : "default";
 
     return (
         <div>
+            {/* edit mode button */}
             {collectionDisplay !== null && (
                 <Button
                     color={editButtonColor}
@@ -55,6 +57,7 @@ const SelectedCollection = (props) => {
                 </Button>
             )}
 
+            {/* show selected collection */}
             {collectionDisplay}
         </div>
     );

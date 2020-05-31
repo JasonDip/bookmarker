@@ -45,8 +45,8 @@ const Bookmark = (props) => {
             <Link href={link} target="_blank" rel="noopener">
                 {bookmark["name"]} {bookmark["_id"]}
             </Link>
-            {/* notes */}
 
+            {/* notes */}
             {bookmark["note"].length > 0 && (
                 <>
                     <NoteButton clickHandler={popoverClickHandler} />
@@ -56,6 +56,7 @@ const Bookmark = (props) => {
                 </>
             )}
 
+            {/* edit buttons */}
             {editMode && (
                 <>
                     {/* modify bookmark */}

@@ -1,11 +1,11 @@
 import * as bundleApi from "../api/bundle";
 
-/*  actions  */
-export const GET_COLLECTIONS_PENDING = "bookmarker/GET_COLLECTIONS_PENDING";
-export const GET_COLLECTIONS_SUCCESS = "bookmarker/GET_COLLECTIONS_SUCCESS";
-export const GET_COLLECTIONS_FAIL = "bookmarker/GET_COLLECTIONS_FAIL";
+/* actions */
+const GET_COLLECTIONS_PENDING = "bookmarker/bookmarker/GET_COLLECTIONS_PENDING";
+const GET_COLLECTIONS_SUCCESS = "bookmarker/bookmarker/GET_COLLECTIONS_SUCCESS";
+const GET_COLLECTIONS_FAIL = "bookmarker/bookmarker/GET_COLLECTIONS_FAIL";
 
-/*  reducer  */
+/* reducer */
 const initialState = {
     collections: [],
     selectedCollection: [],
@@ -28,9 +28,9 @@ export default function reducer(state = initialState, action) {
     }
 }
 
-/*  action creators  */
+/* action creators */
 
-/*  thunks  */
+/* thunks */
 export const getCollections = (bundleId) => {
     return (dispatch) => {
         dispatch({ type: GET_COLLECTIONS_PENDING });

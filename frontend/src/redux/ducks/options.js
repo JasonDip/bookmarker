@@ -1,8 +1,8 @@
-/*  actions  */
-export const SET_EDIT_MODE_ON = "SET_EDIT_MODE_ON";
-export const SET_EDIT_MODE_OFF = "SET_EDIT_MODE_OFF";
+/* actions */
+const SET_EDIT_MODE_ON = "bookmarker/options/SET_EDIT_MODE_ON";
+const SET_EDIT_MODE_OFF = "bookmarker/options/SET_EDIT_MODE_OFF";
 
-/*  reducer  */
+/* reducer */
 const initialState = {
     editMode: false,
 };
@@ -17,7 +17,7 @@ export default function reducer(state = initialState, action) {
     }
 }
 
-/*  action creators  */
+/* action creators */
 export const setEditModeOn = () => {
     return { type: SET_EDIT_MODE_ON };
 };
