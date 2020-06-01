@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 /*  checks authentication token in header  */
 module.exports = (req, res, next) => {
     // check the session if user is logged in
-    if (!req.session.isLoggedIn) {
+    if (!req.session.user) {
         let error = new Error("Not logged in.");
         error.name = "Authentication Error";
         error.statusCode = 401;

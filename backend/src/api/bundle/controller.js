@@ -15,7 +15,6 @@ module.exports.getCollection = async (req, res, next) => {
         }
         // only root-bundles/collections are allowed to be fully populated
         // this is by design. only collections' privacy setting matters.
-        // TODO: maybe just search for root bundle and use that privacy setting?
         if (!collection.isRoot) {
             const error = new Error("Only collections can be populated.");
             error.statusCode = 404;
@@ -24,21 +23,8 @@ module.exports.getCollection = async (req, res, next) => {
 
         // private collections need authentication
         if (collection.isPrivate) {
-            // check the session if user is logged in
-            if (!req.session.isLoggedIn) {
-                let error = new Error("Not logged in.");
-                error.name = "Authentication Error";
-                error.statusCode = 401;
-                return next(error);
-            }
             if (!req.session.user) {
                 let error = new Error("Session has no user logged.");
-                error.name = "Authentication Error";
-                error.statusCode = 401;
-                return next(error);
-            }
-            if (!req.session.user._id) {
-                let error = new Error("Session has no user id logged.");
                 error.name = "Authentication Error";
                 error.statusCode = 401;
                 return next(error);
@@ -110,7 +96,7 @@ module.exports.createRootBundle = async (req, res, next) => {
         const bundle = new Bundle({
             ...req.body,
             isRoot: true,
-            ownerId: req.session.user._id.toString()
+            ownerId: req.session.user._id.toString(),
         });
         await bundle.save();
         // add this new root bundle to the user's ownedCollections list
@@ -118,8 +104,8 @@ module.exports.createRootBundle = async (req, res, next) => {
             req.session.user._id.toString(),
             {
                 $push: {
-                    ownedCollections: bundle._id
-                }
+                    ownedCollections: bundle._id,
+                },
             },
             { new: true }
         );
@@ -172,7 +158,7 @@ module.exports.modifyBundle = async (req, res, next) => {
             { ...req.body, rootBundleId: newRoot },
             {
                 new: true,
-                runValidators: true
+                runValidators: true,
             }
         );
 
@@ -182,8 +168,8 @@ module.exports.modifyBundle = async (req, res, next) => {
                 { _id: oldParent.parentBundleId },
                 {
                     $pull: {
-                        childBundleIds: mongoose.Types.ObjectId(bundle._id)
-                    }
+                        childBundleIds: mongoose.Types.ObjectId(bundle._id),
+                    },
                 }
             );
 
@@ -192,8 +178,8 @@ module.exports.modifyBundle = async (req, res, next) => {
                 { _id: newParent._id },
                 {
                     $push: {
-                        childBundleIds: mongoose.Types.ObjectId(bundle._id)
-                    }
+                        childBundleIds: mongoose.Types.ObjectId(bundle._id),
+                    },
                 }
             );
         }
@@ -235,7 +221,7 @@ module.exports.createNestedBundle = async (req, res, next) => {
             ...req.body,
             parentBundleId: mongoose.Types.ObjectId(req.params.bundleId),
             ownerId: req.session.user._id,
-            rootBundleId: root
+            rootBundleId: root,
         });
         await newBundle.save();
 
@@ -244,8 +230,8 @@ module.exports.createNestedBundle = async (req, res, next) => {
             { _id: mongoose.Types.ObjectId(req.params.bundleId) },
             {
                 $push: {
-                    childBundleIds: mongoose.Types.ObjectId(newBundle._id)
-                }
+                    childBundleIds: mongoose.Types.ObjectId(newBundle._id),
+                },
             }
         );
         return res.status(201).send(newBundle);
@@ -272,15 +258,15 @@ module.exports.deleteBundle = async (req, res, next) => {
                 bundle.ownerId,
                 {
                     $pull: {
-                        ownedCollections: bundle._id
-                    }
+                        ownedCollections: bundle._id,
+                    },
                 },
                 { new: true }
             );
         } else {
             // delete entry from parent bundle if it is a nested bundle
             await Bundle.findByIdAndUpdate(bundle.parentBundleId, {
-                $pull: { childBundleIds: bundle._id }
+                $pull: { childBundleIds: bundle._id },
             });
         }
 

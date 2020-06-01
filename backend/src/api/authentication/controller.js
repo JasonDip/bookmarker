@@ -19,7 +19,6 @@ module.exports.login = async (req, res, next) => {
 
         // save session info
         // note: data is saved in db, client cookie only has session id
-        req.session.isLoggedIn = true;
         req.session.user = findUser;
         req.session.save();
 

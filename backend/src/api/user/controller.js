@@ -4,15 +4,6 @@ const { User } = require("./model");
 
 module.exports.createNewUser = async (req, res, next) => {
     try {
-        // cannot create a new user while logged in
-        if (req.session) {
-            if (req.session.isLoggedIn) {
-                const error = new Error("Currently logged in to a user.");
-                error.statusCode = 401;
-                throw error;
-            }
-        }
-
         const existingUser = await User.findOne({ email: req.body.email });
         if (existingUser) {
             const error = new Error("User with this email already exists.");
@@ -24,7 +15,7 @@ module.exports.createNewUser = async (req, res, next) => {
         newUser = new User({
             name: req.body.name,
             email: req.body.email,
-            hashedPassword: hashed
+            hashedPassword: hashed,
         });
         await newUser.save();
 
@@ -93,7 +84,7 @@ module.exports.getUserInfo = async (req, res, next) => {
             .populate("ownedCollections", {
                 _id: 1,
                 name: 1,
-                note: 1
+                note: 1,
             })
             .execPopulate();
 
@@ -101,7 +92,7 @@ module.exports.getUserInfo = async (req, res, next) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            ownedCollections: user.ownedCollections
+            ownedCollections: user.ownedCollections,
         });
     } catch (e) {
         e.statusCode = e.statusCode || 500;
@@ -130,7 +121,7 @@ module.exports.changePassword = async (req, res, next) => {
         // store new hashed password
         let newPass = await bcrypt.hash(req.body.newPassword, 12);
         await User.findByIdAndUpdate(req.session.user._id, {
-            hashedPassword: newPass
+            hashedPassword: newPass,
         });
 
         // destroy session (log out)
