@@ -1,4 +1,5 @@
 import * as authenticationApi from "../api/authentication";
+import * as bookmarkerDuck from "./bookmarker";
 
 /* actions */
 const LOGIN_PENDING = "bookmarker/authentication/LOGIN_PENDING";
@@ -17,9 +18,17 @@ export default function reducer(state = initialState, action) {
         case LOGIN_PENDING:
             return state;
         case LOGIN_SUCCESS:
-            return state;
+            // save token
+            localStorage.setItem("token", action.payload.token);
+            return {
+                id: action.payload._id,
+                name: action.payload.name,
+                email: action.payload.email,
+                token: action.payload.token,
+            };
         case LOGIN_FAIL:
-            return state;
+            localStorage.removeItem("token");
+            return initialState;
         default:
             return state;
     }
@@ -33,14 +42,13 @@ export const login = (email, password) => {
         authenticationApi
             .login(email, password)
             .then((res) => {
-                console.log(res);
-                return res.json();
-            })
-            .then((res) => {
-                console.log(res);
+                dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+                dispatch(
+                    bookmarkerDuck.saveCollectionList(res.data.ownedCollections)
+                );
             })
             .catch((err) => {
-                console.log(err);
+                dispatch({ type: LOGIN_FAIL, payload: err });
             });
     };
 };
