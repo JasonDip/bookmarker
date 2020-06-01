@@ -4,12 +4,6 @@ const { User } = require("../user/model");
 
 module.exports.login = async (req, res, next) => {
     try {
-        if (req.session.isLoggedIn) {
-            return res
-                .status(401)
-                .send({ error: "You are already logged in an account." });
-        }
-
         // find the user and match input password to hashed password
         const findUser = await User.findOne({ email: req.body.email });
         if (!findUser) {
@@ -32,7 +26,7 @@ module.exports.login = async (req, res, next) => {
         // create access jwt
         const token = jwt.sign(
             {
-                _id: findUser._id.toString()
+                _id: findUser._id.toString(),
             },
             process.env.JWT_SECRET,
             { expiresIn: "30 days" }
@@ -48,7 +42,7 @@ module.exports.login = async (req, res, next) => {
             name: findUser.name,
             email: findUser.email,
             ownedCollections: findUser.ownedCollections,
-            token: token
+            token: token,
         });
     } catch (e) {
         const error = new Error("Invalid email or password.");
