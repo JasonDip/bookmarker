@@ -4,6 +4,11 @@ const { User } = require("../user/model");
 
 module.exports.login = async (req, res, next) => {
     try {
+        // destroy current session if somehow already logged in
+        if (req.session) {
+            req.session.destroy();
+        }
+
         // find the user and match input password to hashed password
         const findUser = await User.findOne({ email: req.body.email });
         if (!findUser) {
