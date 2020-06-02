@@ -1,6 +1,6 @@
 /* actions */
-const SET_EDIT_MODE_ON = "bookmarker/options/SET_EDIT_MODE_ON";
-const SET_EDIT_MODE_OFF = "bookmarker/options/SET_EDIT_MODE_OFF";
+const SET_EDIT_MODE_ON = "ducks/options/SET_EDIT_MODE_ON";
+const SET_EDIT_MODE_OFF = "ducks/options/SET_EDIT_MODE_OFF";
 
 /* reducer */
 const initialState = {

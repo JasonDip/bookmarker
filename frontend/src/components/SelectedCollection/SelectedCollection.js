@@ -65,7 +65,7 @@ const SelectedCollection = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        selectedCollection: state.bookmarker.selectedCollection,
+        selectedCollection: state.selectedCollection,
         editMode: state.options.editMode,
     };
 };

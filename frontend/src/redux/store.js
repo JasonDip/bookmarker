@@ -1,12 +1,14 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 
-import bookmarkerReducer from "./ducks/bookmarker";
+import collectionListReducer from "./ducks/collectionList";
+import selectedCollectionReducer from "./ducks/selectedCollection";
 import optionsReducer from "./ducks/options";
 import authenticationReducer from "./ducks/authentication";
 
 const reducer = combineReducers({
-    bookmarker: bookmarkerReducer,
+    collectionList: collectionListReducer,
+    selectedCollection: selectedCollectionReducer,
     options: optionsReducer,
     authentication: authenticationReducer,
 });

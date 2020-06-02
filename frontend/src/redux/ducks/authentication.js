@@ -1,10 +1,10 @@
 import * as authenticationApi from "../api/authentication";
-import * as bookmarkerDuck from "./bookmarker";
+import * as collectionListDuck from "./collectionList";
 
 /* actions */
-const LOGIN_PENDING = "bookmarker/authentication/LOGIN_PENDING";
-const LOGIN_SUCCESS = "bookmarker/authentication/LOGIN_SUCCESS";
-const LOGIN_FAIL = "bookmarker/authentication/LOGIN_FAIL";
+const LOGIN_PENDING = "ducks/authentication/LOGIN_PENDING";
+const LOGIN_SUCCESS = "ducks/authentication/LOGIN_SUCCESS";
+const LOGIN_FAIL = "ducks/authentication/LOGIN_FAIL";
 
 /* reducer */
 const initialState = {
@@ -44,7 +44,9 @@ export const login = (email, password) => {
             .then((res) => {
                 dispatch({ type: LOGIN_SUCCESS, payload: res.data });
                 dispatch(
-                    bookmarkerDuck.saveCollectionList(res.data.ownedCollections)
+                    collectionListDuck.saveCollectionList(
+                        res.data.ownedCollections
+                    )
                 );
             })
             .catch((err) => {
