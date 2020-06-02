@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import * as selectedCollectionDuck from "../../redux/ducks/selectedCollection";
+import * as userAction from "../../redux/actions/user";
 
 const CollectionList = (props) => {
     return (
@@ -10,8 +11,10 @@ const CollectionList = (props) => {
             <button
                 onClick={() => props.getCollection("5ecadee8e7263f4734bd1a0d")}
             >
-                click
+                select a collection
             </button>
+
+            <button onClick={() => props.getUserInfo()}>get user info</button>
             <p></p>
         </div>
     );
@@ -25,6 +28,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     getCollection: (bundleId) =>
         dispatch(selectedCollectionDuck.getCollection(bundleId)),
+    getUserInfo: () => dispatch(userAction.getUserInfo()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CollectionList);

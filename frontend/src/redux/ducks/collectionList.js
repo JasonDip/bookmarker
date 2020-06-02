@@ -1,3 +1,6 @@
+import * as userActions from "../actions/user";
+
+/* actions */
 // save the collection list to collections
 const SAVE_COLLECTION_LIST = "ducks/collectionList/SAVE_COLLECTION_LIST";
 
@@ -7,6 +10,8 @@ export default function reducer(state = defaultCollectionList, action) {
     switch (action.type) {
         case SAVE_COLLECTION_LIST:
             return action.payload;
+        case userActions.GET_USER_INFO_SUCCESS:
+            return action.payload.ownedCollections;
         default:
             return state;
     }

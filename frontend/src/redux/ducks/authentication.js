@@ -1,5 +1,6 @@
 import * as authenticationApi from "../api/authentication";
 import * as collectionListDuck from "./collectionList";
+import * as userActions from "../actions/user";
 
 /* actions */
 const LOGIN_PENDING = "ducks/authentication/LOGIN_PENDING";
@@ -11,22 +12,21 @@ const initialState = {
     id: null,
     name: null,
     email: null,
-    token: null,
 };
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case LOGIN_PENDING:
+        case userActions.GET_USER_INFO_PENDING:
             return state;
         case LOGIN_SUCCESS:
-            // save token
-            localStorage.setItem("token", action.payload.token);
+        case userActions.GET_USER_INFO_SUCCESS:
             return {
                 id: action.payload._id,
                 name: action.payload.name,
                 email: action.payload.email,
-                token: action.payload.token,
             };
         case LOGIN_FAIL:
+        case userActions.GET_USER_INFO_FAIL:
             localStorage.removeItem("token");
             return initialState;
         default:
@@ -39,10 +39,15 @@ export default function reducer(state = initialState, action) {
 /* thunks */
 export const login = (email, password) => {
     return (dispatch) => {
+        dispatch({ type: LOGIN_PENDING });
         authenticationApi
             .login(email, password)
             .then((res) => {
+                // save token
+                localStorage.setItem("token", res.data.token);
+                // save user data to redux store
                 dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+                // save collectionList to redux store
                 dispatch(
                     collectionListDuck.saveCollectionList(
                         res.data.ownedCollections
