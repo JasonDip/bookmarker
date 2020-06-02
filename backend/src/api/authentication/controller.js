@@ -4,8 +4,6 @@ const { User } = require("../user/model");
 
 module.exports.login = async (req, res, next) => {
     try {
-        // TODO: maybe link jwt to session
-
         // find the user and match input password to hashed password
         const findUser = await User.findOne({ email: req.body.email });
         if (!findUser) {
@@ -19,11 +17,6 @@ module.exports.login = async (req, res, next) => {
             throw new Error("Incorrect password.");
         }
 
-        // save session info
-        // note: data is saved in db, client cookie only has session id
-        req.session.user = findUser;
-        req.session.save();
-
         // create access jwt
         const token = jwt.sign(
             {
@@ -32,6 +25,12 @@ module.exports.login = async (req, res, next) => {
             process.env.JWT_SECRET,
             { expiresIn: "30 days" }
         );
+
+        // save session info
+        // note: data is saved in db, client cookie only has session id
+        req.session.user = findUser;
+        req.session.token = token;
+        req.session.save();
 
         // populate ownedCollections information useful for showing upon login
         await findUser

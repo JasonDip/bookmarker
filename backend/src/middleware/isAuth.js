@@ -20,6 +20,14 @@ module.exports = (req, res, next) => {
     }
     const token = authHeader.split(" ")[1];
 
+    // token must be the most recent
+    if (token !== req.session.token) {
+        const error = new Error("Invalid token.");
+        error.name = "Authentication Error";
+        error.statusCode = 401;
+        return next(error);
+    }
+
     // check the access token
     let decodedToken;
     try {
