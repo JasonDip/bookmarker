@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -12,7 +13,11 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import Button from "@material-ui/core/Button";
 
+import * as userActions from "../redux/actions/user";
+
+import NavBar from "./NavBar/NavBar";
 import CollectionList from "./CollectionList/CollectionList";
 import SelectedCollection from "./SelectedCollection/SelectedCollection";
 import Login from "./Login/Login";
@@ -43,21 +48,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function App() {
+function App(props) {
     const classes = useStyles();
+
+    // check if credentials are valid
+    props.getUserInfo();
 
     return (
         <div className={classes.root}>
             <CssBaseline />
             <Loading />
 
-            <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <Typography variant="h6" noWrap>
-                        Bookmarker
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+            <NavBar />
 
             <Drawer
                 className={classes.drawer}
@@ -249,4 +251,10 @@ function App() {
     );
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getUserInfo: () => dispatch(userActions.getUserInfo()),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(App);
