@@ -3,9 +3,9 @@ import * as collectionListDuck from "./collectionList";
 import * as userActions from "../actions/user";
 
 /* actions */
-const LOGIN_PENDING = "ducks/authentication/LOGIN_PENDING";
-const LOGIN_SUCCESS = "ducks/authentication/LOGIN_SUCCESS";
-const LOGIN_FAIL = "ducks/authentication/LOGIN_FAIL";
+export const LOGIN_PENDING = "ducks/authentication/LOGIN_PENDING";
+export const LOGIN_SUCCESS = "ducks/authentication/LOGIN_SUCCESS";
+export const LOGIN_FAIL = "ducks/authentication/LOGIN_FAIL";
 
 /* reducer */
 const initialState = {
@@ -15,9 +15,6 @@ const initialState = {
 };
 export default function reducer(state = initialState, action) {
     switch (action.type) {
-        case LOGIN_PENDING:
-        case userActions.GET_USER_INFO_PENDING:
-            return state;
         case LOGIN_SUCCESS:
         case userActions.GET_USER_INFO_SUCCESS:
             return {

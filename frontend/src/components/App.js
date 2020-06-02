@@ -16,6 +16,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import CollectionList from "./CollectionList/CollectionList";
 import SelectedCollection from "./SelectedCollection/SelectedCollection";
 import Login from "./Login/Login";
+import Loading from "./Loading/Loading";
 
 const drawerWidth = "30%";
 
@@ -48,6 +49,8 @@ function App() {
     return (
         <div className={classes.root}>
             <CssBaseline />
+            <Loading />
+
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6" noWrap>
