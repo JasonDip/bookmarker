@@ -16,12 +16,10 @@ export const getUserInfo = () => {
                 dispatch({ type: GET_USER_INFO_SUCCESS, payload: res.data });
             })
             .catch((err) => {
-                console.log(
-                    err.response.data,
-                    err.response.status,
-                    err.response.headers
-                );
-                dispatch({ type: GET_USER_INFO_FAIL, payload: err });
+                dispatch({
+                    type: GET_USER_INFO_FAIL,
+                    payload: err.response.data.error,
+                });
             });
     };
 };

@@ -55,7 +55,10 @@ export const login = (email, password) => {
                 );
             })
             .catch((err) => {
-                dispatch({ type: LOGIN_FAIL, payload: err });
+                dispatch({
+                    type: LOGIN_FAIL,
+                    payload: err.response.data.error,
+                });
             });
     };
 };

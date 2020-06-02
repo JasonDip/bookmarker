@@ -25,7 +25,10 @@ export const createRootBundle = (bundleObj) => {
                 dispatch(userActions.getUserInfo());
             })
             .catch((err) => {
-                dispatch({ type: CREATE_NEW_COLLECTION_FAIL, payload: err });
+                dispatch({
+                    type: CREATE_NEW_COLLECTION_FAIL,
+                    payload: err.response.data.error,
+                });
             });
     };
 };
