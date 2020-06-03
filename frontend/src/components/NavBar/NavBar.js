@@ -7,6 +7,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
+import UserMenu from "./UserMenu/UserMenu";
+
 const useStyles = makeStyles((theme) => ({
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
@@ -21,11 +23,17 @@ const NavBar = (props) => {
 
     let userButton = null;
     if (props.authentication.name) {
-        userButton = props.authentication.name; // TODO: change this to a dropdown with options
+        //userButton = props.authentication.name; // TODO: change this to a dropdown with options
+        userButton = <UserMenu username={props.authentication.name} />;
     } else if (props.authentication.email) {
-        userButton = props.authentication.email;
+        userButton = <UserMenu username={props.authentication.email} />;
     } else {
-        userButton = <Button color="inherit">Login</Button>;
+        userButton = (
+            <>
+                <Button color="inherit">About</Button>
+                <Button color="inherit">Login</Button>
+            </>
+        );
     }
 
     return (
@@ -34,7 +42,6 @@ const NavBar = (props) => {
                 <Typography variant="h6" noWrap className={classes.title}>
                     Bookmarker
                 </Typography>
-                <Button color="inherit">About</Button>
 
                 {userButton}
             </Toolbar>
