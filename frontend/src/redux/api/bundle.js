@@ -12,3 +12,12 @@ export const getCollection = (bundleId) => {
 export const createRootBundle = (bundleObj) => {
     return Axios.post(url + "/bundles", bundleObj, getAxiosConfig());
 };
+
+/* modify a bundle */
+export const modifyBundle = (bundleId, bundleObj) => {
+    return Axios.patch(
+        url + "/bundles/" + bundleId,
+        bundleObj,
+        getAxiosConfig()
+    );
+};

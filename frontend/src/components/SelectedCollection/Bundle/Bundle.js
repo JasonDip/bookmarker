@@ -14,6 +14,8 @@ import AddButton from "./Buttons/AddButton/AddButton";
 import ModifyButton from "./Buttons/ModifyButton/ModifyButton";
 import DeleteButton from "./Buttons/DeleteButton/DeleteButton";
 
+import * as bundleActions from "../../../redux/actions/bundle";
+
 const ExpansionPanel = withStyles({
     root: {
         border: "1px solid rgba(0, 0, 0, .125)",
@@ -56,7 +58,7 @@ const Bundle = (props) => {
     // passed in
     const { collection, id } = props;
     // from redux
-    const { editMode } = props;
+    const { editMode, modifyBundle } = props;
     const thisBundle = collection.get(id);
 
     const [expanded, setExpanded] = React.useState(thisBundle["isRoot"]);
@@ -78,7 +80,7 @@ const Bundle = (props) => {
     };
 
     const modifyButtonHandler = (e) => {
-        alert("modify " + id);
+        props.modifyBundle(thisBundle["_id"], { name: Math.random() });
         e.stopPropagation();
         e.preventDefault();
     };
@@ -144,7 +146,7 @@ const Bundle = (props) => {
                     flexDirection: "column",
                 }}
             >
-                {/* child bundles */}
+                {/* recursively populate child bundles */}
                 {thisBundle["childBundleIds"].map((childBundleId) => {
                     return (
                         <Bundle
@@ -152,6 +154,7 @@ const Bundle = (props) => {
                             collection={collection}
                             id={childBundleId}
                             editMode={editMode}
+                            modifyBundle={modifyBundle}
                         />
                     );
                 })}
@@ -182,4 +185,11 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, null)(Bundle);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        modifyBundle: (bundleId, bundleObj) =>
+            dispatch(bundleActions.modifyBundle(bundleId, bundleObj)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Bundle);

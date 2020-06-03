@@ -152,10 +152,15 @@ module.exports.modifyBundle = async (req, res, next) => {
             }
         }
 
+        // create update object
+        let bundleObj = req.body.parentBundleId
+            ? { ...req.body, rootBundleId: newRoot }
+            : { ...req.body };
+
         // find bundle and update
         const bundle = await Bundle.findByIdAndUpdate(
             req.params.bundleId,
-            { ...req.body, rootBundleId: newRoot },
+            bundleObj,
             {
                 new: true,
                 runValidators: true,
