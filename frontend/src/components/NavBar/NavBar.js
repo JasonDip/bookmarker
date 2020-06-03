@@ -35,6 +35,7 @@ const NavBar = (props) => {
                     Bookmarker
                 </Typography>
                 <Button color="inherit">About</Button>
+
                 {userButton}
             </Toolbar>
         </AppBar>

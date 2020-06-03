@@ -3,6 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
 
@@ -98,6 +99,7 @@ const Bundle = (props) => {
             style={{ width: "100%" }}
         >
             <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel-content"
                 id={id}
                 style={{
