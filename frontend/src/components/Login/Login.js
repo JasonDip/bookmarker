@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link as RouterLink } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -18,7 +19,7 @@ import * as authenticationDuck from "../../redux/ducks/authentication";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(15),
+        marginTop: theme.spacing(8),
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -33,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
+    },
+    link: {
+        textDecoration: "none",
     },
 }));
 
@@ -54,7 +58,7 @@ const Login = (props) => {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Log In
                 </Typography>
                 <form className={classes.form} noValidate>
                     <TextField
@@ -66,7 +70,7 @@ const Login = (props) => {
                         label="Email Address"
                         name="email"
                         autoComplete="email"
-                        autoFocus
+                        // autoFocus
                     />
                     <TextField
                         variant="outlined"
@@ -81,7 +85,7 @@ const Login = (props) => {
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
+                        label="Use Demo Account"
                     />
                     <Button
                         // type="submit"
@@ -91,17 +95,17 @@ const Login = (props) => {
                         color="primary"
                         className={classes.submit}
                     >
-                        Sign In
+                        Log In
                     </Button>
-                    <Grid container>
-                        <Grid item xs>
+                    <Grid container justify="flex-end">
+                        {/* <Grid item xs>
                             <Link href="#" variant="body2">
                                 Forgot password?
                             </Link>
-                        </Grid>
+                        </Grid> */}
                         <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
+                            <Link to="/signup" component={RouterLink}>
+                                Don't have an account? Sign Up
                             </Link>
                         </Grid>
                     </Grid>

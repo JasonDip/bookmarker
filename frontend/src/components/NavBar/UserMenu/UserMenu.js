@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Grow from "@material-ui/core/Grow";
@@ -18,8 +19,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UserMenu(props) {
+    // passed in from parent comp
     const { username } = props;
+
     const classes = useStyles();
+    const history = useHistory();
+
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
 
@@ -32,6 +37,11 @@ export default function UserMenu(props) {
             return;
         }
 
+        setOpen(false);
+    };
+
+    const aboutHandler = (e) => {
+        history.push("/about");
         setOpen(false);
     };
 
@@ -88,7 +98,7 @@ export default function UserMenu(props) {
                                         id="menu-list-grow"
                                         onKeyDown={handleListKeyDown}
                                     >
-                                        <MenuItem onClick={handleClose}>
+                                        <MenuItem onClick={aboutHandler}>
                                             About Bookmarker
                                         </MenuItem>
                                         <MenuItem onClick={handleClose}>

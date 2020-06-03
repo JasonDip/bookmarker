@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -15,23 +16,36 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
+        "-webkit-touch-callout": "none",
+        "-webkit-user-select": "none",
+        "-khtml-user-select": "none",
+        "-moz-user-select": "none",
+        "-ms-user-select": "none",
+        "user-select": "none",
     },
 }));
 
 const NavBar = (props) => {
     const classes = useStyles();
+    const history = useHistory();
 
     let userButton = null;
     if (props.authentication.name) {
-        //userButton = props.authentication.name; // TODO: change this to a dropdown with options
         userButton = <UserMenu username={props.authentication.name} />;
     } else if (props.authentication.email) {
         userButton = <UserMenu username={props.authentication.email} />;
     } else {
         userButton = (
             <>
-                <Button color="inherit">About</Button>
-                <Button color="inherit">Login</Button>
+                <Button color="inherit" onClick={() => history.push("/about")}>
+                    About
+                </Button>
+                <Button color="inherit" onClick={() => history.push("/login")}>
+                    Login
+                </Button>
+                <Button color="inherit" onClick={() => history.push("/signup")}>
+                    Signup
+                </Button>
             </>
         );
     }
@@ -40,7 +54,7 @@ const NavBar = (props) => {
         <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
                 <Typography variant="h6" noWrap className={classes.title}>
-                    Bookmarker
+                    <span onClick={() => history.push("/")}>Bookmarker</span>
                 </Typography>
 
                 {userButton}
