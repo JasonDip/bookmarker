@@ -9,8 +9,8 @@ export const login = (email, password) => {
     return Axios.post(
         url + "/login",
         {
-            email: "myemail1@gmail.com",
-            password: "mypass",
+            email: email,
+            password: password,
         },
         getAxiosConfig()
     );

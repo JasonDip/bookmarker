@@ -24,6 +24,7 @@ export default function reducer(state = initialState, action) {
             };
         case LOGIN_FAIL:
         case userActions.GET_USER_INFO_FAIL:
+            console.log(action.payload);
             localStorage.removeItem("token");
             return initialState;
         default:
