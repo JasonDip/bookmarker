@@ -5,7 +5,7 @@ const url = process.env.REACT_APP_API_URL;
 
 /* get a collection */
 export const getCollection = (bundleId) => {
-    return Axios.get(url + "/bundles/" + bundleId);
+    return Axios.get(url + "/bundles/" + bundleId, getAxiosConfig());
 };
 
 /* create a new root bundle */

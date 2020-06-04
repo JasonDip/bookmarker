@@ -30,8 +30,12 @@ const useStyles = makeStyles({
 
 const CollectionList = (props) => {
     // from redux
-    const { collectionList, selectedCollection } = props;
+    const { collectionList, selectedCollection, getCollection } = props;
     const classes = useStyles();
+
+    const collectionClickHandler = (bundleId) => {
+        getCollection(bundleId);
+    };
 
     return (
         <div style={{ maxWidth: "100%" }}>
@@ -78,7 +82,9 @@ const CollectionList = (props) => {
                                     selectedCollection.length > 0 &&
                                     selectedCollection[0]._id === collection._id
                                 }
-                                onClick={() => console.log(collection.name)}
+                                onClick={() =>
+                                    collectionClickHandler(collection._id)
+                                }
                             >
                                 <Typography noWrap gutterBottom>
                                     {collection.name}
