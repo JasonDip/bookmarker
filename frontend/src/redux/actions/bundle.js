@@ -45,11 +45,10 @@ export const modifyBundle = (bundleId, bundleObj) => {
         bundleApi
             .modifyBundle(bundleId, bundleObj)
             .then((res) => {
-                console.log(res);
                 if (res.data.isRoot) {
                     // refresh the collection list
-                    // TODO: refresh collection list
-                    // and refresh selected collection if a root bundle was modified
+                    dispatch(userActions.getUserInfo());
+                    // and refresh selected collection
                     dispatch(
                         selectedCollectionDuck.getCollection(res.data._id)
                     );

@@ -78,6 +78,7 @@ const CollectionList = (props) => {
                                     selectedCollection.length > 0 &&
                                     selectedCollection[0]._id === collection._id
                                 }
+                                onClick={() => console.log(collection.name)}
                             >
                                 <Typography noWrap gutterBottom>
                                     {collection.name}
