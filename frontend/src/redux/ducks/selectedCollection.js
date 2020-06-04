@@ -37,7 +37,7 @@ export const getCollection = (bundleId) => {
             .catch((err) => {
                 dispatch({
                     type: GET_COLLECTION_FAIL,
-                    payload: err.response.data.error,
+                    payload: err,
                 });
             });
     };

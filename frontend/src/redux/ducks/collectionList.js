@@ -9,8 +9,10 @@ const defaultCollectionList = [];
 export default function reducer(state = defaultCollectionList, action) {
     switch (action.type) {
         case SAVE_COLLECTION_LIST:
+            // used after authentication
             return action.payload;
         case userActions.GET_USER_INFO_SUCCESS:
+            // used when refreshing user info
             return action.payload.ownedCollections;
         default:
             return state;

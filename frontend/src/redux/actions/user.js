@@ -18,7 +18,7 @@ export const getUserInfo = () => {
             .catch((err) => {
                 dispatch({
                     type: GET_USER_INFO_FAIL,
-                    payload: err.response.data.error,
+                    payload: err,
                 });
             });
     };

@@ -33,7 +33,7 @@ export const createRootBundle = (bundleObj) => {
             .catch((err) => {
                 dispatch({
                     type: CREATE_NEW_COLLECTION_FAIL,
-                    payload: err.response.data.error,
+                    payload: err,
                 });
             });
     };
@@ -62,7 +62,7 @@ export const modifyBundle = (bundleId, bundleObj) => {
                 }
             })
             .catch((err) => {
-                return err.response.data.error;
+                return err;
             });
     };
 };

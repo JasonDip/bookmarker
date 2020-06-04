@@ -6,6 +6,7 @@ import selectedCollectionReducer from "./ducks/selectedCollection";
 import optionsReducer from "./ducks/options";
 import authenticationReducer from "./ducks/authentication";
 import loadingReducer from "./ducks/loading";
+import errorReducer from "./ducks/error";
 
 const reducer = combineReducers({
     collectionList: collectionListReducer,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
     options: optionsReducer,
     authentication: authenticationReducer,
     loading: loadingReducer,
+    error: errorReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
