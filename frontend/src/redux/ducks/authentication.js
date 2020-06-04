@@ -3,9 +3,14 @@ import * as collectionListDuck from "./collectionList";
 import * as userActions from "../actions/user";
 
 /* actions */
+// login
 export const LOGIN_PENDING = "ducks/authentication/LOGIN_PENDING";
 export const LOGIN_SUCCESS = "ducks/authentication/LOGIN_SUCCESS";
 export const LOGIN_FAIL = "ducks/authentication/LOGIN_FAIL";
+// logout
+export const LOGOUT_PENDING = "ducks/authentication/LOGOUT_PENDING";
+export const LOGOUT_SUCCESS = "ducks/authentication/LOGOUT_SUCCESS";
+export const LOGOUT_FAIL = "ducks/authentication/LOGOUT_FAIL";
 
 /* reducer */
 const initialState = {
@@ -24,7 +29,8 @@ export default function reducer(state = initialState, action) {
             };
         case LOGIN_FAIL:
         case userActions.GET_USER_INFO_FAIL:
-            console.log(action.payload);
+        case LOGOUT_SUCCESS:
+        case LOGOUT_FAIL:
             localStorage.removeItem("token");
             return initialState;
         default:
@@ -57,6 +63,22 @@ export const login = (email, password) => {
                     type: LOGIN_FAIL,
                     payload: err,
                 });
+            });
+    };
+};
+
+export const logout = () => {
+    return (dispatch) => {
+        dispatch({ type: LOGOUT_PENDING });
+        authenticationApi
+            .logout()
+            .then((res) => {
+                // delete jwt and clear redux store
+                dispatch({ type: LOGOUT_SUCCESS });
+            })
+            .catch((err) => {
+                // should still clear on client side
+                dispatch({ type: LOGOUT_FAIL });
             });
     };
 };

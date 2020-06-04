@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -9,6 +10,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { logout } from "../../../redux/ducks/authentication";
+
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
@@ -18,9 +21,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function UserMenu(props) {
+const UserMenu = (props) => {
     // passed in from parent comp
     const { username } = props;
+    // passed in from redux
+    const { logout } = props;
 
     const classes = useStyles();
     const history = useHistory();
@@ -36,12 +41,21 @@ export default function UserMenu(props) {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
+        setOpen(false);
+    };
 
+    const homeHandler = (e) => {
+        history.push("/");
         setOpen(false);
     };
 
     const aboutHandler = (e) => {
         history.push("/about");
+        setOpen(false);
+    };
+
+    const logoutHandler = (e) => {
+        logout();
         setOpen(false);
     };
 
@@ -58,7 +72,6 @@ export default function UserMenu(props) {
         if (prevOpen.current === true && open === false) {
             anchorRef.current.focus();
         }
-
         prevOpen.current = open;
     }, [open]);
 
@@ -98,13 +111,16 @@ export default function UserMenu(props) {
                                         id="menu-list-grow"
                                         onKeyDown={handleListKeyDown}
                                     >
+                                        <MenuItem onClick={homeHandler}>
+                                            Home
+                                        </MenuItem>
                                         <MenuItem onClick={aboutHandler}>
                                             About Bookmarker
                                         </MenuItem>
                                         <MenuItem onClick={handleClose}>
                                             Profile
                                         </MenuItem>
-                                        <MenuItem onClick={handleClose}>
+                                        <MenuItem onClick={logoutHandler}>
                                             Logout
                                         </MenuItem>
                                     </MenuList>
@@ -116,4 +132,12 @@ export default function UserMenu(props) {
             </div>
         </div>
     );
-}
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logout: () => dispatch(logout()),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(UserMenu);

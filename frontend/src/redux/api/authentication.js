@@ -15,3 +15,8 @@ export const login = (email, password) => {
         getAxiosConfig()
     );
 };
+
+/* log out */
+export const logout = () => {
+    return Axios.post(url + "/logout", null, getAxiosConfig());
+};

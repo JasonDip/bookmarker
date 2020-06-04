@@ -16,6 +16,7 @@ export default function reducer(state = errorState, action) {
         case bundleActions.MODIFY_BUNDLE_FAIL:
         case userActions.GET_USER_INFO_FAIL:
         case authenticationDuck.LOGIN_FAIL:
+        case authenticationDuck.LOGOUT_FAIL:
         case selectedCollectionDuck.GET_COLLECTION_FAIL:
             console.log(action.payload.response);
             console.log(
