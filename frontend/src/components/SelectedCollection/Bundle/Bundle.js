@@ -58,7 +58,7 @@ const Bundle = (props) => {
     // passed in
     const { collection, id } = props;
     // from redux
-    const { editMode, modifyBundle } = props;
+    const { editMode, modifyBundle, deleteBundle } = props;
     const thisBundle = collection.get(id);
 
     const [expanded, setExpanded] = React.useState(thisBundle["isRoot"]);
@@ -74,13 +74,13 @@ const Bundle = (props) => {
     };
 
     const deleteButtonHandler = (e) => {
-        alert("delete " + id);
+        deleteBundle(id);
         e.stopPropagation();
         e.preventDefault();
     };
 
     const modifyButtonHandler = (e) => {
-        props.modifyBundle(thisBundle["_id"], { name: Math.random() });
+        modifyBundle(thisBundle["_id"], { name: Math.random() });
         e.stopPropagation();
         e.preventDefault();
     };
@@ -155,6 +155,7 @@ const Bundle = (props) => {
                             id={childBundleId}
                             editMode={editMode}
                             modifyBundle={modifyBundle}
+                            deleteBundle={deleteBundle}
                         />
                     );
                 })}
@@ -189,6 +190,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         modifyBundle: (bundleId, bundleObj) =>
             dispatch(bundleActions.modifyBundle(bundleId, bundleObj)),
+        deleteBundle: (bundleId) =>
+            dispatch(bundleActions.deleteBundle(bundleId)),
     };
 };
 

@@ -21,6 +21,10 @@ export const CREATE_NESTED_BUNDLE_SUCCESS =
     "actions/bundle/CREATE_NESTED_BUNDLE_SUCCESS";
 export const CREATE_NESTED_BUNDLE_FAIL =
     "actions/bundle/CREATE_NESTED_BUNDLE_FAIL";
+// delete bundle
+export const DELETE_BUNDLE_PENDING = "actions/bundle/DELETE_BUNDLE_PENDING";
+export const DELETE_BUNDLE_SUCCESS = "actions/bundle/DELETE_BUNDLE_SUCCESS";
+export const DELETE_BUNDLE_FAIL = "actions/bundle/DELETE_BUNDLE_FAIL";
 
 /* thunks */
 export const createRootBundle = (bundleObj) => {
@@ -48,6 +52,7 @@ export const modifyBundle = (bundleId, bundleObj) => {
         bundleApi
             .modifyBundle(bundleId, bundleObj)
             .then((res) => {
+                dispatch({ type: MODIFY_BUNDLE_SUCCESS });
                 if (res.data.isRoot) {
                     // refresh the collection list
                     dispatch(userActions.getUserInfo());
@@ -65,7 +70,7 @@ export const modifyBundle = (bundleId, bundleObj) => {
                 }
             })
             .catch((err) => {
-                return err;
+                dispatch({ type: MODIFY_BUNDLE_FAIL, payload: err });
             });
     };
 };
@@ -88,4 +93,29 @@ export const createNestedBundle = (bundleId, bundleObj) => {
     };
 };
 
-export const deleteBundle = (bundleId) => {};
+export const deleteBundle = (bundleId) => {
+    return (dispatch) => {
+        dispatch({ type: DELETE_BUNDLE_PENDING });
+        bundleApi
+            .deleteBundle(bundleId)
+            .then((res) => {
+                dispatch({ type: DELETE_BUNDLE_SUCCESS });
+                if (res.data.isRoot) {
+                    // if deleting a root bundle, clear the selectedCollection
+                    dispatch(selectedCollectionDuck.clearSelectedCollection());
+                    // refresh the collection list
+                    dispatch(userActions.getUserInfo());
+                } else {
+                    // otherwise, refresh the selectedCollection
+                    dispatch(
+                        selectedCollectionDuck.getCollection(
+                            res.data.rootBundleId
+                        )
+                    );
+                }
+            })
+            .catch((err) => {
+                dispatch({ type: DELETE_BUNDLE_FAIL, payload: err });
+            });
+    };
+};

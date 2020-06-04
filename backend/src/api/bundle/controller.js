@@ -278,7 +278,7 @@ module.exports.deleteBundle = async (req, res, next) => {
         // recursively delete all children bundles
         bundleUtil.deleteUtil(bundle.childBundleIds);
 
-        return res.status(204).send();
+        return res.status(200).send(bundle);
     } catch (e) {
         e.statusCode = e.statusCode || 500;
         e.name = "Delete Bundle Error";
