@@ -115,7 +115,7 @@ const UserMenu = (props) => {
                                             Home
                                         </MenuItem>
                                         <MenuItem onClick={aboutHandler}>
-                                            About Bookmarker
+                                            About
                                         </MenuItem>
                                         <MenuItem onClick={handleClose}>
                                             Profile

@@ -10,6 +10,14 @@ import PopOver from "../../../PopOver/PopOver";
 const Bookmark = (props) => {
     const { bookmark, editMode } = props;
 
+    // for notes popover
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const popoverClickHandler = (e) => {
+        setAnchorEl(e.currentTarget);
+        e.stopPropagation();
+        e.preventDefault();
+    };
+
     // add https if no prefix is present
     let link = bookmark["url"];
     let reg = new RegExp("^(http|https)://");
@@ -23,14 +31,6 @@ const Bookmark = (props) => {
 
     const modifyBookmarkHandler = () => {
         alert("modify  " + bookmark["_id"]);
-    };
-
-    // for notes popover
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const popoverClickHandler = (e) => {
-        setAnchorEl(e.currentTarget);
-        e.stopPropagation();
-        e.preventDefault();
     };
 
     return (
