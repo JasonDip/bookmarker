@@ -21,3 +21,17 @@ export const modifyBundle = (bundleId, bundleObj) => {
         getAxiosConfig()
     );
 };
+
+/* create a nested bundle */
+export const createNestedBundle = (bundleId, bundleObj) => {
+    return Axios.post(
+        url + "/bundles/" + bundleId,
+        bundleObj,
+        getAxiosConfig()
+    );
+};
+
+/* delete a bundle */
+export const deleteBundle = (bundleId) => {
+    return Axios.delete(url + "/bundles/" + bundleId, getAxiosConfig());
+};

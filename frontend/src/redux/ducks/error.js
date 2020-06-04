@@ -14,6 +14,7 @@ export default function reducer(state = errorState, action) {
         case ERROR_ON:
         case bundleActions.CREATE_NEW_COLLECTION_FAIL:
         case bundleActions.MODIFY_BUNDLE_FAIL:
+        case bundleActions.CREATE_NESTED_BUNDLE_FAIL:
         case userActions.GET_USER_INFO_FAIL:
         case authenticationDuck.LOGIN_FAIL:
         case authenticationDuck.LOGOUT_FAIL:

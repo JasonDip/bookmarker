@@ -14,10 +14,13 @@ export const CREATE_NEW_COLLECTION_FAIL =
 export const MODIFY_BUNDLE_PENDING = "actions/bundle/MODIFY_BUNDLE_PENDING";
 export const MODIFY_BUNDLE_SUCCESS = "actions/bundle/MODIFY_BUNDLE_SUCCESS";
 export const MODIFY_BUNDLE_FAIL = "actions/bundle/MODIFY_BUNDLE_FAIL";
-
-/* reducer */
-
-/* action creators */
+// create nested bundle
+export const CREATE_NESTED_BUNDLE_PENDING =
+    "actions/bundle/CREATE_NESTED_BUNDLE_PENDING";
+export const CREATE_NESTED_BUNDLE_SUCCESS =
+    "actions/bundle/CREATE_NESTED_BUNDLE_SUCCESS";
+export const CREATE_NESTED_BUNDLE_FAIL =
+    "actions/bundle/CREATE_NESTED_BUNDLE_FAIL";
 
 /* thunks */
 export const createRootBundle = (bundleObj) => {
@@ -66,3 +69,23 @@ export const modifyBundle = (bundleId, bundleObj) => {
             });
     };
 };
+
+export const createNestedBundle = (bundleId, bundleObj) => {
+    return (dispatch) => {
+        dispatch({ type: CREATE_NESTED_BUNDLE_PENDING });
+        bundleApi
+            .createNestedBundle(bundleId, bundleObj)
+            .then((res) => {
+                dispatch({ type: CREATE_NESTED_BUNDLE_SUCCESS });
+                // refresh currently selected collection
+                dispatch(
+                    selectedCollectionDuck.getCollection(res.data.rootBundleId)
+                );
+            })
+            .catch((err) => {
+                dispatch({ type: CREATE_NESTED_BUNDLE_FAIL, payload: err });
+            });
+    };
+};
+
+export const deleteBundle = (bundleId) => {};
