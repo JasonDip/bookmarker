@@ -54,7 +54,12 @@ const NavBar = (props) => {
         <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
                 <Typography variant="h6" noWrap className={classes.title}>
-                    <span onClick={() => history.push("/")}>Bookmarker</span>
+                    <span
+                        onClick={() => history.push("/")}
+                        style={{ cursor: "pointer" }}
+                    >
+                        Bookmarker
+                    </span>
                 </Typography>
 
                 {userButton}
