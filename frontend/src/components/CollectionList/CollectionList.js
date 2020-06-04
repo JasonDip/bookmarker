@@ -4,21 +4,13 @@ import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import AddBoxIcon from "@material-ui/icons/AddBox";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import Button from "@material-ui/core/Button";
 
 import * as selectedCollectionDuck from "../../redux/ducks/selectedCollection";
 import * as userActions from "../../redux/actions/user";
 import * as bundleActions from "../../redux/actions/bundle";
-import { findByLabelText } from "@testing-library/react";
 
 const useStyles = makeStyles({
     listHeader: {
@@ -61,17 +53,12 @@ const CollectionList = (props) => {
                 Add New Collection
             </button>
 
-            <button
-                onClick={() => props.getCollection("5ecadee8e7263f4734bd1a0d")}
-            >
-                select a collection
-            </button>
-
             <button onClick={() => props.getUserInfo()}>get user info</button>
 
             {/* show collectionList */}
             <div className={classes.drawerContainer}>
                 <List>
+                    {/* populate collectionList into view */}
                     {collectionList &&
                         collectionList.map((collection, index) => (
                             <ListItem

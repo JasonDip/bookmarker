@@ -50,7 +50,7 @@ const SelectedCollection = (props) => {
                     color={editButtonColor}
                     variant="contained"
                     onClick={editModeClickHandler}
-                    style={{ marginBottom: "10px" }}
+                    style={{ marginBottom: "15px" }}
                     startIcon={<CreateIcon />}
                 >
                     Edit Mode
