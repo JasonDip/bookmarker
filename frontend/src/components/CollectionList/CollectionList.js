@@ -1,14 +1,46 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+import Button from "@material-ui/core/Button";
+
 import * as selectedCollectionDuck from "../../redux/ducks/selectedCollection";
 import * as userActions from "../../redux/actions/user";
 import * as bundleActions from "../../redux/actions/bundle";
+import { findByLabelText } from "@testing-library/react";
+
+const useStyles = makeStyles({
+    listHeader: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+});
 
 const CollectionList = (props) => {
+    // from redux
+    const { collectionList, selectedCollection } = props;
+    const classes = useStyles();
+
     return (
         <div style={{ maxWidth: "100%" }}>
-            <p>Your Collections</p>
+            <Typography className={classes.listHeader}>
+                <strong>Your Collections</strong>
+                <IconButton color="primary">
+                    <AddCircleOutlineIcon />
+                </IconButton>
+            </Typography>
             <button
                 onClick={() =>
                     props.createRootBundle({
@@ -32,14 +64,35 @@ const CollectionList = (props) => {
             </button>
 
             <button onClick={() => props.getUserInfo()}>get user info</button>
-            <p></p>
+
+            {/* show collectionList */}
+            <div className={classes.drawerContainer}>
+                <List>
+                    {collectionList &&
+                        collectionList.map((collection, index) => (
+                            <ListItem
+                                button
+                                key={collection._id}
+                                selected={
+                                    selectedCollection &&
+                                    selectedCollection.length > 0 &&
+                                    selectedCollection[0]._id === collection._id
+                                }
+                            >
+                                <Typography noWrap gutterBottom>
+                                    {collection.name}
+                                </Typography>
+                            </ListItem>
+                        ))}
+                </List>
+            </div>
         </div>
     );
 };
 
 const mapStateToProps = (state) => ({
-    collections: state.collectionList.collectionList,
-    selectedCollection: state.selectedCollection.selectedCollection,
+    collectionList: state.collectionList,
+    selectedCollection: state.selectedCollection,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -51,183 +104,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CollectionList);
-
-/* 
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import Button from "@material-ui/core/Button";
-
-<div className={classes.drawerContainer}>
-                    <List>
-                        {["Inbox", "Starred", "Send email", "Drafts"].map(
-                            (text, index) => (
-                                <ListItem button key={text}>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? (
-                                            <InboxIcon />
-                                        ) : (
-                                            <MailIcon />
-                                        )}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItem>
-                            )
-                        )}
-                    </List>
-                    <Divider />
-                    <List>
-                        {["All mail", "Trash", "Spam"].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {["All mail", "Trash", "Spam"].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {["All mail", "Trash", "Spam"].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {["All mail", "Trash", "Spam"].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {["All mail", "Trash", "Spam"].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {["All mail", "Trash", "Spam"].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {["All mail", "Trash", "Spam"].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {["All mail", "Trash", "Spam"].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {["All mail", "Trash", "Spam"].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {["All mail", "Trash", "Spam"].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? (
-                                        <InboxIcon />
-                                    ) : (
-                                        <MailIcon />
-                                    )}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))}
-                    </List>
-                </div> */
