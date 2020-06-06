@@ -5,7 +5,7 @@ const { Bundle } = require("../bundle/model");
  * @param {Bundle[]} fullCollection
  * @param {ObjectId[]} childBundleIds
  */
-module.exports.populateUtil = async (fullCollection, childBundleIds) => {
+const populateUtil = async (fullCollection, childBundleIds) => {
     try {
         if (childBundleIds.length === 0) return;
         for (let childId of childBundleIds) {
@@ -21,18 +21,20 @@ module.exports.populateUtil = async (fullCollection, childBundleIds) => {
         throw e;
     }
 };
+module.exports.populateUtil = populateUtil;
 
 /**
  * utility function for recursively deleting children bundles
  * @param {ObjectId[]} childBundleIds
  */
-module.exports.deleteUtil = async childBundleIds => {
+const deleteUtil = async (childBundleIds) => {
     try {
         if (childBundleIds.length === 0) return;
         for (let childId of childBundleIds) {
             const bundle = await Bundle.findByIdAndDelete(childId);
-            if (bundle.childBundleIds.length === 0) continue;
-            this.deleteUtil(bundle.childBundleIds);
+            if (bundle.childBundleIds.length > 0) {
+                await deleteUtil(bundle.childBundleIds);
+            }
         }
     } catch (e) {
         e.name = "Error DeleteUtil";
@@ -40,3 +42,4 @@ module.exports.deleteUtil = async childBundleIds => {
         throw e;
     }
 };
+module.exports.deleteUtil = deleteUtil;
