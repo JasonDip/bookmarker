@@ -17,6 +17,7 @@ import DeleteButton from "./Buttons/DeleteButton/DeleteButton";
 import * as bundleActions from "../../../redux/actions/bundle";
 import CreateNestedBundleModal from "../../Modals/CreateNestedBundleModal";
 import DeleteBundleModal from "../../Modals/DeleteBundleModal";
+import ModifyBundleModal from "../../Modals/ModifyBundleModal";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -67,34 +68,44 @@ const Bundle = (props) => {
 
     const [expanded, setExpanded] = React.useState(thisBundle["isRoot"]);
 
-    const [openAddNestBundleModal, setOpenAddNestBundleModal] = React.useState(
+    // show modal states
+    const [
+        openAddNestedBundleModal,
+        setOpenAddNestedBundleModal,
+    ] = React.useState(false);
+    const [openDeleteBundleModal, setOpenDeleteBundleModal] = React.useState(
         false
     );
-    const [openDeleteBundleModal, setOpenDeleteBundleModal] = React.useState(
+    const [openModifyBundleModal, setOpenModifyBundleModal] = React.useState(
         false
     );
 
     const panelClickHandler = () => {
         // stop panel from changing when clicking modal
-        if (openAddNestBundleModal || openDeleteBundleModal) return;
+        if (
+            openAddNestedBundleModal ||
+            openDeleteBundleModal ||
+            openModifyBundleModal
+        )
+            return;
         setExpanded((state) => !state);
     };
 
     const addButtonHandler = (e) => {
-        setOpenAddNestBundleModal(true);
+        setOpenAddNestedBundleModal(true);
         e.stopPropagation();
         e.preventDefault();
     };
 
     const deleteButtonHandler = (e) => {
-        //deleteBundle(id);
         setOpenDeleteBundleModal(true);
         e.stopPropagation();
         e.preventDefault();
     };
 
     const modifyButtonHandler = (e) => {
-        modifyBundle(thisBundle["_id"], { name: Math.random() });
+        //modifyBundle(thisBundle["_id"], { name: Math.random() });
+        setOpenModifyBundleModal(true);
         e.stopPropagation();
         e.preventDefault();
     };
@@ -147,14 +158,20 @@ const Bundle = (props) => {
                             clickHandler={addButtonHandler}
                         />
                         <CreateNestedBundleModal
-                            open={openAddNestBundleModal}
-                            setOpen={setOpenAddNestBundleModal}
+                            open={openAddNestedBundleModal}
+                            setOpen={setOpenAddNestedBundleModal}
                             parentBundleId={id}
                             setExpanded={setExpanded}
                         />
 
                         {/* modify bundle */}
                         <ModifyButton clickHandler={modifyButtonHandler} />
+                        <ModifyBundleModal
+                            bundleObj={thisBundle}
+                            open={openModifyBundleModal}
+                            setOpen={setOpenModifyBundleModal}
+                        />
+
                         {/* delete bundle */}
                         <DeleteButton clickHandler={deleteButtonHandler} />
                         <DeleteBundleModal
