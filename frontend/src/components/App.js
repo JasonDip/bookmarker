@@ -45,11 +45,15 @@ const useStyles = makeStyles((theme) => ({
 function App(props) {
     const classes = useStyles();
 
-    // check if credentials are valid
+    // passed in by redux
     const { getUserInfo } = props;
+
+    // check if credentials are valid
     useEffect(() => {
-        getUserInfo();
-    }, [getUserInfo]);
+        if (localStorage.getItem("token")) {
+            getUserInfo();
+        }
+    }, []);
 
     return (
         <div className={classes.root}>

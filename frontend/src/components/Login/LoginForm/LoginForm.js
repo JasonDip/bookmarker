@@ -60,7 +60,6 @@ const LoginForm = (props) => {
                 password: Yup.string().required("Required."),
             })}
             onSubmit={(value, { setSubmitting }) => {
-                console.log(value);
                 // dispatch login
                 login(value.email, value.password);
                 setSubmitting(false);
