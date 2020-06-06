@@ -7,6 +7,7 @@ const NoteButton = (props) => {
     return (
         <IconButton
             style={props.style}
+            color="primary"
             aria-label="notes"
             onClick={clickHandler}
         >

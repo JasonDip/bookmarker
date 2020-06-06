@@ -6,7 +6,8 @@ const DeleteButton = (props) => {
     const { clickHandler } = props;
     return (
         <IconButton
-            style={props.style}
+            // style={{ color: "red" }}
+            color="secondary"
             aria-label="delete"
             onClick={clickHandler}
         >
