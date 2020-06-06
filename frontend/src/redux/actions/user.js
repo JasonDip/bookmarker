@@ -18,10 +18,9 @@ export const createNewUser = (userObj) => {
             .createNewUser(userObj)
             .then((res) => {
                 dispatch({ type: CREATE_NEW_USER_SUCCESS });
-                // TODO: show message that user was created?
             })
             .catch((err) => {
-                dispatch({ type: CREATE_NEW_USER_FAIL });
+                dispatch({ type: CREATE_NEW_USER_FAIL, payload: err });
             });
     };
 };

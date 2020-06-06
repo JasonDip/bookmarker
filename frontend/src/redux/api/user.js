@@ -5,7 +5,7 @@ const url = process.env.REACT_APP_API_URL;
 
 /* create a new account */
 export const createNewUser = (userObj) => {
-    return Axios.post(url + "/user", userObj, getAxiosConfig());
+    return Axios.post(url + "/user", userObj);
 };
 
 /* delete the current user's account */

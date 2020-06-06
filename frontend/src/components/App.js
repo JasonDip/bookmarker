@@ -16,6 +16,7 @@ import Login from "./Login/Login";
 import Loading from "./Loading/Loading";
 import About from "./About/About";
 import SignUp from "./SignUp/SignUp";
+import SnackBar from "./SnackBar/SnackBar";
 
 const drawerWidth = "30%";
 
@@ -46,7 +47,7 @@ function App(props) {
     const classes = useStyles();
 
     // passed in by redux
-    const { getUserInfo } = props;
+    const { getUserInfo, authentication } = props;
 
     // check if credentials are valid
     useEffect(() => {
@@ -81,7 +82,7 @@ function App(props) {
                 {/* login page */}
                 <Route path="/login">
                     {/* if already logged in, redirect to main page */}
-                    {props.authentication.id === null ? (
+                    {authentication.id === null ? (
                         <div className={classes.content}>
                             <Toolbar />
                             <Login />
@@ -94,7 +95,7 @@ function App(props) {
                 {/* main app page */}
                 <Route path="/" exact>
                     {/* based on user id in store, go to login page or main page */}
-                    {props.authentication.id === null ? (
+                    {authentication.id === null ? (
                         <Redirect to="/login" />
                     ) : (
                         <>
@@ -122,6 +123,7 @@ function App(props) {
                 {/* redirect invalid paths to root */}
                 <Route render={() => <Redirect to={{ pathname: "/" }} />} />
             </Switch>
+            <SnackBar />
         </div>
     );
 }
