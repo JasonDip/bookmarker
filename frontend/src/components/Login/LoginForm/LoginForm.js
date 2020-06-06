@@ -141,12 +141,6 @@ const LoginForm = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return {
-        authentication: state.authentication,
-    };
-};
-
 const mapDispatchToProps = (dispatch) => {
     return {
         login: (email, password) =>
@@ -154,4 +148,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default connect(null, mapDispatchToProps)(LoginForm);
