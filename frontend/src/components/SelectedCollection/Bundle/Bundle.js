@@ -15,6 +15,7 @@ import ModifyButton from "./Buttons/ModifyButton/ModifyButton";
 import DeleteButton from "./Buttons/DeleteButton/DeleteButton";
 
 import * as bundleActions from "../../../redux/actions/bundle";
+import CreateNestedBundleModal from "../../Modals/CreateNestedBundleModal";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -46,6 +47,8 @@ const ExpansionPanelSummary = withStyles({
         },
     },
     expanded: {},
+    // need to override backgroundColor due to weird focus issue with modal
+    focused: { backgroundColor: "rgba(0, 0, 0, .03) !important" },
 })(MuiExpansionPanelSummary);
 
 const ExpansionPanelDetails = withStyles((theme) => ({
@@ -63,12 +66,18 @@ const Bundle = (props) => {
 
     const [expanded, setExpanded] = React.useState(thisBundle["isRoot"]);
 
+    const [openAddNestBundleModal, setOpenAddNestBundleModal] = React.useState(
+        false
+    );
+
     const panelClickHandler = () => {
+        // stop panel from changing when clicking modal
+        if (openAddNestBundleModal) return;
         setExpanded((state) => !state);
     };
 
     const addButtonHandler = (e) => {
-        alert("add " + id);
+        setOpenAddNestBundleModal(true);
         e.stopPropagation();
         e.preventDefault();
     };
@@ -112,7 +121,7 @@ const Bundle = (props) => {
             >
                 {/* title */}
                 <Typography style={{ margin: "auto 0" }}>
-                    {thisBundle["name"]} {id}
+                    {thisBundle["name"]}
                 </Typography>
 
                 {/* notes for bundle */}
@@ -132,6 +141,13 @@ const Bundle = (props) => {
                             style={{ marginLeft: "auto" }}
                             clickHandler={addButtonHandler}
                         />
+                        <CreateNestedBundleModal
+                            open={openAddNestBundleModal}
+                            setOpen={setOpenAddNestBundleModal}
+                            parentBundleId={id}
+                            setExpanded={setExpanded}
+                        />
+
                         {/* modify bundle */}
                         <ModifyButton clickHandler={modifyButtonHandler} />
                         {/* delete bundle */}

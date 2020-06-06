@@ -61,8 +61,8 @@ const LoginForm = (props) => {
             })}
             onSubmit={(value, { setSubmitting }) => {
                 console.log(value);
-                login(value.email, value.password);
                 // dispatch login
+                login(value.email, value.password);
                 setSubmitting(false);
             }}
         >
