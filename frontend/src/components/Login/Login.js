@@ -15,6 +15,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
+import LoginForm from "./LoginForm/LoginForm";
+
 import * as authenticationDuck from "../../redux/ducks/authentication";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,13 +45,6 @@ const useStyles = makeStyles((theme) => ({
 const Login = (props) => {
     const classes = useStyles();
 
-    // from redux props
-    const { login } = props;
-    const loginHandler = () => {
-        login("myemail1@gmail.com", "mypass");
-    };
-    //return <button onClick={loginHandler}>Login</button>;
-
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -60,56 +55,22 @@ const Login = (props) => {
                 <Typography component="h1" variant="h5">
                     Log In
                 </Typography>
-                <form className={classes.form} noValidate>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        // autoFocus
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Use Demo Account"
-                    />
-                    <Button
-                        // type="submit"
-                        onClick={loginHandler}
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Log In
-                    </Button>
-                    <Grid container justify="flex-end">
-                        {/* <Grid item xs>
+
+                {/* login input form */}
+                <LoginForm />
+
+                <Grid container justify="flex-end">
+                    {/* <Grid item xs>
                             <Link href="#" variant="body2">
                                 Forgot password?
                             </Link>
                         </Grid> */}
-                        <Grid item>
-                            <Link to="/signup" component={RouterLink}>
-                                Don't have an account? Sign Up
-                            </Link>
-                        </Grid>
+                    <Grid item>
+                        <Link to="/signup" component={RouterLink}>
+                            Don't have an account? Sign Up
+                        </Link>
                     </Grid>
-                </form>
+                </Grid>
             </div>
         </Container>
     );
