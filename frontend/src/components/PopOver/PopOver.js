@@ -45,7 +45,7 @@ const PopOver = (props) => {
                 className={classes.typography}
                 onClick={doNothingHandler}
             >
-                {props.children}
+                <div style={{ whiteSpace: "pre-line" }}>{props.children}</div>
             </Typography>
         </Popover>
     );
