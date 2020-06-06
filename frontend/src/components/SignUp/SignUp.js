@@ -1,5 +1,6 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -14,6 +15,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import CreateIcon from "@material-ui/icons/Create";
+
+import SignUpForm from "./SignUpForm/SignUpForm";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -37,6 +40,11 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = (props) => {
     const classes = useStyles();
+    const history = useHistory();
+
+    if (localStorage.getItem("token")) {
+        history.push("/");
+    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -48,71 +56,16 @@ const SignUp = (props) => {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <form className={classes.form} noValidate>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                autoComplete="fname"
-                                name="name"
-                                variant="outlined"
-                                // required
-                                fullWidth
-                                id="name"
-                                label="Name"
-                                // autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="confirmPassword"
-                                label="Confirm Password"
-                                type="password"
-                                id="confirmPassword"
-                            />
-                        </Grid>
+
+                <SignUpForm />
+
+                <Grid container justify="flex-end">
+                    <Grid item>
+                        <Link to="/login" component={RouterLink}>
+                            Already have an account? Log In
+                        </Link>
                     </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign Up
-                    </Button>
-                    <Grid container justify="flex-end">
-                        <Grid item>
-                            <Link to="/login" component={RouterLink}>
-                                Already have an account? Log In
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </form>
+                </Grid>
             </div>
         </Container>
     );
