@@ -16,6 +16,7 @@ import DeleteButton from "./Buttons/DeleteButton/DeleteButton";
 
 import * as bundleActions from "../../../redux/actions/bundle";
 import CreateNestedBundleModal from "../../Modals/CreateNestedBundleModal";
+import DeleteBundleModal from "../../Modals/DeleteBundleModal";
 
 const ExpansionPanel = withStyles({
     root: {
@@ -69,10 +70,13 @@ const Bundle = (props) => {
     const [openAddNestBundleModal, setOpenAddNestBundleModal] = React.useState(
         false
     );
+    const [openDeleteBundleModal, setOpenDeleteBundleModal] = React.useState(
+        false
+    );
 
     const panelClickHandler = () => {
         // stop panel from changing when clicking modal
-        if (openAddNestBundleModal) return;
+        if (openAddNestBundleModal || openDeleteBundleModal) return;
         setExpanded((state) => !state);
     };
 
@@ -83,7 +87,8 @@ const Bundle = (props) => {
     };
 
     const deleteButtonHandler = (e) => {
-        deleteBundle(id);
+        //deleteBundle(id);
+        setOpenDeleteBundleModal(true);
         e.stopPropagation();
         e.preventDefault();
     };
@@ -152,6 +157,12 @@ const Bundle = (props) => {
                         <ModifyButton clickHandler={modifyButtonHandler} />
                         {/* delete bundle */}
                         <DeleteButton clickHandler={deleteButtonHandler} />
+                        <DeleteBundleModal
+                            name={thisBundle.name}
+                            bundleId={id}
+                            open={openDeleteBundleModal}
+                            setOpen={setOpenDeleteBundleModal}
+                        />
                     </>
                 )}
             </ExpansionPanelSummary>
