@@ -1,11 +1,31 @@
 import * as userApi from "../api/user";
 
 /* actions */
+// get user info (id, name, email, ownedCollections)
 export const GET_USER_INFO_PENDING = "actions/user/GET_USER_INFO_PENDING";
 export const GET_USER_INFO_SUCCESS = "actions/user/GET_USER_INFO_SUCCESS";
 export const GET_USER_INFO_FAIL = "actions/user/GET_USER_INFO_FAIL";
+// create new user account
+export const CREATE_NEW_USER_PENDING = "actions/user/CREATE_NEW_USER_PENDING";
+export const CREATE_NEW_USER_SUCCESS = "actions/user/CREATE_NEW_USER_SUCCESS";
+export const CREATE_NEW_USER_FAIL = "actions/user/CREATE_NEW_USER_FAIL";
 
 /* thunks */
+export const createNewUser = (userObj) => {
+    return (dispatch) => {
+        dispatch({ type: CREATE_NEW_USER_PENDING });
+        userApi
+            .createNewUser(userObj)
+            .then((res) => {
+                dispatch({ type: CREATE_NEW_USER_SUCCESS });
+                // TODO: show message that user was created?
+            })
+            .catch((err) => {
+                dispatch({ type: CREATE_NEW_USER_FAIL });
+            });
+    };
+};
+
 export const getUserInfo = () => {
     return (dispatch) => {
         dispatch({ type: GET_USER_INFO_PENDING });

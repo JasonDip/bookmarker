@@ -18,6 +18,7 @@ export default function reducer(state = loading, action) {
         case bundleActions.CREATE_NEW_COLLECTION_PENDING:
         case bundleActions.CREATE_NESTED_BUNDLE_PENDING:
         case userActions.GET_USER_INFO_PENDING:
+        case userActions.CREATE_NEW_USER_PENDING:
             return true;
 
         case LOADING_OFF:
@@ -33,6 +34,8 @@ export default function reducer(state = loading, action) {
         case bundleActions.CREATE_NESTED_BUNDLE_FAIL:
         case userActions.GET_USER_INFO_SUCCESS:
         case userActions.GET_USER_INFO_FAIL:
+        case userActions.CREATE_NEW_USER_SUCCESS:
+        case userActions.CREATE_NEW_USER_FAIL:
             return false;
 
         default:
