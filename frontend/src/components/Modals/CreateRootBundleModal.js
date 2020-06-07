@@ -3,7 +3,6 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -13,19 +12,11 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 import * as bundleActions from "../../redux/actions/bundle";
 
-const useStyles = makeStyles((theme) => ({
-    contentContainer: {
-        width: "50vw",
-    },
-}));
-
 const CreateRootBundleModal = (props) => {
     // passed in from parent
     const { open, setOpen } = props;
     // from redux
     const { createRootBundle } = props;
-
-    const classses = useStyles();
 
     const handleClose = () => {
         setOpen(false);
@@ -37,11 +28,12 @@ const CreateRootBundleModal = (props) => {
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-add-root-folder"
+                fullWidth
             >
                 <DialogTitle id="form-dialog-add-root-folder">
                     Add a Folder
                 </DialogTitle>
-                <DialogContent className={classses.contentContainer}>
+                <DialogContent>
                     <Formik
                         initialValues={{ folderName: "", note: "" }}
                         validationSchema={Yup.object({

@@ -3,30 +3,20 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 import * as bookmarkActions from "../../redux/actions/bookmark";
-
-const useStyles = makeStyles((theme) => ({
-    contentContainer: {
-        width: "50vw",
-    },
-}));
 
 const CreateBookmarkModal = (props) => {
     // passed in from parent
     const { setExpanded, parentBundleId, open, setOpen } = props;
     // from redux
     const { createBookmark } = props;
-
-    const classses = useStyles();
 
     const handleClose = () => {
         setOpen(false);
@@ -38,16 +28,16 @@ const CreateBookmarkModal = (props) => {
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-add-bookmark"
+                fullWidth
             >
                 <DialogTitle id="form-dialog-add-bookmark">
                     Add a Bookmark
                 </DialogTitle>
-                <DialogContent className={classses.contentContainer}>
-                    {/* <DialogContentText></DialogContentText> */}
+                <DialogContent>
                     <Formik
                         initialValues={{ bookmarkName: "", note: "", url: "" }}
                         validationSchema={Yup.object({
-                            bookmarkName: Yup.string(), //.required("Required."),
+                            bookmarkName: Yup.string(),
                             note: Yup.string(),
                             url: Yup.string().required("Required."),
                         })}

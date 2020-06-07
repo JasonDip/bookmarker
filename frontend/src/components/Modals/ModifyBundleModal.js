@@ -3,30 +3,20 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 import * as bundleActions from "../../redux/actions/bundle";
-
-const useStyles = makeStyles((theme) => ({
-    contentContainer: {
-        width: "50vw",
-    },
-}));
 
 const CreateNestedBundleModal = (props) => {
     // passed in from parent
     const { bundleObj, open, setOpen } = props;
     // from redux
     const { modifyBundle } = props;
-
-    const classses = useStyles();
 
     const handleClose = () => {
         setOpen(false);
@@ -38,11 +28,12 @@ const CreateNestedBundleModal = (props) => {
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-modify-folder"
+                fullWidth
             >
                 <DialogTitle id="form-dialog-modify-folder">
                     Modify This Folder
                 </DialogTitle>
-                <DialogContent className={classses.contentContainer}>
+                <DialogContent>
                     <Formik
                         initialValues={{
                             folderName: bundleObj.name,

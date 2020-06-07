@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -11,19 +10,11 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 import * as bundleActions from "../../redux/actions/bundle";
 
-const useStyles = makeStyles((theme) => ({
-    contentContainer: {
-        width: "50vw",
-    },
-}));
-
 const DeleteBundleModal = (props) => {
     // passed in from parent
     const { name, bundleId, open, setOpen } = props;
     // from redux
     const { deleteBundle } = props;
-
-    const classses = useStyles();
 
     const handleClose = () => {
         setOpen(false);
@@ -39,11 +30,12 @@ const DeleteBundleModal = (props) => {
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-delete-folder"
+                fullWidth
             >
                 <DialogTitle id="form-dialog-delete-folder">
                     Delete This Folder
                 </DialogTitle>
-                <DialogContent className={classses.contentContainer}>
+                <DialogContent>
                     <DialogContentText>
                         Are you want to delete "{name}" and all the folders and
                         bookmarks it contains?

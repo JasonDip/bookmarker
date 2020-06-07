@@ -3,30 +3,20 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 import * as bundleActions from "../../redux/actions/bundle";
-
-const useStyles = makeStyles((theme) => ({
-    contentContainer: {
-        width: "50vw",
-    },
-}));
 
 const CreateNestedBundleModal = (props) => {
     // passed in from parent
     const { setExpanded, parentBundleId, open, setOpen } = props;
     // from redux
     const { createNestedBundle } = props;
-
-    const classses = useStyles();
 
     const handleClose = () => {
         setOpen(false);
@@ -38,12 +28,12 @@ const CreateNestedBundleModal = (props) => {
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-add-nested-folder"
+                fullWidth
             >
                 <DialogTitle id="form-dialog-add-nested-folder">
                     Add a Folder
                 </DialogTitle>
-                <DialogContent className={classses.contentContainer}>
-                    {/* <DialogContentText></DialogContentText> */}
+                <DialogContent>
                     <Formik
                         initialValues={{ folderName: "", note: "" }}
                         validationSchema={Yup.object({
