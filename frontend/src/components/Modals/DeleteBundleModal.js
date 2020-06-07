@@ -41,7 +41,7 @@ const DeleteBundleModal = (props) => {
                 aria-labelledby="form-dialog-delete-folder"
             >
                 <DialogTitle id="form-dialog-delete-folder">
-                    Delete a Folder
+                    Delete This Folder
                 </DialogTitle>
                 <DialogContent className={classses.contentContainer}>
                     <DialogContentText>

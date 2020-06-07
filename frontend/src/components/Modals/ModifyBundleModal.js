@@ -40,7 +40,7 @@ const CreateNestedBundleModal = (props) => {
                 aria-labelledby="form-dialog-modify-folder"
             >
                 <DialogTitle id="form-dialog-modify-folder">
-                    Modify a Folder
+                    Modify This Folder
                 </DialogTitle>
                 <DialogContent className={classses.contentContainer}>
                     <Formik
