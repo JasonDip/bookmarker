@@ -8,6 +8,8 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 
+import CreateRootBundleModal from "../Modals/CreateRootBundleModal";
+
 import * as selectedCollectionDuck from "../../redux/ducks/selectedCollection";
 import * as userActions from "../../redux/actions/user";
 import * as bundleActions from "../../redux/actions/bundle";
@@ -25,15 +27,29 @@ const CollectionList = (props) => {
     const { collectionList, selectedCollection, getCollection } = props;
     const classes = useStyles();
 
+    const [
+        openCreateRootBundleModal,
+        setOpenCreateRootBundleModal,
+    ] = React.useState(false);
+
     const collectionClickHandler = (bundleId) => {
         getCollection(bundleId);
     };
 
+    const addCollectionClickHandler = () => {
+        setOpenCreateRootBundleModal(true);
+    };
+
     return (
         <div style={{ maxWidth: "100%" }}>
+            <CreateRootBundleModal
+                open={openCreateRootBundleModal}
+                setOpen={setOpenCreateRootBundleModal}
+            />
+
             <Typography className={classes.listHeader}>
                 <strong>Your Collections</strong>
-                <IconButton color="primary">
+                <IconButton color="primary" onClick={addCollectionClickHandler}>
                     <AddCircleOutlineIcon />
                 </IconButton>
             </Typography>

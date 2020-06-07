@@ -36,6 +36,8 @@ export const createRootBundle = (bundleObj) => {
                 dispatch({ type: CREATE_NEW_COLLECTION_SUCCESS });
                 // refresh collectionList
                 dispatch(userActions.getUserInfo());
+                // select the newly created collection
+                dispatch(selectedCollectionDuck.getCollection(res.data._id));
             })
             .catch((err) => {
                 dispatch({
