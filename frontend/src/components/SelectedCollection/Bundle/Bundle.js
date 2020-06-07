@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import PopOver from "../../PopOver/PopOver";
 import Bookmark from "./Bookmark/Bookmark";
 import NoteButton from "./Buttons/NoteButton/NoteButton";
-import AddButton from "./Buttons/AddButton/AddButton";
+import AddFolderButton from "./Buttons/AddFolderButton/AddFolderButton";
 import ModifyButton from "./Buttons/ModifyButton/ModifyButton";
 import DeleteButton from "./Buttons/DeleteButton/DeleteButton";
 
@@ -153,7 +153,7 @@ const Bundle = (props) => {
                 {editMode && (
                     <>
                         {/* add to bundle */}
-                        <AddButton
+                        <AddFolderButton
                             style={{ marginLeft: "auto" }}
                             clickHandler={addButtonHandler}
                         />
