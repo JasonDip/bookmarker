@@ -6,7 +6,7 @@ const url = process.env.REACT_APP_API_URL;
 
 /* create a bookmark in a bundle */
 export const createBookmark = (bundleId, bookmarkObj) => {
-    Axios.post(
+    return Axios.post(
         url + "/bundles/" + bundleId + "/bookmarks",
         { ...bookmarkObj },
         getAxiosConfig()

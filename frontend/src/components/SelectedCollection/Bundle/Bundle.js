@@ -13,9 +13,11 @@ import NoteButton from "./Buttons/NoteButton/NoteButton";
 import AddFolderButton from "./Buttons/AddFolderButton/AddFolderButton";
 import ModifyButton from "./Buttons/ModifyButton/ModifyButton";
 import DeleteButton from "./Buttons/DeleteButton/DeleteButton";
+import AddBookmarkButton from "./Buttons/AddBookmarkButton/AddBookmarkButton";
 
 import * as bundleActions from "../../../redux/actions/bundle";
 import CreateNestedBundleModal from "../../Modals/CreateNestedBundleModal";
+import CreateBookmarkModal from "../../Modals/CreateBookmarkModal";
 import DeleteBundleModal from "../../Modals/DeleteBundleModal";
 import ModifyBundleModal from "../../Modals/ModifyBundleModal";
 
@@ -73,6 +75,9 @@ const Bundle = (props) => {
         openAddNestedBundleModal,
         setOpenAddNestedBundleModal,
     ] = React.useState(false);
+    const [openAddBookmarkModal, setOpenAddBookmarkModal] = React.useState(
+        false
+    );
     const [openDeleteBundleModal, setOpenDeleteBundleModal] = React.useState(
         false
     );
@@ -84,6 +89,7 @@ const Bundle = (props) => {
         // stop panel from changing when clicking modal
         if (
             openAddNestedBundleModal ||
+            openAddBookmarkModal ||
             openDeleteBundleModal ||
             openModifyBundleModal
         )
@@ -91,8 +97,14 @@ const Bundle = (props) => {
         setExpanded((state) => !state);
     };
 
-    const addButtonHandler = (e) => {
+    const addNestedBundleHandler = (e) => {
         setOpenAddNestedBundleModal(true);
+        e.stopPropagation();
+        e.preventDefault();
+    };
+
+    const addBookmarkHandler = (e) => {
+        setOpenAddBookmarkModal(true);
         e.stopPropagation();
         e.preventDefault();
     };
@@ -152,14 +164,23 @@ const Bundle = (props) => {
 
                 {editMode && (
                     <>
-                        {/* add to bundle */}
+                        {/* add new folder to bundle */}
                         <AddFolderButton
                             style={{ marginLeft: "auto" }}
-                            clickHandler={addButtonHandler}
+                            clickHandler={addNestedBundleHandler}
                         />
                         <CreateNestedBundleModal
                             open={openAddNestedBundleModal}
                             setOpen={setOpenAddNestedBundleModal}
+                            parentBundleId={id}
+                            setExpanded={setExpanded}
+                        />
+
+                        {/* add new bookmark to bundle */}
+                        <AddBookmarkButton clickHandler={addBookmarkHandler} />
+                        <CreateBookmarkModal
+                            open={openAddBookmarkModal}
+                            setOpen={setOpenAddBookmarkModal}
                             parentBundleId={id}
                             setExpanded={setExpanded}
                         />

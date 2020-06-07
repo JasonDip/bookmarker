@@ -43,7 +43,7 @@ const Bookmark = (props) => {
         >
             {/* title */}
             <Link href={link} target="_blank" rel="noopener">
-                {bookmark["name"]} {bookmark["_id"]}
+                {bookmark["name"]}
             </Link>
 
             {/* notes */}

@@ -18,7 +18,11 @@ export const createBookmark = (bundleId, bookmarkObj) => {
             .then((res) => {
                 dispatch({ type: CREATE_BOOKMARK_SUCCESS });
                 // refresh selectedCollection
-                dispatch(selectedCollectionDuck.getCollection(res.data._id));
+                dispatch(
+                    selectedCollectionDuck.getCollection(
+                        res.data.topCollectionId
+                    )
+                );
             })
             .catch((err) => {
                 dispatch({ type: CREATE_BOOKMARK_FAIL, payload: err });

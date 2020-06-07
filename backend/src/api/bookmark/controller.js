@@ -8,11 +8,20 @@ module.exports.createBookmark = async (req, res, next) => {
         const updatedBundle = await Bundle.findByIdAndUpdate(
             req.params.bundleId,
             {
-                $push: { bookmarks: bookmark }
+                $push: { bookmarks: bookmark },
             },
             { new: true }
         );
-        return res.status(201).send(bookmark);
+
+        // the top most level bundle - for ui to refresh
+        const topCollectionId = updatedBundle.isRoot
+            ? updatedBundle._id
+            : updatedBundle.rootBundleId;
+
+        return res.status(201).send({
+            bookmark,
+            topCollectionId,
+        });
     } catch (e) {
         e.statusCode = e.statusCode || 500;
         e.name = "Create Bookmark Error";
@@ -25,14 +34,14 @@ module.exports.modifyBookmark = async (req, res, next) => {
         await Bundle.updateOne(
             {
                 _id: req.params.bundleId,
-                "bookmarks._id": req.params.bookmarkId
+                "bookmarks._id": req.params.bookmarkId,
             },
             {
                 $set: {
                     "bookmarks.$.name": req.body.name,
                     "bookmarks.$.url": req.body.url,
-                    "bookmarks.$.note": req.body.note
-                }
+                    "bookmarks.$.note": req.body.note,
+                },
             }
         );
         const bundle = await Bundle.findById(req.params.bundleId); // TODO: is returning bundle needed?
@@ -61,13 +70,13 @@ module.exports.moveBookmark = async (req, res, next) => {
 
         // get the bookmark
         const bookmarkBeforeDelete = await Bundle.findOne({
-            _id: req.params.bundleId
+            _id: req.params.bundleId,
         }).select({
             bookmarks: {
                 $elemMatch: {
-                    _id: req.params.bookmarkId
-                }
-            }
+                    _id: req.params.bookmarkId,
+                },
+            },
         });
         if (bookmarkBeforeDelete.bookmarks.length === 0) {
             const error = new Error("Could not find bookmark.");
@@ -75,7 +84,7 @@ module.exports.moveBookmark = async (req, res, next) => {
             throw error;
         }
         const bookmark = new Bookmark({
-            ...bookmarkBeforeDelete.bookmarks[0]._doc
+            ...bookmarkBeforeDelete.bookmarks[0]._doc,
         });
 
         // add bookmark to newBundleId
@@ -83,8 +92,8 @@ module.exports.moveBookmark = async (req, res, next) => {
             req.params.newBundleId,
             {
                 $push: {
-                    bookmarks: bookmark
-                }
+                    bookmarks: bookmark,
+                },
             },
             { new: true }
         );
@@ -94,8 +103,8 @@ module.exports.moveBookmark = async (req, res, next) => {
             req.params.bundleId,
             {
                 $pull: {
-                    bookmarks: { _id: req.params.bookmarkId }
-                }
+                    bookmarks: { _id: req.params.bookmarkId },
+                },
             },
             { new: true }
         );
@@ -114,8 +123,8 @@ module.exports.deleteBookmark = async (req, res, next) => {
             req.params.bundleId,
             {
                 $pull: {
-                    bookmarks: { _id: bookmarkIdObj }
-                }
+                    bookmarks: { _id: bookmarkIdObj },
+                },
             },
             { new: true }
         );
