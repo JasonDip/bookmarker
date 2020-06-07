@@ -53,23 +53,8 @@ const CollectionList = (props) => {
                     <AddCircleOutlineIcon />
                 </IconButton>
             </Typography>
-            <button
-                onClick={() =>
-                    props.createRootBundle({
-                        name: "root bundle from ui",
-                        note: "my note",
-                        bookmarks: {
-                            name: "hi",
-                            url: "google.com",
-                            note: "bm note",
-                        },
-                    })
-                }
-            >
-                Add New Collection
-            </button>
 
-            <button onClick={() => props.getUserInfo()}>get user info</button>
+            {/* <button onClick={() => props.getUserInfo()}>get user info</button> */}
 
             {/* show collectionList */}
             <div className={classes.drawerContainer}>
