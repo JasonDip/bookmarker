@@ -5,18 +5,18 @@ import Link from "@material-ui/core/Link";
 import ModifyButton from "../Buttons/ModifyButton/ModifyButton";
 import DeleteButton from "../Buttons/DeleteButton/DeleteButton";
 import NoteButton from "../Buttons/NoteButton/NoteButton";
-import PopOver from "../../../PopOver/PopOver";
+// import PopOver from "../../../PopOver/PopOver";
 
 const Bookmark = (props) => {
     const { bookmark, editMode } = props;
 
     // for notes popover
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const popoverClickHandler = (e) => {
-        setAnchorEl(e.currentTarget);
-        e.stopPropagation();
-        e.preventDefault();
-    };
+    // const [anchorEl, setAnchorEl] = React.useState(null);
+    // const popoverClickHandler = (e) => {
+    //     setAnchorEl(e.currentTarget);
+    //     e.stopPropagation();
+    //     e.preventDefault();
+    // };
 
     // add https if no prefix is present
     let link = bookmark["url"];
@@ -49,10 +49,13 @@ const Bookmark = (props) => {
             {/* notes */}
             {bookmark["note"].length > 0 && (
                 <>
-                    <NoteButton clickHandler={popoverClickHandler} />
-                    <PopOver anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
+                    <NoteButton
+                        // clickHandler={popoverClickHandler}
+                        note={bookmark["note"]}
+                    />
+                    {/* <PopOver anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
                         {bookmark["note"]}
-                    </PopOver>
+                    </PopOver> */}
                 </>
             )}
 

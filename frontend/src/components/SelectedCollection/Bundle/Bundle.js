@@ -7,7 +7,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
 
-import PopOver from "../../PopOver/PopOver";
+// import PopOver from "../../PopOver/PopOver";
 import Bookmark from "./Bookmark/Bookmark";
 import NoteButton from "./Buttons/NoteButton/NoteButton";
 import AddFolderButton from "./Buttons/AddFolderButton/AddFolderButton";
@@ -116,19 +116,18 @@ const Bundle = (props) => {
     };
 
     const modifyButtonHandler = (e) => {
-        //modifyBundle(thisBundle["_id"], { name: Math.random() });
         setOpenModifyBundleModal(true);
         e.stopPropagation();
         e.preventDefault();
     };
 
     // for notes popover
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const popoverClickHandler = (e) => {
-        setAnchorEl(e.currentTarget);
-        e.stopPropagation();
-        e.preventDefault();
-    };
+    // const [anchorEl, setAnchorEl] = React.useState(null);
+    // const popoverClickHandler = (e) => {
+    //     setAnchorEl(e.currentTarget);
+    //     e.stopPropagation();
+    //     e.preventDefault();
+    // };
 
     return (
         <ExpansionPanel
@@ -155,10 +154,13 @@ const Bundle = (props) => {
                 {/* notes for bundle */}
                 {thisBundle["note"].length > 0 && (
                     <>
-                        <NoteButton clickHandler={popoverClickHandler} />
-                        <PopOver anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
+                        <NoteButton
+                            // clickHandler={popoverClickHandler}
+                            note={thisBundle["note"]}
+                        />
+                        {/* <PopOver anchorEl={anchorEl} setAnchorEl={setAnchorEl}>
                             {thisBundle["note"]}
-                        </PopOver>
+                        </PopOver> */}
                     </>
                 )}
 
