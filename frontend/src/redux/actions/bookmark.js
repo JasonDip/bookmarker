@@ -35,3 +35,21 @@ export const createBookmark = (bundleId, bookmarkObj) => {
             });
     };
 };
+
+export const modifyBookmark = (bundleId, bookmarkId, bookmarkObj) => {
+    return (dispatch) => {
+        dispatch({ type: MODIFY_BOOKMARK_PENDING });
+        bookmarkApi
+            .modifyBookmark(bundleId, bookmarkId, bookmarkObj)
+            .then((res) => {
+                dispatch({ type: MODIFY_BOOKMARK_SUCCESS });
+                // refresh selected collection
+                dispatch(
+                    selectedCollectionDuck.getCollection(res.data.rootBundleId)
+                );
+            })
+            .catch((err) => {
+                dispatch({ type: MODIFY_BOOKMARK_FAIL, payload: err });
+            });
+    };
+};
