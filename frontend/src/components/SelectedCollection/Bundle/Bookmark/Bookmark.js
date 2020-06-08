@@ -8,6 +8,7 @@ import NoteButton from "../Buttons/NoteButton/NoteButton";
 // import PopOver from "../../../PopOver/PopOver";
 
 import ModifyBookmarkModal from "../../../Modals/ModifyBookmarkModal";
+import DeleteBookmarkModal from "../../../Modals/DeleteBookmarkModal";
 
 const Bookmark = (props) => {
     const { parentBundleId, bookmark, editMode } = props;
@@ -15,6 +16,10 @@ const Bookmark = (props) => {
     const [
         openModifyBookmarkModal,
         setOpenModifyBookmarkModal,
+    ] = React.useState(false);
+    const [
+        openDeleteBookmarkModal,
+        setOpenDeleteBookmarkModal,
     ] = React.useState(false);
 
     // for notes popover
@@ -33,7 +38,7 @@ const Bookmark = (props) => {
     }
 
     const deleteBookmarkHandler = () => {
-        alert("delete " + bookmark["_id"]);
+        setOpenDeleteBookmarkModal(true);
     };
 
     const modifyBookmarkHandler = () => {
@@ -83,6 +88,14 @@ const Bookmark = (props) => {
 
                     {/* delete bookmark */}
                     <DeleteButton clickHandler={deleteBookmarkHandler} />
+
+                    <DeleteBookmarkModal
+                        open={openDeleteBookmarkModal}
+                        setOpen={setOpenDeleteBookmarkModal}
+                        name={bookmark.name}
+                        bundleId={parentBundleId}
+                        bookmarkId={bookmark._id}
+                    />
                 </>
             )}
         </Typography>

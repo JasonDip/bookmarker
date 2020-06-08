@@ -72,7 +72,7 @@ export const deleteBookmark = (bundleId, bookmarkId) => {
                     selectedCollectionDuck.getCollection(res.data.rootBundleId)
                 );
             })
-            .ccatch((err) => {
+            .catch((err) => {
                 dispatch({ type: DELETE_BOOKMARK_FAIL, payload: err });
             });
     };

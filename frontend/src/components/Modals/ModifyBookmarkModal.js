@@ -31,7 +31,7 @@ const ModifyBookmarkModal = (props) => {
                 fullWidth
             >
                 <DialogTitle id="form-dialog-modify-bookmark">
-                    Modify this Bookmark
+                    Modify This Bookmark
                 </DialogTitle>
                 <DialogContent>
                     <Formik
