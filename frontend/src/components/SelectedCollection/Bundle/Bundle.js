@@ -213,6 +213,22 @@ const Bundle = (props) => {
                     flexDirection: "column",
                 }}
             >
+                {/* bookmarks */}
+                {thisBundle["bookmarks"].map((bookmark) => {
+                    return (
+                        <Bookmark
+                            key={bookmark["_id"]}
+                            bookmark={{ ...bookmark }}
+                            editMode={editMode}
+                        />
+                    );
+                })}
+
+                {/* optional padding added if child bundles are rendered below */}
+                {thisBundle["childBundleIds"].length > 0 && (
+                    <div style={{ paddingTop: "16px" }} />
+                )}
+
                 {/* recursively populate child bundles */}
                 {thisBundle["childBundleIds"].map((childBundleId) => {
                     return (
@@ -223,22 +239,6 @@ const Bundle = (props) => {
                             editMode={editMode}
                             modifyBundle={modifyBundle}
                             deleteBundle={deleteBundle}
-                        />
-                    );
-                })}
-
-                {/* optional padding added if child bundles are rendered above */}
-                {thisBundle["childBundleIds"].length > 0 && (
-                    <div style={{ paddingTop: "16px" }} />
-                )}
-
-                {/* bookmarks */}
-                {thisBundle["bookmarks"].map((bookmark) => {
-                    return (
-                        <Bookmark
-                            key={bookmark["_id"]}
-                            bookmark={{ ...bookmark }}
-                            editMode={editMode}
                         />
                     );
                 })}
