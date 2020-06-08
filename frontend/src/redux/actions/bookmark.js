@@ -8,6 +8,12 @@ export const CREATE_BOOKMARK_PENDING =
 export const CREATE_BOOKMARK_SUCCESS =
     "actions/bookmark/CREATE_BOOKMARK_SUCCESS";
 export const CREATE_BOOKMARK_FAIL = "actions/bookmark/CREATE_BOOKMARK_FAIL";
+// modify a bookmark
+export const MODIFY_BOOKMARK_PENDING =
+    "actions/bookmark/MODIFY_BOOKMARK_PENDING";
+export const MODIFY_BOOKMARK_SUCCESS =
+    "actions/bookmark/MODIFY_BOOKMARK_SUCCESS";
+export const MODIFY_BOOKMARK_FAIL = "actions/bookmark/MODIFY_BOOKMARK_FAIL";
 
 /* thunks */
 export const createBookmark = (bundleId, bookmarkObj) => {

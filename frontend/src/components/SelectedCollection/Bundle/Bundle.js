@@ -220,6 +220,7 @@ const Bundle = (props) => {
                             key={bookmark["_id"]}
                             bookmark={{ ...bookmark }}
                             editMode={editMode}
+                            parentBundleId={id}
                         />
                     );
                 })}

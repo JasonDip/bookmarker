@@ -2,6 +2,7 @@ import * as authenticationDuck from "./authentication";
 import * as selectedCollectionDuck from "./selectedCollection";
 import * as bundleActions from "../actions/bundle";
 import * as userActions from "../actions/user";
+import * as bookmarkActions from "../actions/bookmark";
 
 /* actions */
 const LOADING_ON = "ducks/loading/LOADING_ON";
@@ -19,6 +20,8 @@ export default function reducer(state = loading, action) {
         case bundleActions.CREATE_NESTED_BUNDLE_PENDING:
         case userActions.GET_USER_INFO_PENDING:
         case userActions.CREATE_NEW_USER_PENDING:
+        case bookmarkActions.CREATE_BOOKMARK_PENDING:
+        case bookmarkActions.MODIFY_BOOKMARK_PENDING:
             return true;
 
         case LOADING_OFF:
@@ -36,6 +39,10 @@ export default function reducer(state = loading, action) {
         case userActions.GET_USER_INFO_FAIL:
         case userActions.CREATE_NEW_USER_SUCCESS:
         case userActions.CREATE_NEW_USER_FAIL:
+        case bookmarkActions.CREATE_BOOKMARK_SUCCESS:
+        case bookmarkActions.CREATE_BOOKMARK_FAIL:
+        case bookmarkActions.MODIFY_BOOKMARK_SUCCESS:
+        case bookmarkActions.MODIFY_BOOKMARK_FAIL:
             return false;
 
         default:

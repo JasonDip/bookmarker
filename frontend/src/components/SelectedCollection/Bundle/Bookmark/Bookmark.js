@@ -8,7 +8,7 @@ import NoteButton from "../Buttons/NoteButton/NoteButton";
 // import PopOver from "../../../PopOver/PopOver";
 
 const Bookmark = (props) => {
-    const { bookmark, editMode } = props;
+    const { parentBundleId, bookmark, editMode } = props;
 
     // for notes popover
     // const [anchorEl, setAnchorEl] = React.useState(null);

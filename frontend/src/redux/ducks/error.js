@@ -6,6 +6,7 @@ import * as bundleActions from "../actions/bundle";
 import * as userActions from "../actions/user";
 import * as authenticationDuck from "./authentication";
 import * as selectedCollectionDuck from "./selectedCollection";
+import * as bookmarkActions from "../actions/bookmark";
 
 /* actions */
 const ERROR_ON = "ducks/error/ERROR_ON";
@@ -41,6 +42,8 @@ export default function reducer(state = defaultError, action) {
         case authenticationDuck.LOGIN_FAIL:
         case authenticationDuck.LOGOUT_FAIL:
         case selectedCollectionDuck.GET_COLLECTION_FAIL:
+        case bookmarkActions.CREATE_BOOKMARK_FAIL:
+        case bookmarkActions.MODIFY_BOOKMARK_FAIL:
             // console.log(action.payload.response);
             // console.log(
             //     `Error ${action.payload.response.status}: ${action.payload.response.statusText}`

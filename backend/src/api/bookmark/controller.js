@@ -44,8 +44,11 @@ module.exports.modifyBookmark = async (req, res, next) => {
                 },
             }
         );
-        const bundle = await Bundle.findById(req.params.bundleId); // TODO: is returning bundle needed?
-        return res.status(200).send(bundle);
+        const bundle = await Bundle.findById(req.params.bundleId);
+
+        // return the root bundle id that the ui needs to refresh
+        let rootBundleId = bundle.isRoot ? bundle._id : bundle.rootBundleId;
+        return res.status(200).send({ rootBundleId: rootBundleId });
     } catch (e) {
         e.statusCode = e.statusCode || 500;
         e.name = "Modify Bookmark Error";
