@@ -44,6 +44,7 @@ export default function reducer(state = defaultError, action) {
         case selectedCollectionDuck.GET_COLLECTION_FAIL:
         case bookmarkActions.CREATE_BOOKMARK_FAIL:
         case bookmarkActions.MODIFY_BOOKMARK_FAIL:
+        case bookmarkActions.DELETE_BOOKMARK_FAIL:
             // console.log(action.payload.response);
             // console.log(
             //     `Error ${action.payload.response.status}: ${action.payload.response.statusText}`

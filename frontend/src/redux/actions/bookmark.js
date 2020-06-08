@@ -14,6 +14,12 @@ export const MODIFY_BOOKMARK_PENDING =
 export const MODIFY_BOOKMARK_SUCCESS =
     "actions/bookmark/MODIFY_BOOKMARK_SUCCESS";
 export const MODIFY_BOOKMARK_FAIL = "actions/bookmark/MODIFY_BOOKMARK_FAIL";
+// delete a bookmark
+export const DELETE_BOOKMARK_PENDING =
+    "actions/bookmark/DELETE_BOOKMARK_PENDING";
+export const DELETE_BOOKMARK_SUCCESS =
+    "actions/bookmark/DELETE_BOOKMARK_SUCCESS";
+export const DELETE_BOOKMARK_FAIL = "actions/bookmark/DELETE_BOOKMARK_FAIL";
 
 /* thunks */
 export const createBookmark = (bundleId, bookmarkObj) => {
@@ -50,6 +56,24 @@ export const modifyBookmark = (bundleId, bookmarkId, bookmarkObj) => {
             })
             .catch((err) => {
                 dispatch({ type: MODIFY_BOOKMARK_FAIL, payload: err });
+            });
+    };
+};
+
+export const deleteBookmark = (bundleId, bookmarkId) => {
+    return (dispatch) => {
+        dispatch({ type: DELETE_BOOKMARK_PENDING });
+        bookmarkApi
+            .deleteBookmark(bundleId, bookmarkId)
+            .then((res) => {
+                dispatch({ type: DELETE_BOOKMARK_SUCCESS });
+                // refresh selected collection
+                dispatch(
+                    selectedCollectionDuck.getCollection(res.data.rootBundleId)
+                );
+            })
+            .ccatch((err) => {
+                dispatch({ type: DELETE_BOOKMARK_FAIL, payload: err });
             });
     };
 };

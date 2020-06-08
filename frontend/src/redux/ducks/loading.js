@@ -22,6 +22,7 @@ export default function reducer(state = loading, action) {
         case userActions.CREATE_NEW_USER_PENDING:
         case bookmarkActions.CREATE_BOOKMARK_PENDING:
         case bookmarkActions.MODIFY_BOOKMARK_PENDING:
+        case bookmarkActions.DELETE_BOOKMARK_PENDING:
             return true;
 
         case LOADING_OFF:
@@ -43,6 +44,8 @@ export default function reducer(state = loading, action) {
         case bookmarkActions.CREATE_BOOKMARK_FAIL:
         case bookmarkActions.MODIFY_BOOKMARK_SUCCESS:
         case bookmarkActions.MODIFY_BOOKMARK_FAIL:
+        case bookmarkActions.DELETE_BOOKMARK_SUCCESS:
+        case bookmarkActions.DELETE_BOOKMARK_FAIL:
             return false;
 
         default:

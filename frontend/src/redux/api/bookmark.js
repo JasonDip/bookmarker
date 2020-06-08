@@ -25,3 +25,9 @@ export const modifyBookmark = (bundleId, bookmarkId, bookmarkObj) => {
 /* move a bookmark between bundles */
 
 /* delete a bookmark */
+export const deleteBookmark = (bundleId, bookmarkId) => {
+    return Axios.delete(
+        url + "/bundles/" + bundleId + "/bookmarks/" + bookmarkId,
+        getAxiosConfig()
+    );
+};

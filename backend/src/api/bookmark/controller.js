@@ -128,10 +128,15 @@ module.exports.deleteBookmark = async (req, res, next) => {
                 $pull: {
                     bookmarks: { _id: bookmarkIdObj },
                 },
-            },
-            { new: true }
+            }
         );
-        return res.status(204).send(updatedBundle);
+
+        // only return rootBundleId
+        let rootBundleId = updatedBundle.isRoot
+            ? updatedBundle._id
+            : updatedBundle.rootBundleId;
+
+        return res.status(200).send({ rootBundleId: rootBundleId });
     } catch (e) {
         e.statusCode = e.statusCode || 500;
         e.name = "Delete Bookmark Error";
