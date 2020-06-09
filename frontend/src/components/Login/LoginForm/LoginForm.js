@@ -8,6 +8,10 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import IconButton from "@material-ui/core/IconButton";
+import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
+
+import DemoAccountModal from "../../Modals/DemoAccountModal";
 
 import * as authenticationDuck from "../../../redux/ducks/authentication";
 
@@ -39,6 +43,8 @@ const LoginForm = (props) => {
 
     // from redux props
     const { login } = props;
+
+    const [openDemoModal, setOpenDemoModal] = React.useState(false);
 
     const demoAccountCheckHandler = (event, setFieldValue) => {
         if (event.target.checked) {
@@ -117,7 +123,19 @@ const LoginForm = (props) => {
                                 }
                             />
                         }
-                        label="Use a Demo Account"
+                        label="Use Demo Account"
+                    />
+                    <IconButton
+                        color="primary"
+                        onClick={() => {
+                            setOpenDemoModal(true);
+                        }}
+                    >
+                        <HelpOutlineOutlinedIcon />
+                    </IconButton>
+                    <DemoAccountModal
+                        open={openDemoModal}
+                        setOpen={setOpenDemoModal}
                     />
 
                     <Field name="submitButton">
