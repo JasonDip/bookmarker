@@ -1,6 +1,6 @@
 const path = require("path");
 let loadEnv = require("dotenv").config({
-    path: path.join(__dirname, "./.env")
+    path: path.join(__dirname, "./.env"),
 });
 
 if (loadEnv.error) {
@@ -8,5 +8,6 @@ if (loadEnv.error) {
 }
 
 if (!loadEnv) {
-    throw new Error(".env was not loaded.");
+    // throw new Error(".env was not loaded.");
+    console.log(".env was not loaded.");
 }
