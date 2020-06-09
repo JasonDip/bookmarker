@@ -37,11 +37,21 @@
 				{
 					"name": "delete user",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\"\n}",
+							"raw": "{\n\t\"password\": \"{{password}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -90,11 +100,21 @@
 				{
 					"name": "change password",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"{{email}}\",\n\t\"password\": \"{{password}}\",\n\t\"newPassword\": \"newpass\"\n}",
+							"raw": "{\n\t\"password\": \"{{password}}\",\n\t\"newPassword\": \"newpass\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -131,7 +151,9 @@
 									"let response = pm.response.json();\r",
 									"let savedData = response.token;\r",
 									"\r",
-									"pm.environment.set(\"token\", savedData);\r",
+									"if (savedData) {\r",
+									"    pm.environment.set(\"token\", savedData);\r",
+									"}\r",
 									""
 								],
 								"type": "text/javascript"
@@ -140,7 +162,7 @@
 					],
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [],
@@ -168,6 +190,16 @@
 				{
 					"name": "logout",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"url": {
@@ -208,7 +240,14 @@
 					],
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "POST",
 						"header": [
@@ -552,7 +591,7 @@
 								"id": "418eff0d-4c13-4d8a-8b22-9531456122b4",
 								"exec": [
 									"let response = pm.response.json();\r",
-									"let savedData = response._id;\r",
+									"let savedData = response.bookmark._id;\r",
 									"\r",
 									"pm.environment.set(\"bookmarkId\", savedData);\r",
 									""
@@ -562,6 +601,16 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -597,6 +646,16 @@
 				{
 					"name": "Modify a bookmark",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [
 							{
@@ -662,6 +721,16 @@
 				{
 					"name": "Delete a bookmark",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
