@@ -5,7 +5,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 
-import * as errorDuck from "../../redux/ducks/error";
+import * as snackbarDuck from "../../redux/ducks/snackbar";
 
 export const SNACKBAR_SEVERITY = {
     ERROR: "error",
@@ -30,7 +30,7 @@ const SnackBar = (props) => {
     const classes = useStyles();
 
     // from redux
-    const { error, errorOff } = props;
+    const { snackbarState, errorOff } = props;
 
     const handleClose = (event, reason) => {
         if (reason === "clickaway") {
@@ -42,12 +42,15 @@ const SnackBar = (props) => {
     return (
         <div className={classes.root}>
             <Snackbar
-                open={error.showSnackBar}
+                open={snackbarState.showSnackBar}
                 autoHideDuration={10000}
                 onClose={handleClose}
             >
-                <Alert onClose={handleClose} severity={error.snackbarSeverity}>
-                    {error.message}
+                <Alert
+                    onClose={handleClose}
+                    severity={snackbarState.snackbarSeverity}
+                >
+                    {snackbarState.message}
                 </Alert>
             </Snackbar>
             {/* <Alert severity="error">This is an error message!</Alert>
@@ -59,12 +62,12 @@ const SnackBar = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    error: state.error,
+    snackbarState: state.snackbar,
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        errorOff: () => dispatch(errorDuck.errorOff()),
+        errorOff: () => dispatch(snackbarDuck.errorOff()),
     };
 };
 

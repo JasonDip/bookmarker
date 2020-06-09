@@ -13,6 +13,10 @@ export const CREATE_NEW_USER_FAIL = "actions/user/CREATE_NEW_USER_FAIL";
 export const DELETE_USER_PENDING = "actions/user/DELETE_USER_PENDING";
 export const DELETE_USER_SUCCESS = "actions/user/DELETE_USER_SUCCESS";
 export const DELETE_USER_FAIL = "actions/user/DELETE_USER_FAIL";
+// change current user's password
+export const CHANGE_PASSWORD_PENDING = "actions/user/CHANGE_PASSWORD_PENDING";
+export const CHANGE_PASSWORD_SUCCESS = "actions/user/CHANGE_PASSWORD_SUCCESS";
+export const CHANGE_PASSWORD_FAIL = "actions/user/CHANGE_PASSWORD_FAIL";
 
 /* thunks */
 export const createNewUser = (userObj) => {
@@ -57,6 +61,20 @@ export const getUserInfo = () => {
                     type: GET_USER_INFO_FAIL,
                     payload: err,
                 });
+            });
+    };
+};
+
+export const changePassword = (password, newPassword) => {
+    return (dispatch) => {
+        dispatch({ type: CHANGE_PASSWORD_PENDING });
+        userApi
+            .changePassword(password, newPassword)
+            .then((res) => {
+                dispatch({ type: CHANGE_PASSWORD_SUCCESS });
+            })
+            .catch((err) => {
+                dispatch({ type: CHANGE_PASSWORD_FAIL, payload: err });
             });
     };
 };

@@ -14,7 +14,7 @@ const ERROR_OFF = "ducks/error/ERROR_OFF";
 
 /* reducer */
 const defaultError = {
-    state: false,
+    errorState: false,
     message: "",
     showSnackBar: false,
     snackbarSeverity: SNACKBAR_SEVERITY.ERROR,
@@ -23,13 +23,27 @@ export default function reducer(state = defaultError, action) {
     switch (action.type) {
         case userActions.CREATE_NEW_USER_SUCCESS:
             return {
-                state: false,
+                errorState: false,
                 message: (
                     <>
                         Registration successful! Continue to the{" "}
                         <Link to="/login">Login</Link> page.
                     </>
                 ),
+                showSnackBar: true,
+                snackbarSeverity: SNACKBAR_SEVERITY.SUCCESS,
+            };
+        case userActions.CHANGE_PASSWORD_SUCCESS:
+            return {
+                errorState: false,
+                message: "Password was changed successfully.",
+                showSnackBar: true,
+                snackbarSeverity: SNACKBAR_SEVERITY.SUCCESS,
+            };
+        case userActions.DELETE_USER_SUCCESS:
+            return {
+                errorState: false,
+                message: "User was deleted successfully.",
                 showSnackBar: true,
                 snackbarSeverity: SNACKBAR_SEVERITY.SUCCESS,
             };
@@ -40,13 +54,14 @@ export default function reducer(state = defaultError, action) {
         case userActions.GET_USER_INFO_FAIL:
         case userActions.CREATE_NEW_USER_FAIL:
         case userActions.DELETE_USER_FAIL:
+        case userActions.CHANGE_PASSWORD_FAIL:
         case authenticationDuck.LOGIN_FAIL:
         case authenticationDuck.LOGOUT_FAIL:
         case selectedCollectionDuck.GET_COLLECTION_FAIL:
         case bookmarkActions.CREATE_BOOKMARK_FAIL:
         case bookmarkActions.MODIFY_BOOKMARK_FAIL:
         case bookmarkActions.DELETE_BOOKMARK_FAIL:
-            // console.log(action.payload.response);
+            // console.log(action.payload);
             // console.log(
             //     `Error ${action.payload.response.status}: ${action.payload.response.statusText}`
             // );
@@ -60,7 +75,7 @@ export default function reducer(state = defaultError, action) {
                 errorMessage = "Unknown error.";
             }
             return {
-                state: true,
+                errorState: true,
                 message: errorMessage,
                 showSnackBar: true,
                 snackbarSeverity: SNACKBAR_SEVERITY.ERROR,

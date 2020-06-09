@@ -33,6 +33,7 @@ export default function reducer(state = initialState, action) {
         case LOGOUT_FAIL:
         case userActions.GET_USER_INFO_FAIL:
         case userActions.DELETE_USER_SUCCESS:
+        case userActions.CHANGE_PASSWORD_SUCCESS:
             localStorage.removeItem("token");
             return initialState;
         default:

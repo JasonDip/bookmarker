@@ -21,6 +21,7 @@ export default function reducer(state = loading, action) {
         case userActions.GET_USER_INFO_PENDING:
         case userActions.CREATE_NEW_USER_PENDING:
         case userActions.DELETE_USER_PENDING:
+        case userActions.CHANGE_PASSWORD_PENDING:
         case bookmarkActions.CREATE_BOOKMARK_PENDING:
         case bookmarkActions.MODIFY_BOOKMARK_PENDING:
         case bookmarkActions.DELETE_BOOKMARK_PENDING:
@@ -43,6 +44,8 @@ export default function reducer(state = loading, action) {
         case userActions.CREATE_NEW_USER_FAIL:
         case userActions.DELETE_USER_SUCCESS:
         case userActions.DELETE_USER_FAIL:
+        case userActions.CHANGE_PASSWORD_SUCCESS:
+        case userActions.CHANGE_PASSWORD_FAIL:
         case bookmarkActions.CREATE_BOOKMARK_SUCCESS:
         case bookmarkActions.CREATE_BOOKMARK_FAIL:
         case bookmarkActions.MODIFY_BOOKMARK_SUCCESS:

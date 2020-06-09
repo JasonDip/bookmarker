@@ -19,3 +19,10 @@ export const getUserInfo = () => {
 };
 
 /* change password */
+export const changePassword = (password, newPassword) => {
+    return Axios.patch(
+        url + "/user/password",
+        { password, newPassword },
+        getAxiosConfig()
+    );
+};
