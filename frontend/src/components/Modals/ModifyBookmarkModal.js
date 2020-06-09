@@ -23,7 +23,7 @@ const ModifyBookmarkModal = (props) => {
     };
 
     return (
-        <div>
+        <>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -138,7 +138,7 @@ const ModifyBookmarkModal = (props) => {
                     </Formik>
                 </DialogContent>
             </Dialog>
-        </div>
+        </>
     );
 };
 

@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import Button from "@material-ui/core/Button";
-import CreateIcon from "@material-ui/icons/Create";
+
+import EditMode from "./Buttons/EditMode";
+import ShareButton from "./Buttons/ShareButton";
 
 import * as optionsActions from "../../redux/ducks/options";
 import Bundle from "./Bundle/Bundle";
@@ -17,12 +18,14 @@ const SelectedCollection = (props) => {
 
     // map the selected collection into a map for O(1) lookup
     let rootBundleId;
+    let rootIsPrivate;
     let collection = new Map();
     let collectionDisplay = null;
     selectedCollection.forEach((bundle) => {
         collection.set(bundle["_id"], { ...bundle });
         if (bundle["isRoot"] === true) {
             rootBundleId = bundle["_id"];
+            rootIsPrivate = bundle.isPrivate;
         }
     });
     // create the display for the selected collection
@@ -32,29 +35,20 @@ const SelectedCollection = (props) => {
         );
     }
 
-    // edit button util
-    const editModeClickHandler = () => {
-        if (editMode) {
-            setEditModeOff();
-        } else {
-            setEditModeOn();
-        }
-    };
-    const editButtonColor = editMode ? "secondary" : "default";
-
     return (
         <div>
             {/* edit mode button */}
             {collectionDisplay !== null && (
-                <Button
-                    color={editButtonColor}
-                    variant="contained"
-                    onClick={editModeClickHandler}
-                    style={{ marginBottom: "15px" }}
-                    startIcon={<CreateIcon />}
-                >
-                    Edit Mode
-                </Button>
+                <div style={{ display: "flex" }}>
+                    {/* edit mode button */}
+                    <EditMode />
+
+                    {/* share button */}
+                    <ShareButton
+                        rootBundleId={rootBundleId}
+                        isPrivate={rootIsPrivate}
+                    />
+                </div>
             )}
 
             {/* show selected collection */}

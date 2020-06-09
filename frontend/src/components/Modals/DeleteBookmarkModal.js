@@ -25,7 +25,7 @@ const DeleteBookmarkModal = (props) => {
     };
 
     return (
-        <div>
+        <>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -54,7 +54,7 @@ const DeleteBookmarkModal = (props) => {
                     </DialogActions>
                 </DialogContent>
             </Dialog>
-        </div>
+        </>
     );
 };
 
