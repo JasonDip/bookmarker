@@ -17,6 +17,7 @@ import Loading from "./Loading/Loading";
 import About from "./About/About";
 import SignUp from "./SignUp/SignUp";
 import SnackBar from "./SnackBar/SnackBar";
+import Profile from "./Profile/Profile";
 
 const drawerWidth = "30%";
 
@@ -89,6 +90,19 @@ function App(props) {
                         </div>
                     ) : (
                         <Redirect to="/" />
+                    )}
+                </Route>
+
+                {/* profile page */}
+                <Route path="/profile">
+                    {/* based on user id in store, go to login page or main page */}
+                    {authentication.id === null ? (
+                        <Redirect to="/login" />
+                    ) : (
+                        <div className={classes.content}>
+                            <Toolbar />
+                            <Profile />
+                        </div>
                     )}
                 </Route>
 

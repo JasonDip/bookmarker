@@ -54,6 +54,11 @@ const UserMenu = (props) => {
         setOpen(false);
     };
 
+    const profileHandler = (e) => {
+        history.push("/profile");
+        setOpen(false);
+    };
+
     const logoutHandler = (e) => {
         logout();
         setOpen(false);
@@ -117,7 +122,7 @@ const UserMenu = (props) => {
                                         <MenuItem onClick={aboutHandler}>
                                             About
                                         </MenuItem>
-                                        <MenuItem onClick={handleClose}>
+                                        <MenuItem onClick={profileHandler}>
                                             Profile
                                         </MenuItem>
                                         <MenuItem onClick={logoutHandler}>
