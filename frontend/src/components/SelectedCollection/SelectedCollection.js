@@ -9,12 +9,10 @@ import Bundle from "./Bundle/Bundle";
 
 const SelectedCollection = (props) => {
     // props from redux store
-    const {
-        selectedCollection,
-        editMode,
-        setEditModeOn,
-        setEditModeOff,
-    } = props;
+    const { selectedCollection } = props;
+
+    // optional prop for sharing view
+    const { shareMode } = props;
 
     // map the selected collection into a map for O(1) lookup
     let rootBundleId;
@@ -38,7 +36,7 @@ const SelectedCollection = (props) => {
     return (
         <div>
             {/* edit mode button */}
-            {collectionDisplay !== null && (
+            {collectionDisplay !== null && !shareMode && (
                 <div style={{ display: "flex" }}>
                     {/* edit mode button */}
                     <EditMode />
@@ -60,15 +58,11 @@ const SelectedCollection = (props) => {
 const mapStateToProps = (state) => {
     return {
         selectedCollection: state.selectedCollection,
-        editMode: state.options.editMode,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        setEditModeOn: () => dispatch(optionsActions.setEditModeOn()),
-        setEditModeOff: () => dispatch(optionsActions.setEditModeOff()),
-    };
+    return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectedCollection);

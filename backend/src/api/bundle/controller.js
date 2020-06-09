@@ -7,7 +7,14 @@ const { User } = require("../user/model");
 module.exports.getCollection = async (req, res, next) => {
     try {
         // need to search bundle here since we are not using middleware
-        const collection = await Bundle.findById(req.params.bundleId);
+        let collection;
+        try {
+            collection = await Bundle.findById(req.params.bundleId);
+        } catch {
+            const error = new Error("Invalid collection ID.");
+            error.statusCode = 404;
+            return next(error);
+        }
         if (!collection) {
             const error = new Error("Bundle does not exist.");
             error.statusCode = 404;
@@ -24,7 +31,9 @@ module.exports.getCollection = async (req, res, next) => {
         // private collections need authentication
         if (collection.isPrivate) {
             if (!req.session.user) {
-                let error = new Error("Session has no user logged.");
+                let error = new Error(
+                    "You are not authorized to view this collection."
+                );
                 error.name = "Authentication Error";
                 error.statusCode = 401;
                 return next(error);
@@ -68,7 +77,7 @@ module.exports.getCollection = async (req, res, next) => {
                 collection.ownerId.toString()
             ) {
                 const error = new Error(
-                    "You do not have permission to access this collection."
+                    "You are not authorized to view this collection."
                 );
                 error.statusCode = 401;
                 throw error;

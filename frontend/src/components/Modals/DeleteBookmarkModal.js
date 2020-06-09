@@ -22,6 +22,7 @@ const DeleteBookmarkModal = (props) => {
 
     const deleteHandler = () => {
         deleteBookmark(bundleId, bookmarkId);
+        setOpen(false);
     };
 
     return (

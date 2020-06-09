@@ -18,6 +18,7 @@ import About from "./About/About";
 import SignUp from "./SignUp/SignUp";
 import SnackBar from "./SnackBar/SnackBar";
 import Profile from "./Profile/Profile";
+import ShareCollection from "./ShareCollection/ShareCollection";
 
 const drawerWidth = "30%";
 
@@ -55,7 +56,7 @@ function App(props) {
         if (localStorage.getItem("token")) {
             getUserInfo();
         }
-    }, []);
+    }, [getUserInfo]);
 
     return (
         <div className={classes.root}>
@@ -64,6 +65,14 @@ function App(props) {
             <NavBar />
 
             <Switch>
+                {/* share collection page */}
+                <Route path="/share/:bundleId">
+                    <div className={classes.content}>
+                        <Toolbar />
+                        <ShareCollection />
+                    </div>
+                </Route>
+
                 {/* signup page */}
                 <Route path="/signup">
                     <div className={classes.content}>

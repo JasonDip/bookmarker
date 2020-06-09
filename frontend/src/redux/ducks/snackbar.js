@@ -67,9 +67,9 @@ export default function reducer(state = defaultError, action) {
             // );
             let errorMessage;
             try {
-                console.log(
-                    `Error ${action.payload.response.data.error.status} - ${action.payload.response.data.error.name}: ${action.payload.response.data.error.message}`
-                );
+                // console.log(
+                //     `Error ${action.payload.response.data.error.status} - ${action.payload.response.data.error.name}: ${action.payload.response.data.error.message}`
+                // );
                 errorMessage = `Error - ${action.payload.response.data.error.message}`;
             } catch {
                 errorMessage = "Unknown error.";
@@ -82,11 +82,12 @@ export default function reducer(state = defaultError, action) {
             };
 
         case ERROR_OFF:
-        default:
             return {
                 ...defaultError,
                 snackbarSeverity: state.snackbarSeverity,
             };
+        default:
+            return state;
     }
 }
 

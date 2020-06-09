@@ -22,6 +22,7 @@ const DeleteBundleModal = (props) => {
 
     const deleteHandler = () => {
         deleteBundle(bundleId);
+        setOpen(false);
     };
 
     return (

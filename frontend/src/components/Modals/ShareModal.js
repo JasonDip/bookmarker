@@ -113,7 +113,7 @@ const ShareModal = (props) => {
                         }}
                     />
 
-                    <DialogActions>
+                    <DialogActions style={{ marginTop: "20px" }}>
                         <Button onClick={handleClose} color="primary">
                             Cancel
                         </Button>
