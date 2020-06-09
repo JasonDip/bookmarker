@@ -42,8 +42,8 @@ const LoginForm = (props) => {
 
     const demoAccountCheckHandler = (event, setFieldValue) => {
         if (event.target.checked) {
-            setFieldValue("email", "myemail1@gmail.com");
-            setFieldValue("password", "mypass");
+            setFieldValue("email", "Contact@JasonDip.com");
+            setFieldValue("password", "123123");
         } else {
             setFieldValue("email", "");
             setFieldValue("password", "");

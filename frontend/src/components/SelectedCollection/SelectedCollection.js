@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import EditMode from "./Buttons/EditMode";
 import ShareButton from "./Buttons/ShareButton";
 
-import * as optionsActions from "../../redux/ducks/options";
 import Bundle from "./Bundle/Bundle";
 
 const SelectedCollection = (props) => {

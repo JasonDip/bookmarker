@@ -16,7 +16,6 @@ const LargerToolTip = withStyles({
 })(Tooltip);
 
 const NoteButton = (props) => {
-    const { clickHandler } = props;
     return (
         <LargerToolTip
             title={
