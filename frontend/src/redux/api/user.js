@@ -9,6 +9,9 @@ export const createNewUser = (userObj) => {
 };
 
 /* delete the current user's account */
+export const deleteUser = (password) => {
+    return Axios.delete(url + "/user", getAxiosConfig({ password }));
+};
 
 /* get user's id, name, email, and ownedCollections */
 export const getUserInfo = () => {

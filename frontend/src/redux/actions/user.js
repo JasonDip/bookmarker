@@ -9,6 +9,10 @@ export const GET_USER_INFO_FAIL = "actions/user/GET_USER_INFO_FAIL";
 export const CREATE_NEW_USER_PENDING = "actions/user/CREATE_NEW_USER_PENDING";
 export const CREATE_NEW_USER_SUCCESS = "actions/user/CREATE_NEW_USER_SUCCESS";
 export const CREATE_NEW_USER_FAIL = "actions/user/CREATE_NEW_USER_FAIL";
+// delete current logged in user
+export const DELETE_USER_PENDING = "actions/user/DELETE_USER_PENDING";
+export const DELETE_USER_SUCCESS = "actions/user/DELETE_USER_SUCCESS";
+export const DELETE_USER_FAIL = "actions/user/DELETE_USER_FAIL";
 
 /* thunks */
 export const createNewUser = (userObj) => {
@@ -21,6 +25,20 @@ export const createNewUser = (userObj) => {
             })
             .catch((err) => {
                 dispatch({ type: CREATE_NEW_USER_FAIL, payload: err });
+            });
+    };
+};
+
+export const deleteUser = (password) => {
+    return (dispatch) => {
+        dispatch({ type: DELETE_USER_PENDING });
+        userApi
+            .deleteUser(password)
+            .then((res) => {
+                dispatch({ type: DELETE_USER_SUCCESS });
+            })
+            .catch((err) => {
+                dispatch({ type: DELETE_USER_FAIL, payload: err });
             });
     };
 };

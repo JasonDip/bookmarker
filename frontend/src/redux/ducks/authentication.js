@@ -1,6 +1,7 @@
 import * as authenticationApi from "../api/authentication";
 import * as collectionListDuck from "./collectionList";
 import * as userActions from "../actions/user";
+import * as selectedCollectionDuck from "./selectedCollection";
 
 /* actions */
 // login
@@ -28,9 +29,10 @@ export default function reducer(state = initialState, action) {
                 email: action.payload.email,
             };
         case LOGIN_FAIL:
-        case userActions.GET_USER_INFO_FAIL:
         case LOGOUT_SUCCESS:
         case LOGOUT_FAIL:
+        case userActions.GET_USER_INFO_FAIL:
+        case userActions.DELETE_USER_SUCCESS:
             localStorage.removeItem("token");
             return initialState;
         default:
@@ -44,6 +46,7 @@ export default function reducer(state = initialState, action) {
 export const login = (email, password) => {
     return (dispatch) => {
         dispatch({ type: LOGIN_PENDING });
+        dispatch(selectedCollectionDuck.clearSelectedCollection());
         authenticationApi
             .login(email, password)
             .then((res) => {
@@ -70,6 +73,7 @@ export const login = (email, password) => {
 export const logout = () => {
     return (dispatch) => {
         dispatch({ type: LOGOUT_PENDING });
+        dispatch(selectedCollectionDuck.clearSelectedCollection());
         authenticationApi
             .logout()
             .then((res) => {
