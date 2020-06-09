@@ -69,11 +69,11 @@ const About = (props) => {
                             <br />
                             <span>GitHub: </span>
                             <a
-                                href="https://github.com/JasonDip"
+                                href="https://github.com/JasonDip/bookmarker"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                github.com/JasonDip
+                                github.com/JasonDip/bookmarker
                             </a>
                         </p>
                     </Typography>
