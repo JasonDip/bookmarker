@@ -40,6 +40,12 @@ module.exports.deleteUser = async (req, res, next) => {
             error.statusCode = 404;
             throw error;
         }
+        if (existingUser.email === "contact@jasondip.com") {
+            const error = new Error("This demo account cannot be deleted.");
+            error.name = "Delete User Error";
+            error.statusCode = 404;
+            return next(error);
+        }
 
         const isMatch = await bcrypt.compare(
             req.body.password,
@@ -108,6 +114,15 @@ module.exports.changePassword = async (req, res, next) => {
             error.statusCode = 404;
             throw error;
         }
+        if (user.email === "contact@jasondip.com") {
+            const error = new Error(
+                "This demo account cannot change password."
+            );
+            error.name = "Change password Error";
+            error.statusCode = 404;
+            return next(error);
+        }
+
         const isMatch = await bcrypt.compare(
             req.body.password,
             user.hashedPassword
