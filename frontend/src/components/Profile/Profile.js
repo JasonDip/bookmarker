@@ -20,9 +20,7 @@ const Profile = (props) => {
                 width: "100%",
             }}
         >
-            <Typography>
-                <h2>Profile</h2>
-            </Typography>
+            <Typography variant="h5">Profile</Typography>
             <br />
 
             {/* change password */}

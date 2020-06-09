@@ -54,9 +54,7 @@ function ChangePasswordForm(props) {
                         width: "100%",
                     }}
                 >
-                    <Typography>
-                        <h3>Change Password</h3>
-                    </Typography>
+                    <Typography variant="h6">Change Password</Typography>
 
                     <Field name="password">
                         {({ field }) => (

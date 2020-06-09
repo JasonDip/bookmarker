@@ -35,9 +35,7 @@ const DeleteAccountForm = (props) => {
             }}
             onSubmit={deleteAccountHandler}
         >
-            <Typography>
-                <h3>Delete Account</h3>
-            </Typography>
+            <Typography variant="h6">Delete Account</Typography>
             <TextField
                 variant="outlined"
                 margin="normal"
