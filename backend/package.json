@@ -4,7 +4,8 @@
     "description": "",
     "main": "src/app.js",
     "engines": {
-        "node": "13.12.0"
+        "node": "13.12.0",
+        "npm": "6.14.5"
     },
     "scripts": {
         "start": "node src/app.js",
@@ -14,9 +15,6 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "devDependencies": {
-        "nodemon": "^2.0.2"
-    },
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "connect-mongodb-session": "^2.3.1",
@@ -27,5 +25,8 @@
         "mongodb": "^3.5.4",
         "mongoose": "^5.9.3",
         "validator": "^12.2.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.2"
     }
 }
