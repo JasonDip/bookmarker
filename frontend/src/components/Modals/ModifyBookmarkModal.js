@@ -129,7 +129,7 @@ const ModifyBookmarkModal = (props) => {
                                                 disabled={isSubmitting}
                                                 {...field}
                                             >
-                                                Add
+                                                Save
                                             </Button>
                                         )}
                                     </Field>

@@ -105,7 +105,7 @@ const CreateNestedBundleModal = (props) => {
                                                 disabled={isSubmitting}
                                                 {...field}
                                             >
-                                                Modify
+                                                Save
                                             </Button>
                                         )}
                                     </Field>
