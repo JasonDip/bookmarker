@@ -9,6 +9,7 @@ import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import { makeStyles } from "@material-ui/core/styles";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 import { logout } from "../../../redux/ducks/authentication";
 
@@ -90,6 +91,7 @@ const UserMenu = (props) => {
                     onClick={handleToggle}
                     color="inherit"
                 >
+                    <AccountCircleIcon style={{ marginRight: "10px" }} />
                     {username}
                 </Button>
                 <Popper
