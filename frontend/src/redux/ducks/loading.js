@@ -19,6 +19,7 @@ export default function reducer(state = loading, action) {
         case bundleActions.CREATE_NEW_COLLECTION_PENDING:
         case bundleActions.CREATE_NESTED_BUNDLE_PENDING:
         case bundleActions.MODIFY_BUNDLE_PENDING:
+        case bundleActions.DELETE_BUNDLE_PENDING:
         case userActions.GET_USER_INFO_PENDING:
         case userActions.CREATE_NEW_USER_PENDING:
         case userActions.DELETE_USER_PENDING:
@@ -41,6 +42,8 @@ export default function reducer(state = loading, action) {
         case bundleActions.CREATE_NESTED_BUNDLE_FAIL:
         case bundleActions.MODIFY_BUNDLE_SUCCESS:
         case bundleActions.MODIFY_BUNDLE_FAIL:
+        case bundleActions.DELETE_BUNDLE_SUCCESS:
+        case bundleActions.DELETE_BUNDLE_FAIL:
         case userActions.GET_USER_INFO_SUCCESS:
         case userActions.GET_USER_INFO_FAIL:
         case userActions.CREATE_NEW_USER_SUCCESS:
