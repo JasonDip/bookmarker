@@ -4,6 +4,8 @@ A web app for storing and sharing your bookmarks.
 
 Live demo: https://www.bookmarker.jasondip.com/
 
+A demo account is provided.
+
 Note: The live demo is currently being hosted on a free plan so it could take a few seconds for the initial load if the container was shut down due to inactivity.
 
 # Features
