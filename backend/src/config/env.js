@@ -4,7 +4,8 @@ let loadEnv = require("dotenv").config({
 });
 
 if (loadEnv.error) {
-    throw loadEnv.error;
+    // throw loadEnv.error;
+    console.log(".env was not loaded.");
 }
 
 if (!loadEnv) {
