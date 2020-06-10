@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoSanitize = require("express-mongo-sanitize");
 
 /*  routers  */
 const authenticationRouter = require("../api/authentication/router");
@@ -13,8 +14,9 @@ const errorHandler = require("../middleware/errorHandler");
 
 /*  server configuration  */
 const server = express();
-server.use(express.json());
 server.use(CORS);
+server.use(express.json());
+server.use(mongoSanitize());
 server.use(sessions);
 server.use(authenticationRouter);
 server.use(userRouter);
