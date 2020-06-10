@@ -63,6 +63,7 @@ const CreateRootBundleModal = (props) => {
                                             label="Folder Name"
                                             name="folderName"
                                             {...field}
+                                            autoFocus
                                         />
                                     )}
                                 </Field>

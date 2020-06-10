@@ -72,6 +72,7 @@ const ModifyBookmarkModal = (props) => {
                                             label="URL"
                                             name="url"
                                             {...field}
+                                            autoFocus
                                         />
                                     )}
                                 </Field>

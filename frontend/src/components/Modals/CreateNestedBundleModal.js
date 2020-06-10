@@ -64,6 +64,7 @@ const CreateNestedBundleModal = (props) => {
                                             label="Folder Name"
                                             name="folderName"
                                             {...field}
+                                            autoFocus
                                         />
                                     )}
                                 </Field>
