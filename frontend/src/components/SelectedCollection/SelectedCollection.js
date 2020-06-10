@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 
 import EditMode from "./Buttons/EditMode";
 import ShareButton from "./Buttons/ShareButton";
+import ExpandAllButton from "./Buttons/ExpandAllButton";
+import CollapseAllButton from "./Buttons/CollapseAllButton";
 
 import Bundle from "./Bundle/Bundle";
 
@@ -37,6 +39,10 @@ const SelectedCollection = (props) => {
             {/* edit mode button */}
             {collectionDisplay !== null && !shareMode && (
                 <div style={{ display: "flex" }}>
+                    {/* expand/collapse buttons */}
+                    <ExpandAllButton />
+                    <CollapseAllButton />
+
                     {/* edit mode button */}
                     <EditMode />
 

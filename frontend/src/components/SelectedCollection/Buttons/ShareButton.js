@@ -21,7 +21,7 @@ export const ShareButton = (props) => {
                 color="primary"
                 variant="contained"
                 onClick={clickHandler}
-                style={{ marginBottom: "15px", marginLeft: "auto" }}
+                style={{ marginBottom: "15px", marginLeft: "10px" }}
                 startIcon={<ShareIcon />}
             >
                 Share

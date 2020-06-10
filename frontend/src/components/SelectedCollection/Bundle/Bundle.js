@@ -16,6 +16,7 @@ import DeleteButton from "./Buttons/DeleteButton/DeleteButton";
 import AddBookmarkButton from "./Buttons/AddBookmarkButton/AddBookmarkButton";
 
 import * as bundleActions from "../../../redux/actions/bundle";
+import * as optionsDuck from "../../../redux/ducks/options";
 import CreateNestedBundleModal from "../../Modals/CreateNestedBundleModal";
 import CreateBookmarkModal from "../../Modals/CreateBookmarkModal";
 import DeleteBundleModal from "../../Modals/DeleteBundleModal";
@@ -65,10 +66,30 @@ const Bundle = (props) => {
     // passed in
     const { collection, id } = props;
     // from redux
-    const { editMode, modifyBundle, deleteBundle } = props;
+    const {
+        editMode,
+        modifyBundle,
+        deleteBundle,
+        expandState,
+        expandNormal,
+    } = props;
     const thisBundle = collection.get(id);
 
     const [expanded, setExpanded] = React.useState(thisBundle["isRoot"]);
+
+    React.useEffect(() => {
+        switch (expandState) {
+            case optionsDuck.EXPAND_STATE.EXPAND:
+                setExpanded(true);
+                break;
+            case optionsDuck.EXPAND_STATE.COLLAPSE:
+                setExpanded(false);
+                break;
+            case optionsDuck.EXPAND_STATE.NORMAL:
+            default:
+                break;
+        }
+    }, [expandState]);
 
     // show modal states
     const [
@@ -86,6 +107,9 @@ const Bundle = (props) => {
     );
 
     const panelClickHandler = () => {
+        // allow expand/collapse buttons again
+        expandNormal();
+
         // stop panel from changing when clicking modal
         if (
             openAddNestedBundleModal ||
@@ -240,6 +264,8 @@ const Bundle = (props) => {
                             editMode={editMode}
                             modifyBundle={modifyBundle}
                             deleteBundle={deleteBundle}
+                            expandState={expandState}
+                            expandNormal={expandNormal}
                         />
                     );
                 })}
@@ -251,6 +277,7 @@ const Bundle = (props) => {
 const mapStateToProps = (state) => {
     return {
         editMode: state.options.editMode,
+        expandState: state.options.expandState,
     };
 };
 
@@ -260,6 +287,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(bundleActions.modifyBundle(bundleId, bundleObj)),
         deleteBundle: (bundleId) =>
             dispatch(bundleActions.deleteBundle(bundleId)),
+        expandNormal: () => dispatch(optionsDuck.expandNormal()),
     };
 };
 

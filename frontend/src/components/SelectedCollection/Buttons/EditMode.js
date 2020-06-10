@@ -24,7 +24,7 @@ const EditMode = (props) => {
             color={editButtonColor}
             variant="contained"
             onClick={editModeClickHandler}
-            style={{ marginBottom: "15px" }}
+            style={{ marginBottom: "15px", marginLeft: "auto" }}
             startIcon={<CreateIcon />}
         >
             Edit Mode
