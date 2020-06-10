@@ -16,10 +16,12 @@ const cookieOBj =
               httpOnly: true,
               maxAge: 2.592e9,
               secure: "true",
+              sameSite: "none",
           }
         : {
               httpOnly: true,
               maxAge: 2.592e9,
+              sameSite: "none",
           };
 
 module.exports = session({
@@ -27,5 +29,6 @@ module.exports = session({
     store: store,
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: cookieOBj,
 });
