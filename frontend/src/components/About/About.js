@@ -25,7 +25,7 @@ const About = (props) => {
                     <Typography>
                         <h1>About</h1>
                         <p style={{ whiteSpace: "pre-line" }}>
-                            {`Bookmarker is a web app for storing and sharing bookmarks (hyperlinks) on the cloud. These collection of bookmarks can be organized into expandable folders and may have notes attached to them. Collections can be set to private (only the creator may view) or public (anyone may view).`}
+                            {`Bookmarker is a web app for storing and sharing bookmarks (hyperlinks). These collection of bookmarks can be organized into expandable folders and may have notes attached to them. Collections can be set to private (only the creator may view) or public (anyone may view).`}
                         </p>
                         <h1>How To Use</h1>
                         <ol>
