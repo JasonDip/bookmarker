@@ -36,23 +36,28 @@ const SelectedCollection = (props) => {
 
     return (
         <div>
-            {/* edit mode button */}
-            {collectionDisplay !== null && !shareMode && (
-                <div style={{ display: "flex" }}>
-                    {/* expand/collapse buttons */}
-                    <ExpandAllButton />
-                    <CollapseAllButton />
+            <div style={{ display: "flex" }}>
+                {collectionDisplay !== null && (
+                    <>
+                        {/* expand/collapse buttons */}
+                        <ExpandAllButton />
+                        <CollapseAllButton />
+                    </>
+                )}
 
-                    {/* edit mode button */}
-                    <EditMode />
+                {collectionDisplay !== null && !shareMode && (
+                    <>
+                        {/* edit mode button */}
+                        <EditMode />
 
-                    {/* share button */}
-                    <ShareButton
-                        rootBundleId={rootBundleId}
-                        isPrivate={rootIsPrivate}
-                    />
-                </div>
-            )}
+                        {/* share button */}
+                        <ShareButton
+                            rootBundleId={rootBundleId}
+                            isPrivate={rootIsPrivate}
+                        />
+                    </>
+                )}
+            </div>
 
             {/* show selected collection */}
             {collectionDisplay}
