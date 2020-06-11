@@ -1,6 +1,9 @@
 # Bookmarker
 
 A web app for storing and sharing your bookmarks.
+-   Save bookmarks.
+-   Organize your collection using folders and notes.
+-   Share them using the share link.
 
 Live demo: https://www.bookmarker.jasondip.com/
 
@@ -13,12 +16,6 @@ Note: The live demo is currently being hosted on a free plan so it could take a 
 [Welcome](https://www.bookmarker.jasondip.com/share/5ee042cdabff530017a58844)
 
 [Blind Top 75 LC](https://www.bookmarker.jasondip.com/share/5ee08f0058149d00174ef1dc)
-
-# Features
-
--   Save bookmarks.
--   Organize your collection using folders and notes.
--   Share them using the share link.
 
 # Built With
 
