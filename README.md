@@ -8,17 +8,17 @@ A demo account is provided.
 
 Note: The live demo is currently being hosted on a free plan so it could take a few seconds for the initial load if the container was shut down due to inactivity.
 
-# Features
-
--   Save bookmarks.
--   Organize your collection using folders and notes.
--   Share them using the share link.
-
 # Example Collections
 
 [Welcome](https://www.bookmarker.jasondip.com/share/5ee042cdabff530017a58844)
 
 [Blind Top 75 LC](https://www.bookmarker.jasondip.com/share/5ee08f0058149d00174ef1dc)
+
+# Features
+
+-   Save bookmarks.
+-   Organize your collection using folders and notes.
+-   Share them using the share link.
 
 # Built With
 
