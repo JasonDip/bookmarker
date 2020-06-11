@@ -14,17 +14,17 @@ Note: The live demo is currently being hosted on a free plan so it could take a 
 -   Organize your collection using folders and notes.
 -   Share them using the share link.
 
-# Built With
-
-Frontend: React, Redux, Material UI
-
-Backend: Node.js, Express, MongoDB
-
 # Example Collections
 
 [Welcome](https://www.bookmarker.jasondip.com/share/5ee042cdabff530017a58844)
 
 [Blind Top 75 LC](https://www.bookmarker.jasondip.com/share/5ee08f0058149d00174ef1dc)
+
+# Built With
+
+Frontend: React, Redux, Material UI
+
+Backend: Node.js, Express, MongoDB
 
 # Preview
 
