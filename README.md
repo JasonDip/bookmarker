@@ -23,6 +23,8 @@ Frontend: React, Redux, Material UI
 
 Backend: Node.js, Express, MongoDB
 
+Hosting: Netlify, Heroku
+
 # Preview
 
 <img src="preview.png"/>
