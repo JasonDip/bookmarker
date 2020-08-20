@@ -50,11 +50,10 @@ const About = (props) => {
                                 privacy settings.
                             </li>
                         </ol>
-                        <h1>Security</h1>
+                        <h1>Privacy</h1>
                         <p style={{ whiteSpace: "pre-line" }}>
                             {`Your email will never be shared. 
-                            Your password is hashed. 
-                            Data transfer is encrypted.`}
+                            Your account can be deleted via the Profile page. (Note all collections will also be deleted.)`}
                         </p>
                         <h1>Contact</h1>
                         <p style={{ whiteSpace: "pre-line" }}>
