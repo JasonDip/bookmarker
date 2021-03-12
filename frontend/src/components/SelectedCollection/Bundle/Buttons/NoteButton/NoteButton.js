@@ -36,6 +36,7 @@ const NoteButton = (props) => {
                     e.preventDefault();
                     e.stopPropagation();
                 }}
+                disableRipple={true}
             >
                 <DescriptionOutlinedIcon />
             </IconButton>
